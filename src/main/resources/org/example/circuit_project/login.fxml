@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="600.0" style="-fx-background-color: #3aacee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="600.0" style="-fx-background-color: #3aacee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoginController">
    <children>
       <VBox alignment="CENTER" layoutX="194.0" layoutY="80.0" prefHeight="288.0" prefWidth="213.0" spacing="10.0">
          <children>
@@ -18,7 +17,7 @@
             <Label layoutX="89.0" layoutY="133.0" text="Password::" />
             <PasswordField />
             <Button mnemonicParsing="false" text="Sign In" />
-            <Button contentDisplay="TEXT_ONLY" graphicTextGap="5.0" mnemonicParsing="false" text="Create Account" underline="true" />
+            <Button fx:id="createAcctBtn" contentDisplay="TEXT_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#createAcctBtnClick" text="Create Account" underline="true" />
          </children>
       </VBox>
       <Label alignment="TOP_CENTER" layoutX="123.0" layoutY="37.0" prefHeight="43.0" prefWidth="355.0" text="Circuit Breaker" textAlignment="CENTER">
