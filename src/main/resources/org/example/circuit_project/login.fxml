@@ -16,7 +16,7 @@
             <TextField prefHeight="23.0" prefWidth="343.0" />
             <Label layoutX="89.0" layoutY="133.0" text="Password::" />
             <PasswordField />
-            <Button mnemonicParsing="false" text="Sign In" />
+            <Button fx:id="signInBtn" mnemonicParsing="false" onAction="#signInBtnClick" text="Sign In" />
             <Button fx:id="createAcctBtn" contentDisplay="TEXT_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#createAcctBtnClick" text="Create Account" underline="true" />
          </children>
       </VBox>
