@@ -16,9 +16,10 @@ import javafx.stage.Stage;
 import java.io.InputStream;
 import java.io.IOException;
 
+import static javafx.application.Application.launch;
 
 
-public class Login extends HelloApplication {
+public class Login extends Application  {
 
 
         /**
@@ -26,7 +27,7 @@ public class Login extends HelloApplication {
          * @param stage
          * @throws IOException
          */
-        @Override
+
         public void start(Stage stage) throws IOException {
 
 

@@ -27,6 +27,10 @@ public class LoginController {
     private PasswordField passwordID;
 
     @FXML
+    private Button signInBtn;
+
+
+    @FXML
     void createAcctBtnClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newAccount.fxml"));
         Parent root = loader.load();
@@ -36,5 +40,16 @@ public class LoginController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    @FXML
+    void signInBtnClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("playground.fxml"));
+        Parent root = loader.load();
 
+        Stage stage = new Stage();
+        stage.setTitle("Create Account");
+        stage.setScene(new Scene(root));
+        stage.show();
+
+
+    }
 }
