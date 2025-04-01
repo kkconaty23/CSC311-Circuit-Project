@@ -21,11 +21,14 @@ public class PlaygroundController {
     private Line wire;
 
     @FXML
-    private Pane panePlayground;
+    private Pane panePlayground; //place to drag and drop pieces
 
+    /**
+     * adds event handlers for when the fxml is loaded
+     */
     @FXML
     public void initialize() {
-        // Add event handlers after FXML elements are initialized
+        //event handlers
         wire.setOnMousePressed(event -> {
             startX = wire.getStartX();
             startY = wire.getStartY();
@@ -35,17 +38,21 @@ public class PlaygroundController {
 
         wire.setOnMouseDragged(event -> {
             if (event.isPrimaryButtonDown()) {
-                // Update the wire dynamically
+                //move wire dynamically
                 wire.setEndX(event.getX());
                 wire.setEndY(event.getY());
             }
         });
     }
 
+    /**
+     * handles what happens when a pane is clicked on from the select bar
+     * @param event
+     */
     @FXML
     public void onSpriteClicked(MouseEvent event) {
         if (event.getEventType() != MouseEvent.MOUSE_CLICKED) {
-            return; // Prevent unwanted triggering on drag
+            return; //only triggers on click not drag
         }
 
         Node clickedNode = (Node) event.getSource();
@@ -53,7 +60,7 @@ public class PlaygroundController {
 
         Pane originalPane = null;
 
-        // Identify if we clicked on a Pane or on a child inside a Pane
+        // decide if clicked on a pane or on a child inside a Pane
         if (clickedNode instanceof Pane) {
             originalPane = (Pane) clickedNode;
         } else if (clickedNode.getParent() instanceof Pane) {
@@ -62,33 +69,38 @@ public class PlaygroundController {
 
         if (originalPane == null) {
             System.out.println("No Pane found.");
-            return; // Exit if no Pane was found
+            return; // if no pane was found
         }
 
-        // Create a new Pane and copy its properties
+        //makes a new pane and copy it
         Pane newSprite = new Pane();
         newSprite.setPrefSize(originalPane.getPrefWidth(), originalPane.getPrefHeight());
 
-        // Manually copy each child
+        //copy each child
         for (Node child : originalPane.getChildren()) {
-            Node clonedChild = cloneNode(child); // Call helper method to clone the child
+            Node clonedChild = cloneNode(child); //clone the child
             if (clonedChild != null) {
                 newSprite.getChildren().add(clonedChild);
             }
         }
 
-        // Position the new sprite where the user clicked
+        // move the new sprite where the user clicked
         newSprite.setLayoutX(event.getSceneX());
         newSprite.setLayoutY(event.getSceneY());
 
-        // Enable dragging for the new sprite
+        // enable dragging
         enableDragging(newSprite);
 
-        // Add the new sprite to the playground
+        // add new sprite to the playground
         panePlayground.getChildren().add(newSprite);
         System.out.println("New sprite added!");
     }
 
+    /**
+     * clones all pieces inside a pane
+     * @param node
+     * @return
+     */
     private Node cloneNode(Node node) {
         if (node instanceof Rectangle) {
             Rectangle rect = (Rectangle) node;
@@ -118,9 +130,13 @@ public class PlaygroundController {
             copy.setLayoutY(line.getLayoutY());
             return copy;
         }
-        return null; // If it's an unsupported node type, return null
+        return null;
     }
 
+    /**
+     * allows moving of the pane selected by a user
+     * @param sprite
+     */
     private void enableDragging(Pane sprite) {
         final double[] offsetX = {0};
         final double[] offsetY = {0};

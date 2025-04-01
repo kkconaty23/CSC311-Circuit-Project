@@ -32,7 +32,7 @@ public class LoginController {
 
     @FXML
     void createAcctBtnClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("newAccount.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("newAccount.fxml"));//opens the new account page
         Parent root = loader.load();
 
         Stage stage = new Stage();
@@ -42,7 +42,7 @@ public class LoginController {
     }
     @FXML
     void signInBtnClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("playground.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("playground.fxml"));//when player signs in takes them to playground for now
         Parent root = loader.load();
 
         Stage stage = new Stage();

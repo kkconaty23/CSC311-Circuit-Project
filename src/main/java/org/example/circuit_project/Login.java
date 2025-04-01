@@ -33,7 +33,7 @@ public class Login extends Application  {
 
             FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 475);
-            stage.setTitle("Circuit's Login Page!");
+            stage.setTitle("Circuit's Login Page!");//main page of the application
             stage.setScene(scene);
             stage.show();
         }

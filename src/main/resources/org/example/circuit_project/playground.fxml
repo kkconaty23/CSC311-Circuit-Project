@@ -16,7 +16,7 @@
             <Label text="Wire" />
             <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#onSpriteClicked" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" />
             <Label layoutX="86.0" layoutY="30.0" text="Battery" />
-            <Pane fx:id="battery" prefHeight="38.0" prefWidth="106.0" onMouseClicked="#onSpriteClicked">
+            <Pane fx:id="battery" onMouseClicked="#onSpriteClicked" prefHeight="38.0" prefWidth="106.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="90.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" height="32.0" layoutX="-8.0" layoutY="-2.0" onMouseDragged="#onSpriteClicked" stroke="BLACK" strokeType="INSIDE" width="104.0" />
