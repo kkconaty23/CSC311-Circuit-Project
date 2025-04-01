@@ -9,25 +9,24 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.PlaygroundController">
    <left>
       <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="328.0" prefWidth="176.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Wire" />
-            <Line endX="100.0" fill="#508dc6" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" />
+            <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#onSpriteClicked" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" />
             <Label layoutX="86.0" layoutY="30.0" text="Battery" />
-            <Pane prefHeight="38.0" prefWidth="106.0">
+            <Pane fx:id="battery" prefHeight="38.0" prefWidth="106.0" onMouseClicked="#onSpriteClicked">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="90.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="32.0" layoutX="-8.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" width="104.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="32.0" layoutX="-8.0" layoutY="-2.0" onMouseDragged="#onSpriteClicked" stroke="BLACK" strokeType="INSIDE" width="104.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d78f1d" height="32.0" layoutX="71.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
                </children>
             </Pane>
             <Label layoutX="86.0" layoutY="30.0" text="Lightbulb" />
             <Pane layoutX="50.0" prefHeight="91.0" prefWidth="142.0">
                <children>
-                  <Ellipse fill="#f8f8f8" layoutX="69.0" layoutY="38.0" radiusX="24.0" radiusY="36.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Ellipse fill="#f8f8f8" layoutX="69.0" layoutY="38.0" onMouseClicked="#onSpriteClicked" radiusX="24.0" radiusY="36.0" stroke="BLACK" strokeType="INSIDE" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9ba7b2" height="12.0" layoutX="48.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" width="42.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#818b94" height="10.0" layoutX="52.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" width="35.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#818b94" height="9.0" layoutX="58.0" layoutY="78.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
@@ -54,4 +53,7 @@
          </padding>
       </VBox>
    </left>
+   <center>
+      <Pane fx:id="panePlayground" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

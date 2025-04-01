@@ -33,7 +33,7 @@ public class Login extends Application  {
 
             FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 475);
-            stage.setTitle("PintFinder's Login Page!");
+            stage.setTitle("Circuit's Login Page!");
             stage.setScene(scene);
             stage.show();
         }
