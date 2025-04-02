@@ -5,6 +5,7 @@ An interactive Circuit Editor application using JavaFX for the frontend and Micr
 * Java 17+
 * JavaFX
 * CSS
+* Azure
 
 ## Authors 
 * [Justin Derenthal](https://github.com/JderenthalCS)
