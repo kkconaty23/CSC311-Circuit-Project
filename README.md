@@ -1,4 +1,4 @@
-# Circuit Sandbox:  
+# Circuit Sandbox
 *Farmingdale State College*  
 *CSC-311: Advanced Programming - Capstone*
 
