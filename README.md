@@ -11,4 +11,4 @@ An interactive Circuit Editor application using JavaFX for the frontend and Micr
 * [Justin Derenthal](https://github.com/JderenthalCS)
 * [Kevin Conaty](https://github.com/kkconaty23)
 * [Esteban Sandoval](https://github.com/SandalCodez)
-* [Mike Moradi]
+* [Mike Moradi](https://github.com/PracticalEscapement)
