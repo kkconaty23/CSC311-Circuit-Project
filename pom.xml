@@ -69,12 +69,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.auth</groupId>
-            <artifactId>google-auth-library-oauth2-http</artifactId>
-            <version>1.20.0</version>
-        </dependency>
-
 
     </dependencies>
 
@@ -98,7 +92,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.jmc.pintfinder/org.jmc.pintfinder.Login</mainClass>
+                            <mainClass>org.example.circuit-project/org.example.circuit-project.Login</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
