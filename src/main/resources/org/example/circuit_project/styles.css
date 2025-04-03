@@ -1,0 +1,7 @@
+.text-field:focused, .password-field:focused{
+    -fx-border-color: #8A2BE2;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-insets: 0;
+    -fx-background-color: white;
+}
