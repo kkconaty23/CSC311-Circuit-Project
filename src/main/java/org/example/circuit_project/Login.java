@@ -3,6 +3,7 @@ package org.example.circuit_project;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,10 +33,17 @@ public class Login extends Application  {
 
 
             FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 475);
-            stage.setTitle("Circuit's Login Page!");
+            Scene scene = new Scene(fxmlLoader.load(), 1000, 677);
+            stage.setTitle("Circuit Sandbox");
+            stage.setResizable(false);
             stage.setScene(scene);
+
+            // Setting Favicon
+            Image icon = new Image(getClass().getResource("/org/example/circuit_project/images/raw.png").toExternalForm());
+            stage.getIcons().add(icon);
+
             stage.show();
+
         }
 
         /**
