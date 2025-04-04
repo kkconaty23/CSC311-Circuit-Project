@@ -8,9 +8,9 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class SandboxController implements Initializable {
 
@@ -33,7 +33,6 @@ public class SandboxController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = gridCanvas.getGraphicsContext2D();
         drawGrid(gc, isDarkMode, gridLinesEnabled); // Draw the grid initially in light mode
-
     }
 
     /**

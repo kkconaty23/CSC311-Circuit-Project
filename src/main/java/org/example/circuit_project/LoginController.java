@@ -50,6 +50,10 @@ public class LoginController implements Initializable {
         slide.play();
     }
 
+    /**
+     * I HAVE THE LOGIN BUTTON GOING DIRECTLY INTO THE SANDBOX, AS WE DO NOT HAVE A MAIN MENU YET. - JUSTIN
+     * @param event
+     */
     @FXML
     private void onLoginClicked(ActionEvent event){
         try{
