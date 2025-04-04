@@ -43,7 +43,7 @@
             </HBox>
             <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="newPlaygroundBtn" mnemonicParsing="false" onAction="#onClick" prefHeight="75.0" prefWidth="100.0" text="New">
+                  <Button fx:id="newPlaygroundBtn" mnemonicParsing="false" onAction="#PlaygroundOnClick" prefHeight="75.0" prefWidth="100.0" text="New">
                      <font>
                         <Font size="18.0" />
                      </font>

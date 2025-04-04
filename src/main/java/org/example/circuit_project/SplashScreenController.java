@@ -5,7 +5,13 @@ import javafx.fxml.FXML;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 /*
 * This is the screen that will be displayed after the user is logged in.
@@ -28,8 +34,16 @@ public class SplashScreenController  {
 
 
     @FXML
-    private void onClick(ActionEvent event) {
-
+    private void PlaygroundOnClick(ActionEvent event) {
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/playground.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 
