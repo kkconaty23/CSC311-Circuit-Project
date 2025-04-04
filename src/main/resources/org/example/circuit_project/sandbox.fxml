@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1180.0" prefWidth="1725.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1180.0" prefWidth="1725.0" stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
    <top>
       <Pane prefHeight="50.0" prefWidth="1725.0" style="-fx-background-color: #0D1117;" BorderPane.alignment="CENTER">
          <children>
@@ -26,8 +26,8 @@
             </MenuButton>
             <MenuButton layoutX="149.0" layoutY="13.0" mnemonicParsing="false" text="Appearance">
               <items>
-                  <CheckMenuItem fx:id="gridToggle" mnemonicParsing="false" text="Grid Lines" selected="true" />
-                  <MenuItem mnemonicParsing="false" text="Dark Mode" />
+                  <CheckMenuItem fx:id="toggleGridLinesItem" mnemonicParsing="false" onAction="#onToggleGridLines" selected="true" text="Grid Lines" />
+                  <MenuItem fx:id="toggleDarkModeItem" mnemonicParsing="false" onAction="#onToggleDarkMode" text="Dark Mode" />
               </items>
             </MenuButton>
             <Text fill="WHITE" layoutX="728.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Circuit Sandbox" wrappingWidth="269.91796875">
@@ -47,7 +47,7 @@
    <center>
       <Pane fx:id="playgroundPane" style="-fx-background-color: BFBFBF;" BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="gridCanvas" height="1000.0" layoutX="-1.0" layoutY="-2.0" width="1725.0" />
+            <Canvas fx:id="gridCanvas" height="997.0" layoutX="-1.0" layoutY="1.0" width="1725.0" />
          </children>
       </Pane>
    </center>
