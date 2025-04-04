@@ -51,8 +51,6 @@ public class Login extends Application  {
          * key.json is stored in the gitignore file
          * @throws IOException
          */
-
-
         public static void main(String[] args) {
             launch();
         }

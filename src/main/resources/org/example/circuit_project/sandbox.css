@@ -1,0 +1,18 @@
+
+/* Light Mode */
+.sandbox-light {
+    -fx-background-color: #BFBFBF;
+}
+
+.grid-line-light {
+    -fx-stroke: #CCCCCC;
+}
+
+/* Dark Mode */
+.sandbox-dark {
+    -fx-background-color: #1A1A1A;
+}
+
+.grid-line-dark {
+    -fx-stroke: #444444;
+}
