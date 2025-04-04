@@ -16,15 +16,15 @@
    <top>
       <Pane prefHeight="50.0" prefWidth="1725.0" style="-fx-background-color: #0D1117;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Home" />
-            <Button layoutX="1668.0" layoutY="13.0" mnemonicParsing="false" text="Clear" />
-            <MenuButton layoutX="69.0" layoutY="13.0" mnemonicParsing="false" text="Options">
+            <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" text="Home" />
+            <Button layoutX="1646.0" layoutY="8.0" mnemonicParsing="false" text="Clear" />
+            <MenuButton layoutX="101.0" layoutY="8.0" mnemonicParsing="false" text="Options">
               <items>
                 <MenuItem mnemonicParsing="false" text="Save" />
                 <MenuItem mnemonicParsing="false" text="Load" />
               </items>
             </MenuButton>
-            <MenuButton layoutX="149.0" layoutY="13.0" mnemonicParsing="false" text="Appearance">
+            <MenuButton layoutX="219.0" layoutY="8.0" mnemonicParsing="false" text="Appearance">
               <items>
                   <CheckMenuItem fx:id="toggleGridLinesItem" mnemonicParsing="false" onAction="#onToggleGridLines" selected="true" text="Grid Lines" />
                   <MenuItem fx:id="toggleDarkModeItem" mnemonicParsing="false" onAction="#onToggleDarkMode" text="Dark Mode" />
@@ -47,7 +47,7 @@
    <center>
       <Pane fx:id="playgroundPane" style="-fx-background-color: BFBFBF;" BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="gridCanvas" height="997.0" layoutX="-1.0" layoutY="1.0" width="1725.0" />
+            <Canvas fx:id="gridCanvas" height="995.0" layoutX="-1.0" layoutY="1.0" width="1725.0" />
          </children>
       </Pane>
    </center>

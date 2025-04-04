@@ -16,3 +16,63 @@
 .grid-line-dark {
     -fx-stroke: #444444;
 }
+
+/*Button / MenuButton*/
+
+.button, .menu-button{
+    -fx-background-color: white;
+    -fx-text-fill: #0D1117;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0.4, 0, 2);
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-pref-height: 34px;
+    -fx-min-height: 34px;
+    -fx-max-height: 34px;
+}
+
+.button:hover, .menu-button:hover{
+    -fx-background-color: #f0f0f0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.4, 0, 3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button:pressed, .menu-button:pressed{
+    -fx-background-color: #e0e0e0;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 1);
+    -fx-border-color: #00f0ff;
+    -fx-border-width: 2;
+    -fx-border-radius: 10px;
+}
+
+.menu-item{
+    -fx-padding: 6 14 6 14;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10px;
+
+}
+
+.menu-item:focused{
+    -fx-background-color: #eeeeee;
+    -fx-background-radius: 10px;
+}
+
+.context-menu{
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0.3, 0, 2);
+}
+
+.menu-button > .label {
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: -1.4 0 0 0;
+}
+
+.menu-button {
+    -fx-content-display: top; /* forces content to align top */
+}
