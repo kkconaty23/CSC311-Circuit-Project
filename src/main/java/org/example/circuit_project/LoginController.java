@@ -57,11 +57,12 @@ public class LoginController implements Initializable {
     @FXML
     private void onLoginClicked(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/splash-screen.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+
         } catch (IOException e){
             e.printStackTrace();
         }
