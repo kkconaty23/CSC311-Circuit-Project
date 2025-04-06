@@ -3,6 +3,7 @@ package org.example.circuit_project;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,6 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +25,9 @@ public class SandboxController implements Initializable {
 
     @FXML
     public Pane batteryIcon;
+
+    @FXML
+    public Line wire;
     // Main Playground
     @FXML private Pane playgroundPane;
 
@@ -47,11 +53,7 @@ public class SandboxController implements Initializable {
 
     }
 
-//    private void addComponentPreview(String name, String fxmlPath) {
-//        Button previewBtn = new Button(name);
-//        previewBtn.setOnAction(e -> loadComponent(fxmlPath, 100, 100));
-//        componentTray.getChildren().add(previewBtn);
-//    }
+
 
     /**
      * Draws the grid on the canvas
@@ -111,17 +113,23 @@ public class SandboxController implements Initializable {
     public void loadComponent(String fxmlPath, double x, double y) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Pane componentPane = loader.load();
+            Node component = loader.load();  // We use Node instead of Pane to handle both types.
 
             // Set position
-            componentPane.setLayoutX(x);
-            componentPane.setLayoutY(y);
+            component.setLayoutX(x);
+            component.setLayoutY(y);
 
-            // Optional: Add drag event or click listener here
-            enableDrag(componentPane);
+            // Check if the component is a Line (wire)
+            if (component instanceof Line) {
+                Line wire = (Line) component;
+                enableLineResize(wire);  // Enable resizing for the wire
+            }
+
+            // Enable dragging for all components
+            enableDrag(component);
 
             // Add to the playground
-            playgroundPane.getChildren().add(componentPane);
+            playgroundPane.getChildren().add(component);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,6 +149,48 @@ public class SandboxController implements Initializable {
         });
     }
 
+    private void enableLineResize(Line line) {
+        // Flag to indicate which end of the line is being resized
+        final boolean[] isResizingStart = {false};  // Initially, we're not resizing the start
+
+        // Handle mouse pressed event on the line
+        line.setOnMousePressed(event -> {
+            double startX = line.getStartX();
+            double startY = line.getStartY();
+            double endX = line.getEndX();
+            double endY = line.getEndY();
+
+            // Check if the mouse is close to the start or end of the line
+            double startDist = Math.hypot(event.getSceneX() - startX, event.getSceneY() - startY);
+            double endDist = Math.hypot(event.getSceneX() - endX, event.getSceneY() - endY);
+
+            // Set the resizing flag based on proximity to the start or end
+            isResizingStart[0] = startDist < endDist;  // If closer to the start, resize start
+        });
+
+        // Handle mouse drag event on the line
+        line.setOnMouseDragged(event -> {
+            if (isResizingStart[0]) {
+                // Resize the start of the line
+                line.setStartX(event.getSceneX());
+                line.setStartY(event.getSceneY());
+            } else {
+                // Resize the end of the line
+                line.setEndX(event.getSceneX());
+                line.setEndY(event.getSceneY());
+            }
+        });
+    }
+
+
+    // Helper method to create resize handles
+    private Rectangle createResizeHandle(double x, double y) {
+        Rectangle handle = new Rectangle(x - 5, y - 5, 10, 10);  // Create a small square handle
+        handle.setFill(Color.RED);  // Make it visible
+        handle.setCursor(Cursor.HAND);  // Make it look draggable
+        return handle;
+    }
+
     @FXML
     public void batteryClick(MouseEvent mouseEvent) {
         System.out.println("Battery icon clicked");
@@ -151,6 +201,12 @@ public class SandboxController implements Initializable {
     public void lightbulbClick(MouseEvent mouseEvent) {
         System.out.println("Lightbulb icon clicked");
         loadComponent("/org/example/circuit_project/lightbulbICON.fxml", 100, 100);
+    }
+
+    @FXML
+    public void wireClick(MouseEvent mouseEvent) {
+        System.out.println("Wire icon clicked");
+        loadComponent("/org/example/circuit_project/wireICON.fxml", 100, 100);
     }
 
     private static class Delta {

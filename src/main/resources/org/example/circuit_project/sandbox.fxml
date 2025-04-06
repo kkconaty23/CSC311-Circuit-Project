@@ -80,6 +80,8 @@
                     <Line endX="-87.0" endY="-52.0" layoutX="79.0" layoutY="29.0" opacity="0.0" startX="-34.0" startY="-21.0" stroke="#fff422" strokeWidth="5.0" />
                 </children>
             </Pane>
+            <Line fx:id="wire" onMouseClicked="#wireClick" endX="100.0" fill="#508dc6" startX="-5.0" stroke="#d04949"
+                  strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" xmlns:fx="http://javafx.com/fxml/1"/>
         </HBox>
     </bottom>
 </BorderPane>
