@@ -1,0 +1,10 @@
+<component>
+    <type>Wire</type>
+    <x1>100</x1>          <!-- Starting X position of wire -->
+    <y1>150</y1>          <!-- Starting Y position of wire -->
+    <x2>200</x2>          <!-- Ending X position of wire -->
+    <y2>150</y2>          <!-- Ending Y position of wire -->
+    <thickness>2</thickness> <!-- Thickness of the wire -->
+    <color>#000000</color>  <!-- Color of the wire -->
+    <label>W1</label>     <!-- Optional: Label for the wire -->
+</component>

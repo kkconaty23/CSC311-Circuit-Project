@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Rectangle?>
+<Pane fx:id="battery" prefHeight="38.0" prefWidth="106.0" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="90.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" height="32.0" layoutX="-8.0" layoutY="-2.0"  stroke="BLACK" strokeType="INSIDE" width="104.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d78f1d" height="32.0" layoutX="71.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
+    </children>
+</Pane>

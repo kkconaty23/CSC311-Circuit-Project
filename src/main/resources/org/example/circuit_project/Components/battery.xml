@@ -1,0 +1,7 @@
+<component>
+    <type>Battery</type>
+    <x>100</x>
+    <y>200</y>
+    <label>BAT1</label>
+    <voltage>9</voltage>
+</component>

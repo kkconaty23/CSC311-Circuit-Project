@@ -36,7 +36,7 @@ public class SplashScreenController  {
     @FXML
     private void onClick(ActionEvent event) {
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/playground.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
