@@ -1,0 +1,26 @@
+.text-field:focused, .password-field:focused{
+    -fx-border-color: #0D1117;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-insets: 0;
+    -fx-background-color: white;
+}
+
+#loginButton, #registerButton {
+    -fx-background-color: #0D1117;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 5, 0, 0, 4);
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-font-size: 14px;
+}
+
+.button:hover {
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
