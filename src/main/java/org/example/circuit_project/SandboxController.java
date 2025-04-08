@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,13 +40,64 @@ public class SandboxController implements Initializable {
     @FXML private CheckMenuItem toggleGridLinesItem;
 
     // Dark / Light Mode
-    @FXML private MenuItem toggleDarkModeItem;
+    //instead of a drop down menu item
+    //dark/light toogle button
+    //on bottom of componentTray 2
+    @FXML private JToggleButton toggleDarkModeItem;
     private boolean isDarkMode = false;
     private GraphicsContext gc;
     private boolean gridLinesEnabled = true;
 
     @FXML
     private HBox componentTray;
+
+    //* private VBox componentTray2;
+
+    @FXML
+    private JToggleButton toggleButton;
+
+
+    //Load images
+    @FXML
+    private ImageView lightBulb = new ImageView("images/lightbulb.png");
+    private ImageView battery = new ImageView("images/battery.png");
+    private ImageView inductor = new ImageView("images/inductor.png");
+
+    // ImageView as "button"
+    @FXML
+    ImageView imageView = new ImageView("images/lightbulb.png");
+
+    @FXML
+    ImageView imageView2 = new ImageView("images/battery.png");
+
+    @FXML
+    ImageView imageView3 = new ImageView("images/inductor.png");
+
+    {
+        imageView.setFitWidth(100);
+        imageView.setPreserveRatio(true);
+        imageView.setStyle("-fx-cursor: hand;");
+        imageView2.setFitWidth(100);
+        imageView2.setPreserveRatio(true);
+        imageView2.setStyle("-fx-cursor: hand;");
+        imageView3.setFitWidth(100);
+        imageView3.setPreserveRatio(true);
+        imageView3.setStyle("-fx-cursor: hand;");
+    }
+    //theres already a canvas, created a new one for the sake of this
+    //particular "componentTray"
+    Canvas canvas = new Canvas(300, 300);
+    {
+        gc = gridCanvas.getGraphicsContext2D();
+    }
+    public boolean toggleButton.setOnAction(MouseEvent event)
+        if
+
+    public static imageView.setOnMouseClicked((MouseEvent event) -> {
+            gc.clearRect(0, 0, gridCanvas.getWidth(), gridCanvas.getHeight()); // clear old image
+            gc.drawImage(image, 0, 0); // draw the image on the canvas
+        });
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,7 +147,7 @@ public class SandboxController implements Initializable {
      * Updates the background color and button label, and redraws the grid to match the theme.
      */
     @FXML
-    private void onToggleDarkMode() {
+    private void toggleDarkModeButtonClicked() {
         isDarkMode = !isDarkMode;
 
         if (isDarkMode) {

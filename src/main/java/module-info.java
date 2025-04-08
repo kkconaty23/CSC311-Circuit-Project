@@ -4,6 +4,7 @@ module org.example.circuit_project {
     requires firebase.admin;
     requires com.google.auth;
     requires google.cloud.firestore;
+    requires java.desktop;
 
 
     opens org.example.circuit_project to javafx.fxml;

@@ -5,22 +5,26 @@
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.shape.Ellipse?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.HBox?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1191.0" prefWidth="1960.0" stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
    <top>
       <Pane prefHeight="50.0" prefWidth="1725.0" style="-fx-background-color: #0D1117;" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" text="Home" />
-            <Button layoutX="1646.0" layoutY="8.0" mnemonicParsing="false" text="Clear" />
+            <Button layoutX="1111.0" layoutY="16.0" mnemonicParsing="false" text="Clear" />
             <MenuButton layoutX="101.0" layoutY="8.0" mnemonicParsing="false" text="Options">
               <items>
                 <MenuItem mnemonicParsing="false" text="Save" />
@@ -37,19 +41,39 @@
                <font>
                   <Font size="36.0" />
                </font></Text>
+            <Pane fx:id="playgroundPane" layoutX="-131.0" layoutY="361.0" prefHeight="374.0" prefWidth="0.0" style="-fx-background-color: BFBFBF;">
+               <children>
+                  <VBox layoutX="187.0" layoutY="-271.0" prefHeight="955.0" prefWidth="210.0">
+                     <children>
+                        <ImageView fx:id="imageView" fitHeight="298.0" fitWidth="213.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/battery.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="imageView2" fitHeight="264.0" fitWidth="337.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/inductor.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="imageView3" fitHeight="262.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/lightbulb.png" />
+                           </image>
+                        </ImageView>
+                        <ToggleButton fx:id="toggleButton" mnemonicParsing="false" onAction="#toggleDarkModeButtonClicked" prefHeight="52.0" prefWidth="207.0" text="Light/Dark Mode">
+                           <tooltip>
+                              <Tooltip text="Change into dark or light mode " />
+                           </tooltip>
+                        </ToggleButton>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
          </children>
       </Pane>
    </top>
-
-   <center>
-      <Pane fx:id="playgroundPane" style="-fx-background-color: BFBFBF;" BorderPane.alignment="CENTER">
-         <children>
-            <Canvas fx:id="gridCanvas" height="995.0" layoutX="-1.0" layoutY="1.0" width="1725.0" />
-         </children>
-      </Pane>
-   </center>
     <bottom>
-        <HBox spacing="20.0" alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
             <!-- Battery Icon -->
             <Pane fx:id="batteryIcon" onMouseClicked="#batteryClick" prefHeight="47.0" prefWidth="106.0">
                 <children>
@@ -80,8 +104,10 @@
                     <Line endX="-87.0" endY="-52.0" layoutX="79.0" layoutY="29.0" opacity="0.0" startX="-34.0" startY="-21.0" stroke="#fff422" strokeWidth="5.0" />
                 </children>
             </Pane>
-            <Line fx:id="wire" onMouseClicked="#wireClick" endX="100.0" fill="#508dc6" startX="-5.0" stroke="#d04949"
-                  strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" xmlns:fx="http://javafx.com/fxml/1"/>
+            <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#wireClick" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" xmlns:fx="http://javafx.com/fxml/1" />
         </HBox>
     </bottom>
+   <center>
+      <Canvas fx:id="gridCanvas" height="679.0" width="1133.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>
