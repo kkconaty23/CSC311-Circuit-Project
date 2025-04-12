@@ -4,8 +4,11 @@ module org.example.circuit_project {
     requires firebase.admin;
     requires com.google.auth;
     requires google.cloud.firestore;
+    requires jakarta.xml.bind;
+    requires org.apache.httpcomponents.httpclient;
 
+    exports org.example.circuit_project;
 
     opens org.example.circuit_project to javafx.fxml;
-    exports org.example.circuit_project;
+    opens org.example.circuit_project.Elements to jakarta.xml.bind;  // Add this line
 }

@@ -1,107 +1,81 @@
 package org.example.circuit_project.Elements;
 
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+import java.util.ArrayList;
 import java.util.List;
 
-//HERE TO REFER?
-//Everything has a particular order and format and follows java conventions. So, please follow this
-
-/**
- * The circuit class acts a bottom layer for any circuit sandbox instance. It will hold all components and keep track
- * of connections between components. Each circuit will have a user defined name and can be unique identified by its
- * circuit ID.
- */
+@XmlRootElement(name = "circuit")
 public class Circuit {
-    private int id;
+    private long id;
     private String name;
-    private List<Component> componentList;
-    private List<Connection> connectionList;
+    private List<Battery> batteries = new ArrayList<>();
+    private List<Lightbulb> lightbulbs = new ArrayList<>();
+    private List<Wire> wires = new ArrayList<>();
 
-    /**
-     * Constructor for circuit object.
-     *
-     * @param id             unique ID for circuit
-     * @param name           user created name for circuit instance
-     * @param componentList  list of all components for a given circuit instance
-     * @param connectionList list of all component connections for a given circuit instance
-     */
-    public Circuit(int id, String name, List<Component> componentList, List<Connection> connectionList) {
-        this.id = id;
-        this.name = name;
-        this.componentList = componentList;
-        this.connectionList = connectionList;
+    public Circuit() {
+        // Default constructor required for JAXB
     }
 
-    /**
-     * Accessor method to acquire unique circuit ID
-     *
-     * @return the unique identifier for this circuit
-     */
-    public int getId() {
+    @XmlElement(name = "id")
+    public long getId() {
         return id;
     }
 
-    /**
-     * Mutator method to assign a unique circuit ID
-     *
-     * @param id unique identifying ID for this circuit
-     */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Accessor method to acquire user defined circuit name
-     *
-     * @return the name of the circuit
-     */
+    @XmlElement(name = "name")
     public String getName() {
         return name;
     }
 
-    /**
-     * Mutator method to assign a circuit a user defined name
-     *
-     * @param name user defined name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Accessor method to acquire the list of components in this circuit
-     *
-     * @return list of all components in this circuit
-     */
-    public List<Component> getComponentList() {
-        return componentList;
+    @XmlElementWrapper(name = "batteries")
+    @XmlElement(name = "battery")
+    public List<Battery> getBatteries() {
+        return batteries;
     }
 
-    /**
-     * Mutator method to create a list of components for a given circuit
-     *
-     * @param componentList list of components in a circuit
-     */
-    public void setComponentList(List<Component> componentList) {
-        this.componentList = componentList;
+    public void setBatteries(List<Battery> batteries) {
+        this.batteries = batteries;
     }
 
-    /**
-     * Accessor method to acquire list of connections for this circuit
-     *
-     * @return list of connections in this circuit
-     */
-    public List<Connection> getConnectionList() {
-        return connectionList;
+    public void addBattery(Battery battery) {
+        this.batteries.add(battery);
     }
 
-    /**
-     * Mutator method to create a list of component connections for a given circuit
-     *
-     * @param connectionList list of connections for this circuit
-     */
-    public void setConnectionList(List<Connection> connectionList) {
-        this.connectionList = connectionList;
+    @XmlElementWrapper(name = "lightbulbs")
+    @XmlElement(name = "lightbulb")
+    public List<Lightbulb> getLightbulbs() {
+        return lightbulbs;
     }
 
+    public void setLightbulbs(List<Lightbulb> lightbulbs) {
+        this.lightbulbs = lightbulbs;
+    }
 
+    public void addLightbulb(Lightbulb lightbulb) {
+        this.lightbulbs.add(lightbulb);
+    }
+
+    @XmlElementWrapper(name = "wires")
+    @XmlElement(name = "wire")
+    public List<Wire> getWires() {
+        return wires;
+    }
+
+    public void setWires(List<Wire> wires) {
+        this.wires = wires;
+    }
+
+    public void addWire(Wire wire) {
+        this.wires.add(wire);
+    }
 }

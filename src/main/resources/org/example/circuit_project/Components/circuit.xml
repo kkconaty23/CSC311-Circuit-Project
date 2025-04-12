@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<circuit>
+    <batteries>
+        <battery>
+            <x>100.0</x>
+            <y>150.0</y>
+            <voltage>9.0</voltage>
+        </battery>
+        <battery>
+            <x>200.0</x>
+            <y>250.0</y>
+            <voltage>5.0</voltage>
+        </battery>
+    </batteries>
+</circuit>

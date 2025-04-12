@@ -70,6 +70,22 @@
         </dependency>
 
 
+            <!-- JAXB API -->
+            <dependency>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+
+            <!-- JAXB Runtime used for saving and using xml files-->
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+
+
+
     </dependencies>
 
     <build>

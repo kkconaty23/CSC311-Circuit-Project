@@ -6,16 +6,15 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.shape.Ellipse?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.HBox?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1018.0" prefWidth="1730.0" stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
    <top>
       <Pane prefHeight="50.0" prefWidth="1725.0" style="-fx-background-color: #0D1117;" BorderPane.alignment="CENTER">
          <children>
@@ -23,8 +22,8 @@
             <Button layoutX="1646.0" layoutY="8.0" mnemonicParsing="false" text="Clear" />
             <MenuButton layoutX="101.0" layoutY="8.0" mnemonicParsing="false" text="Options">
               <items>
-                <MenuItem mnemonicParsing="false" text="Save" />
-                <MenuItem mnemonicParsing="false" text="Load" />
+                <MenuItem mnemonicParsing="false" onAction="#saveBtnClick" text="Save" />
+                <MenuItem mnemonicParsing="false" onAction="#loadBtnClick" text="Load" />
               </items>
             </MenuButton>
             <MenuButton layoutX="219.0" layoutY="8.0" mnemonicParsing="false" text="Appearance">
@@ -49,7 +48,7 @@
       </Pane>
    </center>
     <bottom>
-        <HBox spacing="20.0" alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
             <!-- Battery Icon -->
             <Pane fx:id="batteryIcon" onMouseClicked="#batteryClick" prefHeight="47.0" prefWidth="106.0">
                 <children>
@@ -80,8 +79,7 @@
                     <Line endX="-87.0" endY="-52.0" layoutX="79.0" layoutY="29.0" opacity="0.0" startX="-34.0" startY="-21.0" stroke="#fff422" strokeWidth="5.0" />
                 </children>
             </Pane>
-            <Line fx:id="wire" onMouseClicked="#wireClick" endX="100.0" fill="#508dc6" startX="-5.0" stroke="#d04949"
-                  strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" xmlns:fx="http://javafx.com/fxml/1"/>
+            <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#wireClick" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" xmlns:fx="http://javafx.com/fxml/1" />
         </HBox>
     </bottom>
 </BorderPane>

@@ -1,10 +1,50 @@
 package org.example.circuit_project.Elements;
-// each component will be a  type (battery, wire, lightbulb, fuse, switch, resistor)
-//component will have the following:
-//- a unique ID
-//- an x(int) and y(int) coordinate to show its location on the circuit board
-//- rotate(float) to determine its rotation
-//- properties (voltage, resistance)
-//- a list of ports
-public class Component {
+
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlID;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+
+@XmlSeeAlso({Battery.class, Lightbulb.class, Wire.class})
+public abstract class Component {
+    private String id;
+    private double x;
+    private double y;
+
+    public Component() {
+        // Default constructor required for JAXB
+    }
+
+    public Component(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @XmlID
+    @XmlAttribute
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @XmlElement
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    @XmlElement
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
 }
