@@ -52,7 +52,7 @@ public class SandboxController implements Initializable {
     @FXML private MenuItem toggleDarkModeItem;
     @FXML private HBox componentTray;
 
-    // Circuit Component Management
+    //circuit Components
     private final List<Component> components = new ArrayList<>();
     private final Map<String, Node> componentNodesMap = new HashMap<>(); // Maps component IDs to UI nodes
 
@@ -62,11 +62,16 @@ public class SandboxController implements Initializable {
     private boolean gridLinesEnabled = true;
     private static final double GRID_SPACING = 25.0;
 
-    // Component Types
+    //component Types
     private static final String BATTERY_FXML = "/org/example/circuit_project/batteryICON.fxml";
     private static final String LIGHTBULB_FXML = "/org/example/circuit_project/lightbulbICON.fxml";
     private static final String WIRE_FXML = "/org/example/circuit_project/wireICON.fxml";
 
+    /**
+     * initialize method used for setting the UI on boot up
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = gridCanvas.getGraphicsContext2D();
@@ -125,6 +130,11 @@ public class SandboxController implements Initializable {
         drawGrid(gc, isDarkMode, gridLinesEnabled);
     }
 
+    @FXML
+    private void clearBtnClick(){
+        clearPlayground();
+    }
+
     /**
      * Loads a component from an FXML file and adds it to the playground
      *
@@ -175,8 +185,8 @@ public class SandboxController implements Initializable {
         });
 
         node.setOnMouseDragged(event -> {
-            node.setLayoutX(alignToGrid(event.getSceneX() - dragDelta.x));
-            node.setLayoutY(alignToGrid(event.getSceneY() - dragDelta.y));
+            node.setLayoutX(event.getSceneX() - dragDelta.x);
+            node.setLayoutY(event.getSceneY() - dragDelta.y);
 
             // Update component model with new position
             String nodeId = node.getId();
@@ -195,87 +205,89 @@ public class SandboxController implements Initializable {
     }
 
     /**
+     * MAKING IT MORE SNAPPY WITH THE GRIDS (_OPTIONAL_)
      * Aligns a value to the nearest grid position
      */
-    private double alignToGrid(double value) {
-        return Math.round(value / GRID_SPACING) * GRID_SPACING;
-    }
+//    private double alignToGrid(double value) {
+//        return Math.round(value / GRID_SPACING) * GRID_SPACING;
+//    }
 
     /**
      * Enables resizing of line components (wires)
-     *
+     *NEEDS SOME WORK TO MAKE IT ON THE LINE ADJUSTMENTS
      * @param line The line to make resizable
-     * @param wireId The ID of the associated Wire component
+     * @
      */
     private void enableLineResize(Line line, String wireId) {
-        // Create resize handles
-        Rectangle startHandle = createResizeHandle(line.getStartX(), line.getStartY());
-        Rectangle endHandle = createResizeHandle(line.getEndX(), line.getEndY());
-
-        // Add handles to the playground
-        playgroundPane.getChildren().addAll(startHandle, endHandle);
-
-        // Make handles draggable
+        final boolean[] resizingStart = new boolean[1]; // true = resizing start, false = end
         final Delta dragDelta = new Delta();
 
-        // Start handle drag
-        startHandle.setOnMousePressed(event -> {
-            dragDelta.x = event.getSceneX() - startHandle.getX();
-            dragDelta.y = event.getSceneY() - startHandle.getY();
+        line.setOnMousePressed(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            double startX = line.getStartX();
+            double startY = line.getStartY();
+            double endX = line.getEndX();
+            double endY = line.getEndY();
+
+            // Decide which endpoint is being dragged
+            resizingStart[0] = Math.hypot(mouseX - startX, mouseY - startY) <
+                    Math.hypot(mouseX - endX, mouseY - endY);
+
+            dragDelta.x = mouseX;
+            dragDelta.y = mouseY;
+
             event.consume();
         });
 
-        startHandle.setOnMouseDragged(event -> {
-            double newX = alignToGrid(event.getSceneX() - dragDelta.x + 5);
-            double newY = alignToGrid(event.getSceneY() - dragDelta.y + 5);
+        line.setOnMouseDragged(event -> {
+            double newX = event.getX();
+            double newY = event.getY();
 
-            // Update handle position
-            startHandle.setX(newX - 5);
-            startHandle.setY(newY - 5);
+            if (resizingStart[0]) {
+                line.setStartX(newX);
+                line.setStartY(newY);
+            } else {
+                line.setEndX(newX);
+                line.setEndY(newY);
+            }
 
-            // Update line position
-            line.setStartX(newX);
-            line.setStartY(newY);
-
-            // Update wire component position
+            // 🔥 Update the corresponding Wire's absolute start/end points
             Wire wire = (Wire) findComponentById(wireId);
-            if (wire != null) {
-                wire.setStartX(newX);
-                wire.setStartY(newY);
+            Node wireNode = componentNodesMap.get(wireId);
+            if (wire != null && wireNode != null) {
+                double offsetX = wireNode.getLayoutX();
+                double offsetY = wireNode.getLayoutY();
+
+                wire.setStartX(line.getStartX() + offsetX);
+                wire.setStartY(line.getStartY() + offsetY);
+                wire.setEndX(line.getEndX() + offsetX);
+                wire.setEndY(line.getEndY() + offsetY);
             }
 
             event.consume();
         });
 
-        // End handle drag
-        endHandle.setOnMousePressed(event -> {
-            dragDelta.x = event.getSceneX() - endHandle.getX();
-            dragDelta.y = event.getSceneY() - endHandle.getY();
-            event.consume();
-        });
+        line.setOnMouseMoved(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
 
-        endHandle.setOnMouseDragged(event -> {
-            double newX = alignToGrid(event.getSceneX() - dragDelta.x + 5);
-            double newY = alignToGrid(event.getSceneY() - dragDelta.y + 5);
+            double startX = line.getStartX();
+            double startY = line.getStartY();
+            double endX = line.getEndX();
+            double endY = line.getEndY();
 
-            // Update handle position
-            endHandle.setX(newX - 5);
-            endHandle.setY(newY - 5);
-
-            // Update line position
-            line.setEndX(newX);
-            line.setEndY(newY);
-
-            // Update wire component position
-            Wire wire = (Wire) findComponentById(wireId);
-            if (wire != null) {
-                wire.setEndX(newX);
-                wire.setEndY(newY);
+            if (Math.hypot(mouseX - startX, mouseY - startY) < 10 ||
+                    Math.hypot(mouseX - endX, mouseY - endY) < 10) {
+                line.setCursor(Cursor.CROSSHAIR);
+            } else {
+                line.setCursor(Cursor.DEFAULT);
             }
-
-            event.consume();
         });
     }
+
+
 
     /**
      * Creates a resize handle for line endpoints
@@ -301,12 +313,13 @@ public class SandboxController implements Initializable {
     }
 
     /**
-     * Adds a new battery to the playground
+     * Adds a new battery to the playground in the form of FXML icon
+     * and also creates a new battery instance
      */
     @FXML
     public void batteryClick(MouseEvent mouseEvent) {
-        double x = alignToGrid(100);
-        double y = alignToGrid(100);
+        double x = 100;
+        double y = 100;
         String batteryId = "battery-" + UUID.randomUUID().toString();
 
         // Create UI component
@@ -317,7 +330,7 @@ public class SandboxController implements Initializable {
             Battery battery = new Battery(x, y, 9.0); // Default 9V battery
             battery.setId(batteryId);
 
-            // Store component
+            // store component SO IT CAN BE RELOADED
             components.add(battery);
             componentNodesMap.put(batteryId, batteryNode);
         }
@@ -328,8 +341,8 @@ public class SandboxController implements Initializable {
      */
     @FXML
     public void lightbulbClick(MouseEvent mouseEvent) {
-        double x = alignToGrid(100);
-        double y = alignToGrid(100);
+        double x = 100;
+        double y = 100;
         String lightbulbId = "lightbulb-" + UUID.randomUUID().toString();
 
         // Create UI component
@@ -347,47 +360,41 @@ public class SandboxController implements Initializable {
     }
 
 
+    /**
+     * creates a new dragable wire and creates a wire java obj
+     * @param mouseEvent
+     */
     @FXML
     public void wireClick(MouseEvent mouseEvent) {
-        double x = alignToGrid(100);
-        double y = alignToGrid(100);
+        double x = 100;
+        double y = 100;
         String wireId = "wire-" + UUID.randomUUID().toString();
 
-        // Create UI component
         Node wireNode = loadComponent(WIRE_FXML, x, y, wireId);
 
         if (wireNode != null) {
-            // Find the Line within the loaded FXML
-            Line wireLine = null;
-
-            // If the node is a Line directly
-            if (wireNode instanceof Line) {
-                wireLine = (Line) wireNode;
-            }
-            // If the node is a container (like Pane) that contains a Line
-            else if (wireNode instanceof Parent) {
-                wireLine = findLineInNode(wireNode);
-            }
+            Line wireLine = findLineInNode(wireNode);
 
             if (wireLine != null) {
-                // Create data model
                 Wire wire = new Wire(
-                        wireLine.getStartX() + x, // Add offset for the container's position
+                        wireLine.getStartX() + x,
                         wireLine.getStartY() + y,
                         wireLine.getEndX() + x,
                         wireLine.getEndY() + y
                 );
                 wire.setId(wireId);
+                wire.setX(x);
+                wire.setY(y);
 
-                // Enable line resizing
+                // Pass the wireId so resizing updates the model
                 enableLineResize(wireLine, wireId);
 
-                // Store component
                 components.add(wire);
                 componentNodesMap.put(wireId, wireNode);
             }
         }
     }
+
 
     /**
      * Utility to find a Line object within a Node hierarchy
@@ -413,20 +420,9 @@ public class SandboxController implements Initializable {
         double x, y;
     }
 
-    /**
-     * Handle drop of a component
-     */
-    @FXML
-    public void handleDrop(MouseEvent event) {
-        // This method could be expanded to support dragging components from a palette
-        double x = alignToGrid(event.getX());
-        double y = alignToGrid(event.getY());
-
-        batteryClick(event); // Default to adding a battery for now
-    }
 
     /**
-     * Show the save file dialog and save the circuit
+     * Show the save file dialog and save the circuit to you local machine (currently)
      */
     @FXML
     public void saveBtnClick(ActionEvent event) {
@@ -452,6 +448,8 @@ public class SandboxController implements Initializable {
 
     /**
      * Show the load file dialog and load a circuit
+     * pulls up file explorer and allows you to open previous builds
+     * POTENTIALLY KEEP TIS WAY SINCE IT IS A DESKTOP APPLICATION
      */
     @FXML
     public void loadBtnClick(ActionEvent event) {
@@ -476,11 +474,12 @@ public class SandboxController implements Initializable {
 
     /**
      * Save the current circuit to XML
+     * creates a new circuit xml file that the user can rename
      */
     public void saveCircuitToXML(File file) {
         try {
-            // Create a new Circuit object with all components
-            Circuit circuit = new Circuit();
+
+            Circuit circuit = new Circuit(); //create a new circuit object with all components
             circuit.setName("Circuit " + System.currentTimeMillis());
             circuit.setId(System.currentTimeMillis());
 
@@ -508,7 +507,7 @@ public class SandboxController implements Initializable {
             marshaller.marshal(circuit, file);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to save circuit: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to save circuit: " + e.getMessage(), e);//error checking
         }
     }
 
@@ -538,12 +537,13 @@ public class SandboxController implements Initializable {
 
     /**
      * Update the UI with components from a loaded circuit
+     * puts the components back into their position
      */
     private void updateUIWithCircuit(Circuit circuit) {
-        // Clear existing components
-        clearPlayground();
 
-        // Add all components from the loaded circuit
+        clearPlayground(); //clear the playground
+
+        //get all componentes from the circuit xml and add the m to correct position
         addBatteriesToPlayground(circuit.getBatteries());
         addLightbulbsToPlayground(circuit.getLightbulbs());
         addWiresToPlayground(circuit.getWires());
@@ -562,6 +562,7 @@ public class SandboxController implements Initializable {
     }
 
     /**
+     * helper method
      * Add batteries from a circuit to the playground
      */
     private void addBatteriesToPlayground(List<Battery> batteries) {
@@ -580,6 +581,7 @@ public class SandboxController implements Initializable {
     }
 
     /**
+     * helper method
      * Add lightbulbs from a circuit to the playground
      */
     private void addLightbulbsToPlayground(List<Lightbulb> lightbulbs) {
@@ -598,13 +600,14 @@ public class SandboxController implements Initializable {
     }
 
     /**
+     * helper method
      * Add wires from a circuit to the playground
      */
     private void addWiresToPlayground(List<Wire> wires) {
         if (wires == null) return;
 
         for (Wire wire : wires) {
-            // Create UI component
+            // Create UI component at the wire's position
             Node wireNode = loadComponent(WIRE_FXML, wire.getX(), wire.getY(), wire.getId());
 
             if (wireNode != null) {
@@ -612,11 +615,18 @@ public class SandboxController implements Initializable {
                 Line wireLine = findLineInNode(wireNode);
 
                 if (wireLine != null) {
+                    // Calculate the offset-adjusted positions
+                    // The line's endpoints are relative to its container's position
+                    double startX = wire.getStartX() - wire.getX();
+                    double startY = wire.getStartY() - wire.getY();
+                    double endX = wire.getEndX() - wire.getX();
+                    double endY = wire.getEndY() - wire.getY();
+
                     // Update line endpoints
-                    wireLine.setStartX(wire.getStartX());
-                    wireLine.setStartY(wire.getStartY());
-                    wireLine.setEndX(wire.getEndX());
-                    wireLine.setEndY(wire.getEndY());
+                    wireLine.setStartX(startX);
+                    wireLine.setStartY(startY);
+                    wireLine.setEndX(endX);
+                    wireLine.setEndY(endY);
 
                     // Enable line resizing
                     enableLineResize(wireLine, wire.getId());

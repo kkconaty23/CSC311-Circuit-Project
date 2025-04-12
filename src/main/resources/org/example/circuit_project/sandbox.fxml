@@ -19,7 +19,7 @@
       <Pane prefHeight="50.0" prefWidth="1725.0" style="-fx-background-color: #0D1117;" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" text="Home" />
-            <Button layoutX="1646.0" layoutY="8.0" mnemonicParsing="false" text="Clear" />
+            <Button layoutX="1646.0" layoutY="8.0" mnemonicParsing="false" onAction="#clearBtnClick" text="Clear" />
             <MenuButton layoutX="101.0" layoutY="8.0" mnemonicParsing="false" text="Options">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#saveBtnClick" text="Save" />
