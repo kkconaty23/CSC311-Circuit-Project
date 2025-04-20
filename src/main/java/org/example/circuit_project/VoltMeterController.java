@@ -42,10 +42,20 @@ public class VoltMeterController {
         System.out.println(event);
     }
 
+    // Calculations of the display values using Ohms law (V = IR)
     // Ensure value of reading is changed when the mode is changed
     public String displayReading() {
-        return null;
+        String reading = switch (mode) {
+            case AMPS -> (voltage / resistance) + "A";
+            case VOLTS -> (amps * resistance) + "V";
+            case RESISTANCE -> (voltage / amps) + "Ω";
+            default -> throw new IllegalArgumentException("ERROR");
+        };
+        this.display = reading;
+        return reading;
     }
+
+
 
 
     // Getters and Setters
