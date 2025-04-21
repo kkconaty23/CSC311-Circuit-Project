@@ -4,8 +4,6 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -75,6 +73,14 @@ public class SandboxController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = gridCanvas.getGraphicsContext2D();
+        drawGrid(gc, isDarkMode, gridLinesEnabled);
+
+        gridCanvas.widthProperty().addListener((obs, oldVal, newVal) -> drawGrid(gc, isDarkMode, gridLinesEnabled));
+        gridCanvas.heightProperty().addListener((obs, oldVal, newVal) -> drawGrid(gc, isDarkMode, gridLinesEnabled));
+
+        gridCanvas.widthProperty().bind(playgroundPane.widthProperty());
+        gridCanvas.heightProperty().bind(playgroundPane.heightProperty());
+
         drawGrid(gc, isDarkMode, gridLinesEnabled);
     }
 
