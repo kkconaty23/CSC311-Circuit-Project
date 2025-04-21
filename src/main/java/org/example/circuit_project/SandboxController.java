@@ -162,6 +162,8 @@ public class SandboxController implements Initializable {
             component.setLayoutX(x);
             component.setLayoutY(y);
 
+            component.setUserData("dropped"); //Marks the entity as "dropped"
+
             enableDrag(component);
             playgroundPane.getChildren().add(component);
 
@@ -560,7 +562,9 @@ public class SandboxController implements Initializable {
      */
     private void clearPlayground() {
         // Remove all nodes except the grid canvas
-        playgroundPane.getChildren().removeIf(node -> node != gridCanvas);
+        playgroundPane.getChildren().removeIf(node -> {
+            return "dropped".equals(node.getUserData());
+                });
 
         // Clear component collections
         components.clear();
