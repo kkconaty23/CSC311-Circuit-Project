@@ -14,7 +14,7 @@ public class DbOpps {
     final String USERNAME = "circuitAdmin";
 
     //password will be shared. When you have it, do not push it. DONT EXPOSE US :D
-    final String PASSWORD = "";
+    final String PASSWORD = "Qwerty123!";
 
 
 
@@ -93,5 +93,37 @@ public class DbOpps {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean queryUserByName(String message, String password) {
+        boolean result = false;
+
+
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+
+            String sql = "SELECT * FROM circuitusers WHERE email = ? AND password = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, message);
+            preparedStatement.setString(2, password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String email = resultSet.getString("email");
+                String firstName = resultSet.getString("firstname");
+                String lastName = resultSet.getString("lastname");
+                System.out.println("ID: " + id + ", Email: " + email + ", FirstName: " + firstName +  ", LastName: " +lastName);
+                result = true;
+
+            }
+
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }return result;
     }
 }

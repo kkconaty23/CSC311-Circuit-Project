@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginController implements Initializable {
 
@@ -40,6 +42,9 @@ public class LoginController implements Initializable {
     @FXML private PasswordField passwordCheckField;
     @FXML private PasswordField passwordField;
     @FXML private DatePicker dobField;
+    @FXML private TextField loginEmailField;
+    @FXML private PasswordField loginPasswordField;
+
 
 
     @FXML
@@ -70,20 +75,30 @@ public class LoginController implements Initializable {
     @FXML
     private void onLoginClicked(ActionEvent event){
 
-        DbOpps connection = new DbOpps(); //establish database connection
-        connection.connectToDatabase();
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+        DbOpps connection = new DbOpps();//establish database connection
 
 
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
+
+        System.out.println(checkUser);
+
+if (checkUser){
+
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }else{
+    System.out.println(loginEmailField.getText() + " " + loginPasswordField.getText() + "is invalid");
+}
+
     }
     @FXML
     void onRegisterClicked(ActionEvent event) {
