@@ -5,7 +5,7 @@ module org.example.circuit_project {
     requires com.google.auth;
     requires google.cloud.firestore;
     requires jakarta.xml.bind;
-    requires org.apache.httpcomponents.httpclient;
+//    requires org.apache.httpcomponents.httpclient;
 
     exports org.example.circuit_project;
 
