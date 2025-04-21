@@ -14,7 +14,7 @@ public class DbOpps {
     final String USERNAME = "circuitAdmin";
 
     //password will be shared. When you have it, do not push it. DONT EXPOSE US :D
-    final String PASSWORD = "Qwerty123!";
+    final String PASSWORD = "";
 
 
 
