@@ -649,6 +649,8 @@ public class SandboxController implements Initializable {
         }
     }
 
+    // Methods for Voltmeter
+
     /**
      * Show an alert dialog
      */

@@ -9,7 +9,7 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
  * component base class that all other components extend
  * Main uses is giving components IDs and saving their X, Y coordinates
  */
-@XmlSeeAlso({Battery.class, Lightbulb.class, Wire.class})
+@XmlSeeAlso({Battery.class, Lightbulb.class, Wire.class, Voltmeter.class})
 public abstract class Component {
     private String id;
     private double x;
