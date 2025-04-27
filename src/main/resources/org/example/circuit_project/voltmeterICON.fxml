@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d02727" height="400.0" layoutX="149.0" stroke="BLACK" strokeType="INSIDE" width="302.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="65.0" layoutX="200.0" layoutY="30.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Text layoutX="214.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.0V" textAlignment="CENTER" wrappingWidth="172.21630859375">
+         <font>
+            <Font size="33.0" />
+         </font>
+      </Text>
+      <HBox layoutX="161.0" layoutY="231.0">
+         <children>
+            <ToggleButton mnemonicParsing="false" text="ToggleButton" />
+            <ToggleButton mnemonicParsing="false" text="ToggleButton" />
+            <ToggleButton mnemonicParsing="false" text="ToggleButton" />
+         </children>
+      </HBox>
+   </children>
+</Pane>

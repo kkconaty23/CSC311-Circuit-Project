@@ -1,5 +1,6 @@
 package org.example.circuit_project.Elements;
 
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,11 +17,9 @@ public class Voltmeter extends Component {
 
 
     // Basic Readings for meter
-    @FXML
+
     private double voltage;
-    @FXML
     private double amps;
-    @FXML
     private double resistance;
 
     // The setting of the meter (type of measurement)
@@ -83,6 +82,7 @@ public class Voltmeter extends Component {
         this.resistance = resistance;
     }
 
+    @XmlElement
     public Mode getMode() {
         return mode;
     }
@@ -91,6 +91,7 @@ public class Voltmeter extends Component {
 //        this.mode = mode;
 //    }
 
+    @XmlElement
     public String getDisplay() {
         return display;
     }
