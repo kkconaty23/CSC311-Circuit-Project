@@ -18,6 +18,7 @@ public class Circuit {
     private List<Battery> batteries = new ArrayList<>();
     private List<Lightbulb> lightbulbs = new ArrayList<>();
     private List<Wire> wires = new ArrayList<>();
+    private List<Voltmeter> voltmeters = new ArrayList<>();
 
     /**
      * default constructor JAXB req
@@ -86,10 +87,25 @@ public class Circuit {
         this.batteries.add(battery);
     }
 
-    /**
-     * allows you to get hte list of lightbulbs being used in circuit
-     * @return
-     */
+
+
+
+    @XmlElementWrapper(name = "voltmeters")
+    @XmlElement(name = "voltmeters")
+    public List<Voltmeter> getVoltmeters() {
+        return voltmeters;
+    }
+
+    public void setVoltmeters(List<Voltmeter> voltmeters) {
+        this.voltmeters = voltmeters;
+    }
+
+    public void addVoltmeter(Lightbulb lightbulb) {
+        this.lightbulbs.add(lightbulb);
+    }
+
+
+
     @XmlElementWrapper(name = "lightbulbs")
     @XmlElement(name = "lightbulb")
     public List<Lightbulb> getLightbulbs() {
@@ -137,4 +153,6 @@ public class Circuit {
     public void addWire(Wire wire) {
         this.wires.add(wire);
     }
+
+
 }

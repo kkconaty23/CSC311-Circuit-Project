@@ -30,7 +30,8 @@ public class Voltmeter extends Component {
 
     // need leads for positive and negative (red and black)
 
-    public Voltmeter() {
+    public Voltmeter(double x, double y) {
+        super(x, y);
         this.amps = 0;
         this.resistance = 0;
         this.voltage = 0;

@@ -23,11 +23,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+
 import org.example.circuit_project.Elements.Battery;
 import org.example.circuit_project.Elements.Circuit;
 import org.example.circuit_project.Elements.Component;
 import org.example.circuit_project.Elements.Lightbulb;
 import org.example.circuit_project.Elements.Wire;
+import org.example.circuit_project.Elements.Voltmeter;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +66,9 @@ public class SandboxController implements Initializable {
     private static final String BATTERY_FXML = "/org/example/circuit_project/batteryICON.fxml";
     private static final String LIGHTBULB_FXML = "/org/example/circuit_project/lightbulbICON.fxml";
     private static final String WIRE_FXML = "/org/example/circuit_project/wireICON.fxml";
+
+    // TODO Voltmeter FXML
+    private static final String VOLTMETER_FXML = "/org/example/circuit_project/voltmeterICON.fxml";
 
     /**
      * initialize method used for setting the UI on boot up
@@ -403,6 +408,26 @@ public class SandboxController implements Initializable {
         }
     }
 
+    @FXML
+    public void voltmeterClick(MouseEvent mouseEvent) {
+        double x = 100;
+        double y = 100;
+        String voltmeterId = "voltmeter-" + UUID.randomUUID().toString();
+
+        // Create UI component
+        Node voltmeterNode = loadComponent(VOLTMETER_FXML, x, y, voltmeterId);
+
+        if (voltmeterId != null) {
+            // Create data model
+            Voltmeter voltmeter = new Voltmeter(x, y);
+            voltmeter.setId(voltmeterId);
+
+            // Store component
+            components.add(voltmeter);
+            componentNodesMap.put(voltmeterId, voltmeterNode);
+        }
+    }
+
 
     /**
      * Utility to find a Line object within a Node hierarchy
@@ -555,6 +580,7 @@ public class SandboxController implements Initializable {
         addBatteriesToPlayground(circuit.getBatteries());
         addLightbulbsToPlayground(circuit.getLightbulbs());
         addWiresToPlayground(circuit.getWires());
+        addVoltmetersToPlayground(circuit.getVoltmeters());
     }
 
     /**
@@ -605,6 +631,21 @@ public class SandboxController implements Initializable {
                 // Store component
                 components.add(lightbulb);
                 componentNodesMap.put(lightbulb.getId(), lightbulbNode);
+            }
+        }
+    }
+
+    private void addVoltmetersToPlayground(List<Voltmeter> voltmeters) {
+        if (voltmeters == null) return;
+
+        for (Voltmeter voltmeter : voltmeters) {
+            // Create UI component
+            Node voltmeterNode = loadComponent(VOLTMETER_FXML, voltmeter.getX(), voltmeter.getY(), voltmeter.getId());
+
+            if (voltmeterNode != null) {
+                // Store component
+                components.add(voltmeter);
+                componentNodesMap.put(voltmeter.getId(), voltmeterNode);
             }
         }
     }
