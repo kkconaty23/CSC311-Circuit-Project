@@ -28,6 +28,7 @@ import org.example.circuit_project.Elements.Circuit;
 import org.example.circuit_project.Elements.Component;
 import org.example.circuit_project.Elements.Lightbulb;
 import org.example.circuit_project.Elements.Wire;
+import org.example.circuit_project.Elements.Switch;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
+
 
 public class SandboxController implements Initializable {
 
@@ -64,6 +66,7 @@ public class SandboxController implements Initializable {
     private static final String BATTERY_FXML = "/org/example/circuit_project/batteryICON.fxml";
     private static final String LIGHTBULB_FXML = "/org/example/circuit_project/lightbulbICON.fxml";
     private static final String WIRE_FXML = "/org/example/circuit_project/wireICON.fxml";
+    private static final String SWITCH_FXML = "/org/example/circuit_project/switchICON.fxml";
 
     /**
      * initialize method used for setting the UI on boot up
@@ -261,7 +264,7 @@ public class SandboxController implements Initializable {
                 line.setEndY(newY);
             }
 
-            // 🔥 Update the corresponding Wire's absolute start/end points
+            //update the corresponding Wire's absolute start/end points
             Wire wire = (Wire) findComponentById(wireId);
             Node wireNode = componentNodesMap.get(wireId);
             if (wire != null && wireNode != null) {
@@ -403,6 +406,120 @@ public class SandboxController implements Initializable {
         }
     }
 
+    /**
+     * Adds a new switch to the playground
+     */
+    @FXML
+    public void switchClick(MouseEvent mouseEvent) {
+        double x = 100;
+        double y = 100;
+        String switchId = "switch-" + UUID.randomUUID().toString();
+
+        // Create UI component
+        Node switchNode = loadComponent(SWITCH_FXML, x, y, switchId);
+
+        if (switchNode != null) {
+            // Create data model (initially closed)
+            Switch switchComponent = new Switch(x, y, true);
+            switchComponent.setId(switchId);
+
+            // Set up click handler to toggle switch state
+            setupSwitchToggle(switchNode, switchComponent);
+
+            // Store component
+            components.add(switchComponent);
+            componentNodesMap.put(switchId, switchNode);
+        }
+    }
+
+    /**
+     * Set up toggle functionality for a switch
+     * @param switchNode The switch UI node
+     * @param switchComponent The switch data model
+     */
+    private void setupSwitchToggle(Node switchNode, Switch switchComponent) {
+        // Find the lever line in the switch node
+        Line leverLine = findSwitchLeverInNode(switchNode);
+        if (leverLine == null) return;
+
+        // Set up click handler to toggle switch
+        switchNode.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Double-click to toggle
+                boolean newState = switchComponent.toggle();
+                updateSwitchVisual(leverLine, newState);
+                event.consume();
+            }
+        });
+    }
+
+    /**
+     * Update the visual state of a switch
+     * @param leverLine The lever line UI element
+     * @param closed Whether the switch is closed
+     */
+    private void updateSwitchVisual(Line leverLine, boolean closed) {
+        if (closed) {
+            // Closed position - horizontal line
+            leverLine.setStartX(15.0);
+            leverLine.setStartY(19.0);
+            leverLine.setEndX(75.0);
+            leverLine.setEndY(19.0);
+        } else {
+            // Open position - angled line
+            leverLine.setStartX(15.0);
+            leverLine.setStartY(19.0);
+            leverLine.setEndX(65.0);
+            leverLine.setEndY(5.0);
+        }
+    }
+
+    /**
+     * Utility to find the lever Line object within a Switch Node
+     */
+    private Line findSwitchLeverInNode(Node node) {
+        if (node instanceof Parent) {
+            for (Node child : ((Parent) node).getChildrenUnmodifiable()) {
+                if (child instanceof Line && "leverLine".equals(child.getId())) {
+                    return (Line) child;
+                } else {
+                    Line found = findSwitchLeverInNode(child);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+// Add this method for loading switches from saved circuits
+    /**
+     * Add switches from a circuit to the playground
+     */
+    private void addSwitchesToPlayground(List<Switch> switches) {
+        if (switches == null) return;
+
+        for (Switch switchComponent : switches) {
+            // Create UI component
+            Node switchNode = loadComponent(SWITCH_FXML, switchComponent.getX(), switchComponent.getY(), switchComponent.getId());
+
+            if (switchNode != null) {
+                // Update visual state
+                Line leverLine = findSwitchLeverInNode(switchNode);
+                if (leverLine != null) {
+                    updateSwitchVisual(leverLine, switchComponent.isClosed());
+                }
+
+                // Set up toggle functionality
+                setupSwitchToggle(switchNode, switchComponent);
+
+                // Store component
+                components.add(switchComponent);
+                componentNodesMap.put(switchComponent.getId(), switchNode);
+            }
+        }
+    }
+
 
     /**
      * Utility to find a Line object within a Node hierarchy
@@ -500,6 +617,9 @@ public class SandboxController implements Initializable {
                 } else if (component instanceof Wire) {
                     circuit.addWire((Wire) component);
                 }
+                else if (component instanceof Switch) {
+                    circuit.addSwitch((Switch) component);
+                }
             }
 
             // Create JAXB context for all relevant classes
@@ -526,22 +646,80 @@ public class SandboxController implements Initializable {
         try {
             // Create JAXB context for all relevant classes
             JAXBContext context = JAXBContext.newInstance(
-                    Circuit.class, Battery.class, Lightbulb.class, Wire.class
+                    Circuit.class, Battery.class, Lightbulb.class, Wire.class, Switch.class
             );
 
-            // Create unmarshaller
+            // Create and configure the unmarshaller
             Unmarshaller unmarshaller = context.createUnmarshaller();
 
-            // Unmarshal the XML file to a Circuit object
+            // Unmarshal (deserialize) the XML file into a Circuit object
             Circuit circuit = (Circuit) unmarshaller.unmarshal(file);
 
-            // Update the UI with the loaded circuit
-            updateUIWithCircuit(circuit);
-        } catch (JAXBException e) {
+            // Clear current playground and data
+            playgroundPane.getChildren().clear();
+            components.clear();
+            componentNodesMap.clear();
+
+            drawGrid(gc, isDarkMode, gridLinesEnabled);
+
+
+
+            // Load batteries
+            if (circuit.getBatteries() != null) {
+                for (Battery battery : circuit.getBatteries()) {
+                    Node batteryNode = loadComponent(BATTERY_FXML, battery.getX(), battery.getY(), battery.getId());
+                    if (batteryNode != null) {
+                        components.add(battery);
+                        componentNodesMap.put(battery.getId(), batteryNode);
+                    }
+                }
+            }
+
+            // Load lightbulbs
+            if (circuit.getLightbulbs() != null) {
+                for (Lightbulb lightbulb : circuit.getLightbulbs()) {
+                    Node lightbulbNode = loadComponent(LIGHTBULB_FXML, lightbulb.getX(), lightbulb.getY(), lightbulb.getId());
+                    if (lightbulbNode != null) {
+                        components.add(lightbulb);
+                        componentNodesMap.put(lightbulb.getId(), lightbulbNode);
+                    }
+                }
+            }
+
+            // Load wires
+            if (circuit.getWires() != null) {
+                for (Wire wire : circuit.getWires()) {
+                    Node wireNode = loadComponent(WIRE_FXML, wire.getX(), wire.getY(), wire.getId());
+                    if (wireNode != null) {
+                        Line wireLine = findLineInNode(wireNode);
+                        if (wireLine != null) {
+                            double offsetX = wireNode.getLayoutX();
+                            double offsetY = wireNode.getLayoutY();
+                            wireLine.setStartX(wire.getStartX() - offsetX);
+                            wireLine.setStartY(wire.getStartY() - offsetY);
+                            wireLine.setEndX(wire.getEndX() - offsetX);
+                            wireLine.setEndY(wire.getEndY() - offsetY);
+
+                            enableLineResize(wireLine, wire.getId());
+                        }
+
+                        components.add(wire);
+                        componentNodesMap.put(wire.getId(), wireNode);
+                    }
+                }
+            }
+
+            // Load switches
+            if (circuit.getSwitches() != null) {
+                addSwitchesToPlayground(circuit.getSwitches());
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load circuit: " + e.getMessage(), e);
         }
     }
+
 
     /**
      * Update the UI with components from a loaded circuit
@@ -555,6 +733,7 @@ public class SandboxController implements Initializable {
         addBatteriesToPlayground(circuit.getBatteries());
         addLightbulbsToPlayground(circuit.getLightbulbs());
         addWiresToPlayground(circuit.getWires());
+        addSwitchesToPlayground(circuit.getSwitches());
     }
 
     /**

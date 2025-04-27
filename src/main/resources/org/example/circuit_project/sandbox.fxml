@@ -8,13 +8,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Ellipse?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane stylesheets="@sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
 
     <!-- Top Bar -->
     <top>
@@ -24,8 +26,8 @@
                 <Button fx:id="clearBtn" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#clearBtnClick" text="Clear" AnchorPane.rightAnchor="10.0" />
                 <MenuButton layoutX="101.0" layoutY="8.0" mnemonicParsing="false" text="Options">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Load" />
+                        <MenuItem fx:id="saveButton" onAction="#saveBtnClick" mnemonicParsing="false" text="Save" />
+                        <MenuItem fx:id="loadButton" onAction="#loadBtnClick" mnemonicParsing="false" text="Load" />
                     </items>
                 </MenuButton>
                 <MenuButton layoutX="219.0" layoutY="8.0" mnemonicParsing="false" text="Appearance">
@@ -80,6 +82,25 @@
 
             <!-- Wire Icon -->
             <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#wireClick" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" />
+            <!-- Switch Icon -->
+            <Pane fx:id="switch" onMouseClicked="#switchClick" prefHeight="38.0" prefWidth="90.0" xmlns:fx="http://javafx.com/fxml/1">
+                <children>
+                    <!-- Base/background rectangle -->
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="32.0" layoutX="5.0" layoutY="3.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
+
+                    <!-- Left terminal -->
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="5.0" layoutY="11.5" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+
+                    <!-- Right terminal -->
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="75.0" layoutY="11.5" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+
+                    <!-- Switch lever (in closed position) -->
+                    <Line endX="75.0" endY="19.0" startX="15.0" startY="19.0" stroke="BLACK" strokeWidth="3.0" />
+
+                    <!-- Switch handle -->
+                    <Circle centerX="40.0" centerY="19.0" fill="#d78f1d" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+                </children>
+            </Pane>
         </HBox>
     </bottom>
 </BorderPane>

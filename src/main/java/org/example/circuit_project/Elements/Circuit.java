@@ -18,6 +18,7 @@ public class Circuit {
     private List<Battery> batteries = new ArrayList<>();
     private List<Lightbulb> lightbulbs = new ArrayList<>();
     private List<Wire> wires = new ArrayList<>();
+    private List<Switch> switches;
 
     /**
      * default constructor JAXB req
@@ -137,4 +138,23 @@ public class Circuit {
     public void addWire(Wire wire) {
         this.wires.add(wire);
     }
+
+    @XmlElementWrapper(name = "switches")
+    @XmlElement(name = "switch")
+    public List<Switch> getSwitches() {
+        return switches;
+    }
+
+    public void setSwitches(List<Switch> switches) {
+        this.switches = switches;
+    }
+
+    public void addSwitch(Switch switchComponent) {
+        if (switches == null) {
+            switches = new ArrayList<>();
+        }
+        switches.add(switchComponent);
+    }
+
+
 }
