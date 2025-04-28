@@ -37,7 +37,7 @@ public class SplashScreenController  {
         try{
             Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1730, 1018);
+            Scene scene = new Scene(root, 1030, 818);
             stage.setScene(scene);
             stage.show();
 

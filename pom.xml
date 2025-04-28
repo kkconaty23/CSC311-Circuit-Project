@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jmc</groupId>
-    <artifactId>PintFinder</artifactId>
+    <artifactId>Circuit</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>PintFinder</name>
+    <name>Circuit</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -97,8 +97,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>23</source>
-                    <target>23</target>
+                    <source>21</source>
+                    <target>21</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
@@ -111,7 +111,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.example.circuit-project/org.example.circuit-project.Login</mainClass>
+                            <mainClass>org.example.circuit_project.Login</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
