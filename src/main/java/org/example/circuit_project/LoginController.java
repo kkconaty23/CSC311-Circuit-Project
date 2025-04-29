@@ -77,9 +77,9 @@ public class LoginController implements Initializable {
 
     }
 
-    private boolean validateFormFields(){
-        boolean valid = true;
-    }
+//    private boolean validateFormFields(){
+//        boolean valid = true;
+//    }
 
     private void isFormValid(){
 
