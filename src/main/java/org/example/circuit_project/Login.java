@@ -33,9 +33,9 @@ public class Login extends Application  {
 
 
             FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 800, 677);
+            Scene scene = new Scene(fxmlLoader.load(), 1000, 679);
             stage.setTitle("Circuit Sandbox");
-            stage.setResizable(true);
+            stage.setResizable(false);
             stage.setScene(scene);
 
             // Setting Favicon

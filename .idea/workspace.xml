@@ -5,11 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="merging">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/loading-screen.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/loading-screen.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/loading-screen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/loading-screen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/main-menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/main-menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/sandbox.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/splash-screen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/splash-screen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/styles.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +59,6 @@
     &quot;accountId&quot;: &quot;7477931b-cf03-4be2-86b1-3e9ed01a0640&quot;
   }
 }</component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -68,11 +74,9 @@
   "keyToString": {
     "Application.HelloApplication.executor": "Run",
     "Application.Login.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
+    "git-widget-placeholder": "Declutter",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/estos/Documents/DSA2/M08_AVLTree_STUDENT/M08AVLTree/AVLTree",
     "node.js.detected.package.eslint": "true",
@@ -80,13 +84,14 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propCompiler",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\css" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="CSC311-Circuit-Project" />
@@ -99,6 +104,14 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -113,9 +126,6 @@
       <workItem from="1745343070218" duration="106000" />
       <workItem from="1745343273343" duration="208000" />
       <workItem from="1745517748887" duration="56000" />
-      <workItem from="1745871053683" duration="1008000" />
-      <workItem from="1745872078076" duration="252000" />
-      <workItem from="1745872347199" duration="180000" />
     </task>
     <task id="LOCAL-00001" summary="Create README.md&#10;&#10;added read.me">
       <option name="closed" value="true" />
@@ -138,17 +148,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update project to new machine" />
