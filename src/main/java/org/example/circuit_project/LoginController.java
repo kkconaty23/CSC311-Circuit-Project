@@ -77,14 +77,14 @@ public class LoginController implements Initializable {
     @FXML
     private void onLoginClicked(ActionEvent event){
 
-//        DbOpps connection = new DbOpps();//establish database connection
-//
-//
-//        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
-//
-//        System.out.println(checkUser);
-//
-//        if (checkUser){
+        DbOpps connection = new DbOpps();//establish database connection
+
+
+        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
+
+        System.out.println(checkUser);
+
+        if (checkUser){
 
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
@@ -97,9 +97,9 @@ public class LoginController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//        }else{
-//            System.out.println(loginEmailField.getText() + " " + loginPasswordField.getText() + "is invalid");
-//        }
+        }else{
+            System.out.println(loginEmailField.getText() + " " + loginPasswordField.getText() + "is invalid");
+        }
 
     }
     @FXML
