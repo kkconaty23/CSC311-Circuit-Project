@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@main-menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SplashScreenController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/main-menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SplashScreenController">
    <children>
       <GridPane layoutX="1.0" layoutY="-1.0" prefHeight="400.0" prefWidth="600.0">
         <columnConstraints>
