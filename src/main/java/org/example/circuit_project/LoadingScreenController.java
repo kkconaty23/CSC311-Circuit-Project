@@ -24,7 +24,7 @@ public class LoadingScreenController {
         PauseTransition delay = new PauseTransition(Duration.seconds(.4));
         delay.setOnFinished(event -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/circuit_project/splash-screen.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/circuit_project/mainmenu.fxml"));
                 Parent homeRoot = loader.load();
                 Stage stage = (Stage) loadingGif.getScene().getWindow();
                 stage.setScene(new Scene(homeRoot));
