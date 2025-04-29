@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 * User will have the option to enter the Tutorial, Create a new Playground, or visit their profile page.
 * There will be a button to go back to the SplashScreen, which makes it similar to a "home dashboard".
 * */
-public class SplashScreenController  {
+public class MainMenuController {
 
     // Button to enter tutorial mode
     @FXML
