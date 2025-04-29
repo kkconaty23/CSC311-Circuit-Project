@@ -46,6 +46,8 @@ public class LoginController implements Initializable {
     @FXML private DatePicker dobField;
     @FXML private TextField loginEmailField;
     @FXML private PasswordField loginPasswordField;
+    @FXML private Label emailRegex, emailMatchRegex, passwordMatchRegex, firstNameRegex, lastNameRegex;
+
 
 
 
@@ -102,8 +104,16 @@ public class LoginController implements Initializable {
 //        }
 
     }
+
+
     @FXML
     void onRegisterClicked(ActionEvent event) {
+        Regex regex = new Regex();
+        boolean fieldCheck = regex.allFieldCheck(firstNameField.getText(), lastNameField.getText(), emailField.getText());
+        System.out.println(fieldCheck);
+
+
+
         System.out.println("onRegisterClicked");
 
         //Database connection
