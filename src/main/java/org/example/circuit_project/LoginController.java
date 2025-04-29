@@ -72,6 +72,19 @@ public class LoginController implements Initializable {
         slide.play();
     }
 
+    private void validateFields() {
+        lastNameField.textProperty().addListener((observable, oldValue, newValue) ->validateFields());
+
+    }
+
+    private boolean validateFormFields(){
+        boolean valid = true;
+    }
+
+    private void isFormValid(){
+
+    }
+
     /**
      * I HAVE THE LOGIN BUTTON GOING DIRECTLY INTO THE SANDBOX, AS WE DO NOT HAVE A MAIN MENU YET. - JUSTIN
      * @param event
