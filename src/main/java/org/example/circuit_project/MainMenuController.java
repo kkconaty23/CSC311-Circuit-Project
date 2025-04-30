@@ -45,6 +45,7 @@ public class MainMenuController implements Initializable {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 1030, 818);
             stage.setScene(scene);
+            stage.setResizable(true);
             stage.show();
 
 

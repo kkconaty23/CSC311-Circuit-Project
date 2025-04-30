@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="Regex labels included, most patterns and matchers implemented.">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Regex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Regex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/sandbox.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/sandbox.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,12 +46,12 @@
     &quot;assignee&quot;: &quot;SandalCodez&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/kkconaty23/CSC311-Circuit-Project.git",
-    "accountId": "f57224fa-0fd1-43a7-ae33-19025d14b09e"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kkconaty23/CSC311-Circuit-Project.git&quot;,
+    &quot;accountId&quot;: &quot;f57224fa-0fd1-43a7-ae33-19025d14b09e&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -69,9 +70,10 @@
   "keyToString": {
     "Application.HelloApplication.executor": "Run",
     "Application.Login.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "regex",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/estos/AppData/Local/SceneBuilder/SceneBuilder.exe",
@@ -102,14 +104,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -127,6 +121,7 @@
       <workItem from="1745872078076" duration="252000" />
       <workItem from="1745872347199" duration="180000" />
       <workItem from="1745943577488" duration="4852000" />
+      <workItem from="1745977192907" duration="4785000" />
     </task>
     <task id="LOCAL-00001" summary="Create README.md&#10;&#10;added read.me">
       <option name="closed" value="true" />
@@ -144,12 +139,10 @@
       <option name="project" value="LOCAL" />
       <updated>1745343370853</updated>
     </task>
-    <MESSAGE value="Decluttered files&#10; - Fixed loginScreen resize(false), and set correct load size" />
-    <MESSAGE value="Decluttered files:&#10; - Added CSS folder for ease of access&#10; - Placed CSS inside&#10; &#10;Login:&#10; - Fixed loginScreen resize(false), and set correct load size&#10; - Linked Back to DB (DO NOT UNDO)&#10; - Ensured all functionality&#10; - DB Password removed" />
-    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4" />
-    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml" />
-    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController" />
-    <option name="LAST_COMMIT_MESSAGE" value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

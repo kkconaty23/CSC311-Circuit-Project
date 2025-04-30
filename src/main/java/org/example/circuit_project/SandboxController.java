@@ -11,11 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.example.circuit_project.Elements.Battery;
 import org.example.circuit_project.Elements.Circuit;
 import org.example.circuit_project.Elements.Component;
@@ -32,6 +34,7 @@ import org.example.circuit_project.Elements.Switch;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PipedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,8 +51,7 @@ public class SandboxController implements Initializable {
     @FXML public Line wire;
     @FXML private Pane playgroundPane;
     @FXML private Canvas gridCanvas;
-    @FXML private CheckMenuItem toggleGridLinesItem;
-    @FXML private MenuItem toggleDarkModeItem;
+    @FXML private Button toggleDarkModeItem;
     @FXML private HBox componentTray;
 
     //circuit Components
@@ -68,6 +70,19 @@ public class SandboxController implements Initializable {
     private static final String WIRE_FXML = "/org/example/circuit_project/wireICON.fxml";
     private static final String SWITCH_FXML = "/org/example/circuit_project/switchICON.fxml";
 
+    @FXML private Button logoutIcon2;
+    @FXML private Button homeButton;
+    @FXML private ImageView darkModeIcon;
+    @FXML private Button toggleGridLinesItem;
+    @FXML private Button loadButton;
+    @FXML private Button saveButton;
+    @FXML private Button clearBtn;
+
+    Tooltip darkTooltip(String text) {
+        Tooltip tooltip = new Tooltip(text);
+        return tooltip;
+    }
+
     /**
      * initialize method used for setting the UI on boot up
      * @param url
@@ -85,6 +100,14 @@ public class SandboxController implements Initializable {
         gridCanvas.heightProperty().bind(playgroundPane.heightProperty());
 
         drawGrid(gc, isDarkMode, gridLinesEnabled);
+
+        toggleDarkModeItem.setTooltip(darkTooltip("Toggle Light/Dark Mode"));
+        toggleGridLinesItem.setTooltip(darkTooltip("Toggle Grid"));
+        logoutIcon2.setTooltip(darkTooltip("Log Out"));
+        saveButton.setTooltip(darkTooltip("Save Circuit"));
+        loadButton.setTooltip(darkTooltip("Load Circuit"));
+        clearBtn.setTooltip(darkTooltip("Clear Workspace"));
+        homeButton.setTooltip(darkTooltip("Return to Main Menu")); //
     }
 
     /**
@@ -99,16 +122,25 @@ public class SandboxController implements Initializable {
 
         if (!gridOn) return;
 
-        gc.setStroke(darkMode ? Color.web("#9ca3af") : Color.DARKGRAY);
-        gc.setLineWidth(1.5);
+        // Subtle semi-transparent stroke for a clean, high-quality look
+        Color gridColor = darkMode
+                ? Color.web("#3a3a3a", 0.35)  // softer gray for dark mode
+                : Color.web("#cccccc", 0.4);  // soft light gray for light mode
 
-        for (double x = 0; x < gridCanvas.getWidth(); x += GRID_SPACING) {
-            gc.strokeLine(x, 0, x, gridCanvas.getHeight());
+        gc.setStroke(gridColor);
+        gc.setLineWidth(1.0);
+
+        double width = gridCanvas.getWidth();
+        double height = gridCanvas.getHeight();
+
+        for (double x = 0; x < width; x += GRID_SPACING) {
+            gc.strokeLine(x, 0, x, height);
         }
-        for (double y = 0; y < gridCanvas.getHeight(); y += GRID_SPACING) {
-            gc.strokeLine(0, y, gridCanvas.getWidth(), y);
+        for (double y = 0; y < height; y += GRID_SPACING) {
+            gc.strokeLine(0, y, width, y);
         }
     }
+
 
     /**
      * Toggles the visibility of the grid lines based on the user's checkbox selection.
@@ -116,9 +148,10 @@ public class SandboxController implements Initializable {
      */
     @FXML
     private void onToggleGridLines() {
-        gridLinesEnabled = toggleGridLinesItem.isSelected();
+        gridLinesEnabled = !gridLinesEnabled;
         drawGrid(gc, isDarkMode, gridLinesEnabled);
     }
+
 
     /**
      * Toggles between dark and light mode for the playground UI.
@@ -129,15 +162,22 @@ public class SandboxController implements Initializable {
         isDarkMode = !isDarkMode;
 
         if (isDarkMode) {
-            playgroundPane.setStyle("-fx-background-color: #0D1117;");
-            toggleDarkModeItem.setText("Light Mode");
+            playgroundPane.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #121212, #1a1a1a);");
+            toggleDarkModeItem.setTooltip(new Tooltip("Switch to Light Mode"));
+            darkModeIcon.setImage(new Image(getClass().getResourceAsStream("/org/example/circuit_project/images/sun.png")));
         } else {
-            playgroundPane.setStyle("-fx-background-color: #BFBFBF;");
-            toggleDarkModeItem.setText("Dark Mode");
+            playgroundPane.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #f5f5f5, #d9d9d9);");
+            toggleDarkModeItem.setTooltip(new Tooltip("Switch to Dark Mode"));
+            darkModeIcon.setImage(new Image(getClass().getResourceAsStream("/org/example/circuit_project/images/moon.png")));
         }
 
         drawGrid(gc, isDarkMode, gridLinesEnabled);
     }
+
+
+
+
+
 
     @FXML
     private void clearBtnClick(){
@@ -839,5 +879,32 @@ public class SandboxController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void logoutUser2() {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/login.fxml"));
+            Stage stage = (Stage) logoutIcon2.getScene().getWindow();
+            stage.setScene(new Scene(loginRoot));
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToMainMenu(){
+        try {
+            Parent mainMenuRoot = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/mainmenu.fxml"));
+            Stage stage = (Stage) homeButton.getScene().getWindow();
+            stage.setScene(new Scene(mainMenuRoot));
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Navigation Error", "Failed to load Main Menu", e.getMessage());
+        }
     }
 }
