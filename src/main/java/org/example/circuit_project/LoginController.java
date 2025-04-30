@@ -1,9 +1,5 @@
 package org.example.circuit_project;
 
-//<<<<<<< HEAD
-//        =======
-//
-//        >>>>>>> Storage-Integration
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,11 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoginController implements Initializable {
-
 
     @FXML private Pane slidingPane; //Panel that slides
     @FXML private Button slideRightButton; //Panel Slide Button <RIGHT>
@@ -46,106 +39,258 @@ public class LoginController implements Initializable {
     @FXML private DatePicker dobField;
     @FXML private TextField loginEmailField;
     @FXML private PasswordField loginPasswordField;
-    @FXML private Label emailRegex, emailMatchRegex, passwordMatchRegex, firstNameRegex, lastNameRegex;
+    @FXML private Label emailRegex, emailMatchRegex, passwordMatchRegex, firstNameRegex, lastNameRegex, registerErrorLabel;
 
+    private Regex regex;
 
-
-
+    /**
+     *
+     * @param location
+     * @param resources
+     */
     @FXML
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
         slidingPane.setTranslateX(slidingPane.getWidth());
+
+        // Initialize regex validator
+        regex = new Regex();
+
+        // Make sure error labels are initially empty
+        clearErrorLabels();
+
+        // Add listeners for field validation
+        firstNameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) { // When focus is lost
+                validateFirstName();
+            }
+        });
+
+        lastNameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                validateLastName();
+            }
+        });
+
+        emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                validateEmail();
+            }
+        });
+
+        emailCheckField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                validateEmailMatch();
+            }
+        });
+
+        passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                // Password validation when implemented
+            }
+        });
+
+        passwordCheckField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                validatePasswordMatch();
+            }
+        });
+    }
+
+    /**
+     * This method is used to clear all the error labels within the registration screen
+     *
+     */
+    private void clearErrorLabels() {
+        registerErrorLabel.setText("");
+        firstNameRegex.setText("");
+        lastNameRegex.setText("");
+        emailRegex.setText("");
+        emailMatchRegex.setText("");
+        passwordMatchRegex.setText("");
+    }
+
+    /**
+     * This method ensures that the inputted first name is made up of
+     * only characters and starts with a capital letter
+     *
+     */
+    private void validateFirstName() {
+        if (!firstNameField.getText().isEmpty()) {
+            if (!regex.firstNameCheck(firstNameField.getText())) {
+                firstNameRegex.setText("Only letters allowed, 2-25 characters");
+            } else {
+                firstNameRegex.setText("");
+            }
+        }
+    }
+
+    /**
+     * This method ensures that the inputted last name is made up of
+     * only letters and starts with a capital letter
+     *
+     */
+    private void validateLastName() {
+        if (!lastNameField.getText().isEmpty()) {
+            if (!regex.lastNameCheck(lastNameField.getText())) {
+                lastNameRegex.setText("Only letters allowed, 2-25 characters");
+            } else {
+                lastNameRegex.setText("");
+            }
+        }
+    }
+
+    /**
+     * This method ensures that the inputted email is only a
+     * @farmingdale.edu email
+     *
+     */
+    private void validateEmail() {
+        if (!emailField.getText().isEmpty()) {
+            if (!regex.emailCheck(emailField.getText())) {
+                emailRegex.setText("Must be @farmingdale.edu");
+            } else {
+                emailRegex.setText("");
+            }
+        }
+    }
+
+    /**
+     * This method ensures that the email in the "retype email" textField
+     * matches with the "email" textField
+     *
+     */
+    private void validateEmailMatch() {
+        if (!emailField.getText().isEmpty() && !emailCheckField.getText().isEmpty()) {
+            if (!emailCheckField.getText().equals(emailField.getText())) {
+                emailMatchRegex.setText("Emails must match");
+            } else {
+                emailMatchRegex.setText("");
+            }
+        }
+    }
+
+    /**
+     * This method ensures that the password in the "retype password" textFields
+     * matches with the "password" textField
+     *
+     */
+    private void validatePasswordMatch() {
+        if (!passwordField.getText().isEmpty() && !passwordCheckField.getText().isEmpty()) {
+            if (!passwordCheckField.getText().equals(passwordField.getText())) {
+                passwordMatchRegex.setText("Passwords must match");
+            } else {
+                passwordMatchRegex.setText("");
+            }
+        }
     }
 
     @FXML
-    private void slideToRegister(){
+    private void slideToRegister() {
         TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
-        slide.setToX(0); //Slide into view
-        slide.setOnFinished(e-> slidingPane.setPrefWidth(400));
+        slide.setToX(0); // Slide into view
+        slide.setOnFinished(e -> slidingPane.setPrefWidth(400));
         slide.play();
     }
 
     @FXML
-    private void slideToLogin(){
+    private void slideToLogin() {
         TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
         slidingPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
         slide.setToX(500);
         slide.play();
     }
 
-    private void validateFields() {
-        lastNameField.textProperty().addListener((observable, oldValue, newValue) ->validateFields());
+    /**
+     * This method checks for any empty fields and ensures the inputted data passes
+     * the respective regex patterns
+     *
+     * @return boolean according to filled fields
+     */
+    private boolean isFormValid() {
+        // Check if all fields are filled
+        if (firstNameField.getText().isEmpty() ||
+                lastNameField.getText().isEmpty() ||
+                emailField.getText().isEmpty() ||
+                emailCheckField.getText().isEmpty() ||
+                passwordField.getText().isEmpty() ||
+                passwordCheckField.getText().isEmpty() ||
+                dobField.getValue() == null) {
+            registerErrorLabel.setText("All fields are required");
+            return false;
+        }
 
+        // Check if all validations pass
+        if (!regex.firstNameCheck(firstNameField.getText())) {
+            registerErrorLabel.setText("First name format is invalid");
+            return false;
+        }
+
+        if (!regex.lastNameCheck(lastNameField.getText())) {
+            registerErrorLabel.setText("Last name format is invalid");
+            return false;
+        }
+
+        if (!regex.emailCheck(emailField.getText())) {
+            registerErrorLabel.setText("Email must be @farmingdale.edu");
+            return false;
+        }
+
+        if (!emailField.getText().equals(emailCheckField.getText())) {
+            registerErrorLabel.setText("Emails do not match");
+            return false;
+        }
+
+        if (!passwordField.getText().equals(passwordCheckField.getText())) {
+            registerErrorLabel.setText("Passwords do not match");
+            return false;
+        }
+
+        registerErrorLabel.setText("");
+        return true;
     }
 
-//    private boolean validateFormFields(){
-//        boolean valid = true;
-//    }
-
-    private void isFormValid(){
-
+    @FXML
+    private void onLoginClicked(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * I HAVE THE LOGIN BUTTON GOING DIRECTLY INTO THE SANDBOX, AS WE DO NOT HAVE A MAIN MENU YET. - JUSTIN
-     * @param event
+     * This method is used to establish a connection to the database and insert a user through the DbOpps
+     * class
+     * @param event clicking the register button
      */
     @FXML
-    private void onLoginClicked(ActionEvent event){
-
-//        DbOpps connection = new DbOpps();//establish database connection
-//
-//
-//        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
-//
-//        System.out.println(checkUser);
-//
-//        if (checkUser){
-
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//        }else{
-//            System.out.println(loginEmailField.getText() + " " + loginPasswordField.getText() + "is invalid");
-//        }
-
-    }
-
-
-    @FXML
     void onRegisterClicked(ActionEvent event) {
-        Regex regex = new Regex();
-        boolean fieldCheck = regex.allFieldCheck(firstNameField.getText(), lastNameField.getText(), emailField.getText());
-        System.out.println(fieldCheck);
+        if (!isFormValid()) {
+            return;
+        }
 
-
-
-        System.out.println("onRegisterClicked");
-
-        //Database connection
+        // Database connection
         DbOpps connection = new DbOpps();
         connection.connectToDatabase();
 
-        //DOB date picker converter
+        // DOB date picker converter
         LocalDate dob_ = dobField.getValue();
         LocalDateTime dobDateTime = dob_.atStartOfDay();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDOB = dobDateTime.format(formatter);
 
-        //UniqueID generation
+        // UniqueID generation
         String uniqueID = UUID.randomUUID().toString();
 
-        //User is inserted(registered) into database
-        connection.insertUser(uniqueID, emailCheckField.getText(), passwordField.getText(), firstNameField.getText(), lastNameField.getText(), formattedDOB);
+        // User is inserted(registered) into database
+        connection.insertUser(uniqueID, emailCheckField.getText(), passwordField.getText(),
+                firstNameField.getText(), lastNameField.getText(), formattedDOB);
 
-
+        // Show success message
+        registerErrorLabel.setText("Registration successful!");
     }
-
 }
