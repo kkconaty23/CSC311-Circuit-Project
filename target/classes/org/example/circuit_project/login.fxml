@@ -37,11 +37,36 @@
                               <TextField fx:id="firstNameField" layoutX="49.0" layoutY="373.0" prefHeight="40.0" prefWidth="178.0" promptText="First Name" />
                               <TextField fx:id="lastNameField" layoutX="259.0" layoutY="373.0" prefHeight="40.0" prefWidth="178.0" promptText="Last Name" />
                               <DatePicker fx:id="dobField" layoutX="49.0" layoutY="438.0" prefHeight="40.0" prefWidth="178.0" promptText="Date of Birth" />
+                              <Label fx:id="registerErrorLabel" layoutX="50.0" layoutY="549.0" text="Label" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="14.0" />
+                                 </font>
+                              </Label>
                               <Button fx:id="registerButton" layoutX="49.0" layoutY="503.0" mnemonicParsing="false" onAction="#onRegisterClicked" prefHeight="40.0" prefWidth="100.0" text="Register">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Button>
+                              <Label fx:id="emailMatchRegex" layoutX="260.0" layoutY="286.0" text="Email Invlaid" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="emailRegex" layoutX="49.0" layoutY="286.0" text="Email Invlaid" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="passwordMatchRegex" layoutX="260.0" layoutY="350.0" text="Passwords must match" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="lastNameRegex" layoutX="260.0" layoutY="415.0" text="Last name invalid" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="13.0" />
+                                 </font></Label>
+                              <Label fx:id="firstNameRegex" layoutX="49.0" layoutY="415.0" text="First name invalid" textFill="RED">
+                                 <font>
+                                    <Font name="System Italic" size="13.0" />
+                                 </font></Label>
                            </children>
                         </Pane>
                      </children>
