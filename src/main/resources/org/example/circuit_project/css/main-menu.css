@@ -1,9 +1,8 @@
-/* Set the background of the entire AnchorPane */
 .root {
-    -fx-background-color: black;
+    -fx-background-color: #0b0f14;
 }
 
-/* Style all buttons */
+/* Buttons */
 .button {
     -fx-background-color: white;
     -fx-text-fill: black;
@@ -14,10 +13,77 @@
     -fx-padding: 10px 20px;
     -fx-border-width: 0;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0.3, 0, 4);
-    -fx-transition: all 0.3s ease;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-transition: all 0.3s ease-in-out;
 }
 
-/* Hover effect */
+/* Hover Effect: smooth grow + tint */
 .button:hover {
-    -fx-background-color: #e0e0e0; /* light gray */
+    -fx-background-color: #f5f5f5;
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.4), 12, 0.5, 0, 4);
+    -fx-text-fill: #0b0f14;
 }
+
+/* Label Styling */
+.label {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 6, 0.4, 0, 3);
+    -fx-letter-spacing: 1.2px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-padding: 4px;
+    -fx-opacity: 0.9;
+    -fx-text-transform: uppercase;
+    -fx-transition: all 0.25s ease-in-out;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.about-overlay {
+    -fx-background-color: rgba(25, 25, 25, 0.95);
+    -fx-background-radius: 12px;
+    -fx-border-color: white;
+    -fx-border-radius: 12px;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 20, 0.6, 0, 4);
+}
+
+.icon-button:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+}
+.icon-button:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+}
+
+.about-text {
+    -fx-background-color: transparent;
+    -fx-text-fill: Black;
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+    -fx-border-color: transparent;
+    -fx-padding: 8;
+    -fx-line-spacing: 4px;
+}
+
+
+

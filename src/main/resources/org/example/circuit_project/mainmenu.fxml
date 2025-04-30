@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="642.0" prefWidth="912.0" stylesheets="@css/main-menu.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.MainMenuController">
+   <children>
+      <Pane prefHeight="685.0" prefWidth="912.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="58.0" layoutY="633.0" stroke="BLACK" strokeType="INSIDE" width="912.0" />
+            <ImageView fitHeight="454.0" fitWidth="498.0" layoutX="224.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/raw.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="profileBtn" alignment="CENTER" layoutX="96.0" layoutY="384.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="200.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="200.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="newPlaygroundBtn" layoutX="354.0" layoutY="451.0" mnemonicParsing="false" onAction="#onClick" prefHeight="140.0" prefWidth="200.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Label fx:id="tutorialLabel" layoutX="676.0" layoutY="541.0" text="Tutorial" />
+            <Label fx:id="sandboxLabel" layoutX="405.0" layoutY="601.0" text="Sandbox" />
+            <Label fx:id="profileLabel" layoutX="154.0" layoutY="541.0" text="Profile" />
+            <Button fx:id="helpIcon" layoutX="856.0" layoutY="645.0" mnemonicParsing="false" onAction="#showAboutOverlay" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/information-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="logoutIcon" layoutX="785.0" layoutY="645.0" mnemonicParsing="false" onAction="#logoutUser" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ImageView fitHeight="182.0" fitWidth="180.0" layoutX="-12.0" layoutY="577.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/FSC_LOGO.png" />
+               </image>
+            </ImageView>
+            <Pane fx:id="aboutOverlay" layoutX="219.0" layoutY="195.0" prefHeight="296.0" prefWidth="474.0" styleClass="about-overlay" visible="false">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f5f5" height="263.0" layoutY="33.0" stroke="BLACK" strokeType="INSIDE" width="474.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="474.0" />
+                  <Text layoutX="95.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What is Circuit Sandbox?" textAlignment="CENTER">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Text>
+                  <Button layoutX="439.0" layoutY="-3.0" mnemonicParsing="false" onAction="#hideAboutOverlay" prefHeight="45.0" prefWidth="32.0" styleClass="icon-button">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="31.0" preserveRatio="true">
+                           <image>
+                              <Image url="@images/close.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <TextArea editable="false" layoutY="33.0" prefHeight="263.0" prefWidth="474.0" styleClass="about-text" text="Circuit Sandbox is a visual circuit builder designed to make&#10;learning electronics fun and intuitive.  Create, connect, &#10;and simulate simple circuits with ease.&#10;&#10;&#10;Built by:&#10;Justin Derenthal, Esteban Sandoval, &#10;Kevin Conaty, Mike Moradi&#10; &#10;&#10;Version 1.0 – Farmingdale State College, 2025&#10;" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

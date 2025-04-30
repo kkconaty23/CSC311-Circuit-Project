@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="Decluttered files&#10; - Fixed loginScreen resize(false), and set correct load size">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/main-menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/main-menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/mainmenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/mainmenu.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +80,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\images" />
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\css" />
     </key>
   </component>
@@ -140,7 +143,47 @@
       <option name="project" value="LOCAL" />
       <updated>1745966884052</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Decluttered files:&#10; - Added CSS folder for ease of access&#10; - Placed CSS inside&#10; &#10;Login:&#10; - Fixed loginScreen resize(false), and set correct load size&#10; - Linked Back to DB (DO NOT UNDO)&#10; - Ensured all functionality&#10; - DB Password removed">
+      <option name="closed" value="true" />
+      <created>1745967419993</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1745967419993</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Decluttered files:&#10; - Added CSS folder for ease of access&#10; - Placed CSS inside&#10; &#10;Login:&#10; - Fixed loginScreen resize(false), and set correct load size&#10; - Linked Back to DB (DO NOT UNDO)&#10; - Ensured all functionality&#10; - DB Password removed">
+      <option name="closed" value="true" />
+      <created>1745967460460</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1745967460460</updated>
+    </task>
+    <task id="LOCAL-00006" summary="SplashScreen:&#10; - Changed duration to .4">
+      <option name="closed" value="true" />
+      <created>1745967923323</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1745967923323</updated>
+    </task>
+    <task id="LOCAL-00007" summary="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml">
+      <option name="closed" value="true" />
+      <created>1745968255310</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1745968255310</updated>
+    </task>
+    <task id="LOCAL-00008" summary="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController">
+      <option name="closed" value="true" />
+      <created>1745968372561</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1745968372561</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,7 +206,11 @@
     <MESSAGE value="commit before rebase" />
     <MESSAGE value="merging" />
     <MESSAGE value="Decluttered files&#10; - Fixed loginScreen resize(false), and set correct load size" />
-    <option name="LAST_COMMIT_MESSAGE" value="Decluttered files&#10; - Fixed loginScreen resize(false), and set correct load size" />
+    <MESSAGE value="Decluttered files:&#10; - Added CSS folder for ease of access&#10; - Placed CSS inside&#10; &#10;Login:&#10; - Fixed loginScreen resize(false), and set correct load size&#10; - Linked Back to DB (DO NOT UNDO)&#10; - Ensured all functionality&#10; - DB Password removed" />
+    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4" />
+    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml" />
+    <MESSAGE value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController" />
+    <option name="LAST_COMMIT_MESSAGE" value="SplashScreen:&#10; - Changed duration to .4&#10; &#10;Main Menu:&#10; - Renamed &quot;splashscreen.fxml&quot; to mainmenu.fxml&#10; - Renamed &quot;splashscreenController&quot; to MainMenuController" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
