@@ -7,6 +7,7 @@ module org.example.circuit_project {
     requires jakarta.xml.bind;
 //    requires org.apache.httpcomponents.httpclient;
     requires java.sql;
+    requires mysql.connector.j;
 
     exports org.example.circuit_project;
     opens org.example.circuit_project to javafx.fxml;

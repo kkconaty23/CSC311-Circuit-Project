@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@css/profile.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.ProfileController">
+
+    <left>
+        <!-- Left sidebar with Circuit Sandbox logo and navigation -->
+        <VBox alignment="TOP_CENTER" prefWidth="250" spacing="20" styleClass="sidebar">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Circuit logo -->
+            <StackPane styleClass="logo-container">
+            <children>
+               <ImageView fitHeight="177.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@images/raw.png" />
+                  </image>
+               </ImageView>
+            </children>
+            </StackPane>
+
+            <Separator styleClass="separator" />
+
+            <!-- Navigation buttons -->
+            <HBox alignment="CENTER" spacing="15">
+                <Button onAction="#goBackToMainMenu" styleClass="nav-button" text="&lt;" />
+                <Button styleClass="nav-button" text="-" />
+                <Button styleClass="nav-button" text="&gt;" />
+            </HBox>
+
+            <VBox alignment="CENTER" spacing="15" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </left>
+
+    <center>
+        <!-- Main content area -->
+        <ScrollPane fitToWidth="true" styleClass="content-area">
+            <VBox spacing="25" styleClass="profile-container">
+                <padding>
+                    <Insets bottom="30" left="40" right="40" top="30" />
+                </padding>
+
+                <!-- Header -->
+                <HBox>
+                    <Label styleClass="page-title" text="User Profile" />
+                </HBox>
+
+                <Separator styleClass="separator" />
+
+                <!-- Profile information section -->
+                <TitledPane expanded="true" styleClass="section-pane" text="Personal Information">
+                    <VBox spacing="15">
+                        <!-- First Name -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="First Name:" />
+                            <TextField fx:id="firstNameField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <!-- Last Name -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="Last Name:" />
+                            <TextField fx:id="lastNameField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <!-- Email -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="Email:" />
+                            <TextField fx:id="emailField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <Button onAction="#saveProfileChanges" styleClass="action-button" text="Save Changes" />
+                    </VBox>
+                </TitledPane>
+
+                <!-- Password section -->
+                <TitledPane expanded="false" styleClass="section-pane" text="Change Password">
+                    <VBox spacing="15">
+                        <!-- Current Password -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="Current Password:" />
+                            <PasswordField fx:id="currentPasswordField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <!-- New Password -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="New Password:" />
+                            <PasswordField fx:id="newPasswordField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <!-- Confirm Password -->
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label prefWidth="120" styleClass="field-label" text="Confirm Password:" />
+                            <PasswordField fx:id="confirmPasswordField" prefWidth="250" styleClass="profile-field" />
+                        </HBox>
+
+                        <Button onAction="#updatePassword" styleClass="action-button" text="Update Password" />
+                    </VBox>
+                </TitledPane>
+
+                <!-- Projects section -->
+                <TitledPane expanded="true" styleClass="section-pane" text="My Projects">
+                    <VBox spacing="15">
+                        <HBox alignment="CENTER_LEFT" styleClass="project-header">
+                            <Label prefWidth="200" text="Project Name" HBox.hgrow="ALWAYS" />
+                            <Label prefWidth="150" text="Last Modified" HBox.hgrow="ALWAYS" />
+                            <Label prefWidth="100" text="Actions" HBox.hgrow="ALWAYS" />
+                        </HBox>
+
+                        <ListView fx:id="projectListView" prefHeight="200" VBox.vgrow="ALWAYS" />
+
+                        <HBox spacing="10">
+                            <Button onAction="#importProject" styleClass="action-button" text="Import Project" />
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+
+</BorderPane>

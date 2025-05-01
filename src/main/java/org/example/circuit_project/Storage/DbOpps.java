@@ -1,5 +1,7 @@
 package org.example.circuit_project.Storage;
 
+import org.example.circuit_project.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +16,7 @@ public class DbOpps {
     final String USERNAME = "circuitAdmin";
 
     //password will be shared. When you have it, do not push it. DONT EXPOSE US :D
-    final String PASSWORD = "";
+    final String PASSWORD = "Qwerty123!";
 
 
 
@@ -95,8 +97,9 @@ public class DbOpps {
         }
     }
 
-    public boolean queryUserByName(String message, String password) {
-        boolean result = false;
+    public User queryUserByName(String message, String password) {
+//        boolean result = false;
+        User currentUser = null;
 
 
         try {
@@ -114,8 +117,11 @@ public class DbOpps {
                 String email = resultSet.getString("email");
                 String firstName = resultSet.getString("firstname");
                 String lastName = resultSet.getString("lastname");
+                String dob = resultSet.getString("dob");
+                String pass = resultSet.getString("password");
+                currentUser = new User(id, email, firstName, lastName, pass);
                 System.out.println("ID: " + id + ", Email: " + email + ", FirstName: " + firstName +  ", LastName: " +lastName);
-                result = true;
+//                result = true;
 
             }
 
@@ -124,6 +130,6 @@ public class DbOpps {
         } catch (SQLException e) {
             e.printStackTrace();
 
-        }return result;
+        }return currentUser;
     }
 }

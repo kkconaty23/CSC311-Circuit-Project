@@ -19,10 +19,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /*
-* This is the screen that will be displayed after the user is logged in.
-* User will have the option to enter the Tutorial, Create a new Playground, or visit their profile page.
-* There will be a button to go back to the SplashScreen, which makes it similar to a "home dashboard".
-* */
+ * This is the screen that will be displayed after the user is logged in.
+ * User will have the option to enter the Tutorial, Create a new Playground, or visit their profile page.
+ * There will be a button to go back to the SplashScreen, which makes it similar to a "home dashboard".
+ * */
 public class MainMenuController implements Initializable {
 
 
@@ -54,12 +54,35 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Navigate to profile page when profile button is clicked
+     * @param event The action event triggered by clicking the profile button
+     */
+    @FXML
+    private void openProfilePage(ActionEvent event) {
+        try {
+
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/profile_page.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1030, 818);
+            stage.setScene(scene);
+            stage.setResizable(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupHoverSync(profileBtn, profileLabel);
         setupHoverSync(tutorialBtn, tutorialLabel);
         setupHoverSync(newPlaygroundBtn, sandboxLabel);
+
+        // Set up action handlers for buttons
+        profileBtn.setOnAction(this::openProfilePage);
+        newPlaygroundBtn.setOnAction(this::onClick); // Use existing onClick method for sandbox
     }
 
     /**
