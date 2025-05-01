@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.circuit_project.Storage.DbOpps;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,8 @@ public class ProfileController implements Initializable {
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
 
+    User currentUser = UserManager.getInstance().getCurrentUser();
+
 
 
 
@@ -40,7 +43,6 @@ public class ProfileController implements Initializable {
      * now this works!
      */
     private void loadUserProfile() {
-        User currentUser = UserManager.getInstance().getCurrentUser();
 
         firstNameField.setText(currentUser.getFirstName());
         lastNameField.setText(currentUser.getLastName());
@@ -81,6 +83,7 @@ public class ProfileController implements Initializable {
      */
     @FXML
     private void updatePassword() {
+        DbOpps connection = new DbOpps();
 
         if (currentPasswordField.getText().isEmpty() ||
                 newPasswordField.getText().isEmpty() ||
@@ -94,6 +97,14 @@ public class ProfileController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Error", "New password and confirmation do not match.");
             return;
         }
+
+        if(currentUser.getPassword().equals(currentPasswordField.getText())) {
+            boolean result = connection.changePassword(String.valueOf(newPasswordField), currentUser.getID());
+            if(result) {
+                currentUser.setPassword(newPasswordField.getText());
+            }
+        }
+
 
         // Clear fields and show confirmation
         currentPasswordField.clear();

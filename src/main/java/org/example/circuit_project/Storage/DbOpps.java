@@ -71,7 +71,6 @@ public class DbOpps {
 
     public void insertUser(String uniqueID, String email, String password, String firstname, String lastname, String dob) {
 
-
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             String sql = "INSERT INTO circuitUsers (id, email, password, firstname, lastname, dob) VALUES (?, ?, ?, ?, ?, ?)";
@@ -131,5 +130,26 @@ public class DbOpps {
             e.printStackTrace();
 
         }return currentUser;
+    }
+    public boolean changePassword(String newPassword, String id) {
+        boolean result = false;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "UPDATE circuitusers SET password = ? WHERE id = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(2, id);
+
+            preparedStatement.executeUpdate();
+
+            System.out.println("Password changed successfully");
+            result = true;
+            preparedStatement.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }
