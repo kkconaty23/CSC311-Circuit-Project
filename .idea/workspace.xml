@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="Regex labels included, most patterns and matchers implemented.">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- adjusted listeners&#10;- added regex class&#10;- form validation&#10;- documentation for all methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Elements/Voltmeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Elements/Voltmeter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/PlaygroundController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/PlaygroundController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/sandbox.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/css/sandbox.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +36,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="regex" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,19 +75,23 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "profile",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/estos/AppData/Local/SceneBuilder/SceneBuilder.exe",
+    "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\estos\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\images" />
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\css" />
@@ -103,6 +109,14 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -122,6 +136,9 @@
       <workItem from="1745872347199" duration="180000" />
       <workItem from="1745943577488" duration="4852000" />
       <workItem from="1745977192907" duration="4785000" />
+      <workItem from="1746041876370" duration="3108000" />
+      <workItem from="1746046703725" duration="364000" />
+      <workItem from="1746070911377" duration="6464000" />
     </task>
     <task id="LOCAL-00001" summary="Create README.md&#10;&#10;added read.me">
       <option name="closed" value="true" />
@@ -144,13 +161,25 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/Login.java</url>
-          <line>38</line>
-          <option name="timeStamp" value="1" />
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java</url>
+          <line>45</line>
+          <properties field="currentUser" class="org.example.circuit_project.LoginController" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

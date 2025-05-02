@@ -43,6 +43,8 @@ public class LoginController implements Initializable {
 
     private Regex regex;
 
+    public User currentUser;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         slidingPane.setTranslateX(slidingPane.getWidth());
@@ -71,7 +73,7 @@ public class LoginController implements Initializable {
         });
     }
 
-    private void clearErrorLabels() {
+ private void clearErrorLabels() {
         registerErrorLabel.setText("");
         firstNameRegex.setText("");
         lastNameRegex.setText("");
@@ -166,9 +168,11 @@ public class LoginController implements Initializable {
     @FXML
     private void onLoginClicked(ActionEvent event) {
         DbOpps connection = new DbOpps();
-        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
+//        boolean checkUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
+        currentUser = connection.queryUserByName(loginEmailField.getText(), loginPasswordField.getText());
 
-        if (checkUser) {
+        if (currentUser != null) {
+            UserManager.getInstance().setCurrentUser(currentUser);
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/loading-screen.fxml"));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

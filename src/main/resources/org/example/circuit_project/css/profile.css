@@ -1,0 +1,141 @@
+/* profile.css - Styling for the Profile page */
+
+/* Main container */
+.main-container {
+    -fx-background-color: white;
+}
+
+/* Sidebar styling */
+.sidebar {
+    -fx-background-color: #121212;
+    -fx-text-fill: white;
+}
+
+/* Logo styling */
+.logo-container {
+    -fx-padding: 10;
+}
+
+.logo-text {
+    -fx-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.circuit-line {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+    -fx-shape: "M 0 50 C 0 22.5 22.5 0 50 0 C 77.5 0 100 22.5 100 50 L 100 100";
+    -fx-max-width: 100;
+    -fx-max-height: 100;
+}
+
+/* Navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-padding: 5;
+}
+
+.nav-button:hover {
+    -fx-background-color: #333333;
+}
+
+/* Menu buttons */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-min-width: 150px;
+    -fx-alignment: center-left;
+    -fx-padding: 10;
+}
+
+.menu-button:hover {
+    -fx-background-color: #333333;
+}
+
+.active-menu-button {
+    -fx-background-color: #333333;
+}
+
+.school-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.content-area {
+    -fx-background-color: white;
+    -fx-background: white;
+}
+
+.content-area > .viewport {
+    -fx-background-color: white;
+}
+
+.profile-container {
+    -fx-background-color: white;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.section-pane {
+    -fx-background-color: white;
+}
+
+.section-pane > .title {
+    -fx-background-color: #f5f5f5;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.section-pane > .content {
+    -fx-padding: 15;
+    -fx-background-color: white;
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+
+.profile-field {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 4;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+}
+
+
+.action-button {
+    -fx-background-color: #121212;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 4;
+}
+
+.action-button:hover {
+    -fx-background-color: #333333;
+}
+
+.project-header {
+    -fx-font-weight: bold;
+    -fx-padding: 5;
+    -fx-background-color: #f5f5f5;
+}
+
+.separator {
+    -fx-background: #e0e0e0;
+}

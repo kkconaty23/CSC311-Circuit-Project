@@ -1,5 +1,7 @@
 package org.example.circuit_project.Storage;
 
+import org.example.circuit_project.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,26 +15,19 @@ public class DbOpps {
     final String DB_URL = MYSQL_SERVER_URL + "DBname";
     final String USERNAME = "circuitAdmin";
 
-    //password will be shared. When you have it, do not push it. DONT EXPOSE US :D
-    final String PASSWORD = "";
-
-
+    final String PASSWORD = "Qwerty123!";
 
 
     public boolean connectToDatabase() {
         boolean hasRegistredUsers = false;
 
-//email, retype, pass, retype, first, last, dob
-        //Class.forName("com.mysql.jdbc.Driver");
         try {
-            //First, connect to MYSQL server and create the database if not created
             Connection conn = DriverManager.getConnection(MYSQL_SERVER_URL, USERNAME, PASSWORD);
             Statement statement = conn.createStatement();
             statement.executeUpdate("CREATE DATABASE IF NOT EXISTS DBname");
             statement.close();
             conn.close();
 
-            //Second, connect to the database and create the table "users" if cot created
             conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             statement = conn.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS circuitUsers ("
@@ -44,8 +39,6 @@ public class DbOpps {
                     + "dob DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP"
                     + ")";
             statement.executeUpdate(sql);
-
-            //check if we have users in the table users
             statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM circuitUsers");
 
@@ -68,7 +61,6 @@ public class DbOpps {
     }
 
     public void insertUser(String uniqueID, String email, String password, String firstname, String lastname, String dob) {
-
 
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -95,9 +87,8 @@ public class DbOpps {
         }
     }
 
-    public boolean queryUserByName(String message, String password) {
-        boolean result = false;
-
+    public User queryUserByName(String message, String password) {
+        User currentUser = null;
 
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -114,9 +105,10 @@ public class DbOpps {
                 String email = resultSet.getString("email");
                 String firstName = resultSet.getString("firstname");
                 String lastName = resultSet.getString("lastname");
-                System.out.println("ID: " + id + ", Email: " + email + ", FirstName: " + firstName +  ", LastName: " +lastName);
-                result = true;
-
+                String dob = resultSet.getString("dob");
+                String pass = resultSet.getString("password");
+                currentUser = new User(id, firstName, lastName, email, pass);
+                System.out.println("ID: " + id + ", Email: " + email + ", FirstName: " + firstName + ", LastName: " + lastName);
             }
 
             preparedStatement.close();
@@ -124,6 +116,72 @@ public class DbOpps {
         } catch (SQLException e) {
             e.printStackTrace();
 
-        }return result;
+        }
+        return currentUser;
+    }
+
+    /**
+     * This method is utilized by the profile controller to change the password of the current user. It creates a UPDATE
+     *  SQL query and uses the users UUID as the where clause.
+     * @param newPassword a new password inputted by the user
+     * @param id The users UUID taken from the User class
+     * @return boolean dependent on a successful update
+     */
+    public boolean changePassword(String newPassword, String id) {
+        boolean result = false;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "UPDATE circuitusers SET password = ? WHERE id = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(2, id);
+
+            preparedStatement.executeUpdate();
+
+            System.out.println("Password changed successfully");
+            result = true;
+            preparedStatement.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * This method is ultilzed by the profile controller to change the personal info of a current user.
+     * An UPDATE SQL query is created and changes the firstName, lastName and email of a user according
+     * to the users UUID.
+     * @param id The current users UUID
+     * @param firstname The new first name of the user
+     * @param lastname The new last name of the user
+     * @param email The new email of the user
+     * @return boolean according to the success of the update
+     */
+    public boolean chanegUserInfo(String id, String firstname, String lastname, String email) {
+        boolean result = false;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "UPDATE circuitusers SET firstname = ?, lastname = ?, email = ? WHERE id = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, firstname);
+            preparedStatement.setString(2, lastname);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, id);
+
+            preparedStatement.executeUpdate();
+
+            System.out.println("User info changed successfully");
+            result = true;
+            preparedStatement.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return result;
     }
 }
