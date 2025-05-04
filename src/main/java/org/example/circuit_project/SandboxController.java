@@ -4,6 +4,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +29,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.circuit_project.Elements.Battery;
 import org.example.circuit_project.Elements.Circuit;
 import org.example.circuit_project.Elements.Component;
@@ -259,6 +262,17 @@ public class SandboxController implements Initializable {
      */
     private void enableDrag(Node node) {
         final Delta dragDelta = new Delta();
+        final long[] lastClickTime = new long[1];  // For double-click detection
+
+        // Enable double-click to unsnap
+        node.setOnMouseClicked(event -> {
+            long now = System.currentTimeMillis();
+            if (event.getClickCount() == 2 || (now - lastClickTime[0] < 300)) { // Double click or fast second click
+                unsnapComponent(node);
+                event.consume();
+            }
+            lastClickTime[0] = now;
+        });
 
         node.setOnMousePressed(event -> {
             node.toFront();
@@ -337,7 +351,13 @@ public class SandboxController implements Initializable {
 
             // Clear previous connections for this component if we're snapping
             if (snapped) {
-                clearSnapsFor(node);
+                // Visual feedback when snapping
+                playSnapAnimation(sourceSnapPoint, targetSnapPoint);
+
+//                clearSnapsFor(node);
+                if (!(findComponentById(node.getId()) instanceof Wire)) {
+                    clearSnapsFor(node);  // ✅ Only clear if it's NOT a wire
+                }
 
                 // Record new snap connection
                 if (sourceSnapPoint != null && targetSnapPoint != null) {
@@ -347,6 +367,24 @@ public class SandboxController implements Initializable {
                     // Record component partnership
                     snappedPartners.computeIfAbsent(node, k -> new ArrayList<>()).add(snappedToComponent);
                     snappedPartners.computeIfAbsent(snappedToComponent, k -> new ArrayList<>()).add(node);
+
+
+
+                    // Add a subtle magnetic effect when close to snapping
+//                    finalX = applyMagneticEffect(finalX, newX + dx);
+//                    finalY = applyMagneticEffect(finalY, newY + dy);
+                }
+            }
+
+            // Handle wire connections for connected components
+            if (snappedToComponent != null) {
+                Component thisComponent = findComponentById(node.getId());
+                Component otherComponent = findComponentById(snappedToComponent.getId());
+
+                if (thisComponent instanceof Wire wire) {
+                    handleWireConnection(wire, otherComponent);
+                } else if (otherComponent instanceof Wire wire) {
+                    handleWireConnection(wire, thisComponent);
                 }
             }
 
@@ -379,7 +417,118 @@ public class SandboxController implements Initializable {
             event.consume();
         });
 
-        node.setOnMouseReleased(event -> node.setCursor(Cursor.HAND));
+        node.setOnMouseReleased(event -> {
+            node.setCursor(Cursor.HAND);
+
+            // Optional: Run simulation after component placement
+            // Platform.runLater(this::simulateCircuit);
+        });
+    }
+
+    // New method: Apply a magnetic-like effect to make snapping feel smoother
+    private double applyMagneticEffect(double currentVal, double targetVal) {
+        // Apply a slight attraction effect for smooth snapping
+        double blendFactor = 0.9; // Closer to 1 = stronger magnetic effect
+        return currentVal * (1 - blendFactor) + targetVal * blendFactor;
+    }
+
+    // New method: Unsnap a component from all its connections
+    private void unsnapComponent(Node node) {
+        // Save original position
+        double originalX = node.getLayoutX();
+        double originalY = node.getLayoutY();
+
+        // Get a list of partners before clearing connections
+        List<Node> partners = new ArrayList<>(snappedPartners.getOrDefault(node, new ArrayList<>()));
+
+        // Clear all connections
+        clearSnapsFor(node);
+
+        // Get component model
+        Component component = findComponentById(node.getId());
+
+        // If it's a wire, clear connection IDs
+        if (component instanceof Wire wire) {
+            wire.setFromComponentId(null);
+            wire.setToComponentId(null);
+        }
+
+        // Optional: Move the component slightly away from its last connection
+        if (!partners.isEmpty()) {
+            // Calculate the average position of the partners
+            double avgX = 0, avgY = 0;
+            for (Node partner : partners) {
+                avgX += partner.getLayoutX();
+                avgY += partner.getLayoutY();
+            }
+            avgX /= partners.size();
+            avgY /= partners.size();
+
+            // Move slightly away from the center of connected components
+            double moveAwayX = originalX - avgX;
+            double moveAwayY = originalY - avgY;
+            double distance = Math.sqrt(moveAwayX * moveAwayX + moveAwayY * moveAwayY);
+
+            if (distance < 0.1) {
+                // If components are directly on top of each other, just move right
+                node.setLayoutX(originalX + 20);
+            } else {
+                // Normalize and apply a small movement away
+                double scale = 20 / Math.max(0.1, distance);
+                node.setLayoutX(originalX + moveAwayX * scale);
+                node.setLayoutY(originalY + moveAwayY * scale);
+            }
+
+            // Update the model with new position
+            if (component != null) {
+                component.setX(node.getLayoutX());
+                component.setY(node.getLayoutY());
+            }
+
+            // Show visual feedback
+            playUnsnapAnimation(node);
+        }
+
+        // Optionally run simulation after unsnapping
+        // Platform.runLater(this::simulateCircuit);
+    }
+
+    // New method: Handle wire connections
+    private void handleWireConnection(Wire wire, Component otherComponent) {
+        if (wire.getFromComponentId() == null) {
+            wire.setFromComponentId(otherComponent.getId());
+        } else if (wire.getToComponentId() == null && !wire.getFromComponentId().equals(otherComponent.getId())) {
+            wire.setToComponentId(otherComponent.getId());
+        }
+    }
+
+    // New method: Visual animation when components snap together
+    private void playSnapAnimation(Node sourceSnap, Node targetSnap) {
+        if (sourceSnap == null || targetSnap == null) return;
+
+        // Create a quick highlight effect at both snap points
+        for (Node snap : List.of(sourceSnap, targetSnap)) {
+            String originalStyle = snap.getStyle();
+            snap.setStyle("-fx-fill: rgba(0, 255, 0, 0.7); -fx-stroke: green;");
+
+            // Restore original style after a short delay
+            PauseTransition pause = new PauseTransition(Duration.millis(300));
+            pause.setOnFinished(e -> snap.setStyle(originalStyle));
+            pause.play();
+        }
+    }
+
+    // New method: Visual animation when components unsnap
+    private void playUnsnapAnimation(Node node) {
+        // Optional: Add a subtle bounce or highlight effect
+        ScaleTransition scale = new ScaleTransition(Duration.millis(150), node);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(1.05);
+        scale.setToY(1.05);
+        scale.setCycleCount(2);
+        scale.setAutoReverse(true);
+        scale.play();
     }
 
     // Helper method to clear snap connections for a node
@@ -470,8 +619,8 @@ public class SandboxController implements Initializable {
             for (Node child : parent.getChildrenUnmodifiable()) {
                 if (child.getId() != null && child.getId().toLowerCase().startsWith("snap")) {
                     snapPoints.add(child);
-
-                     child.setStyle("-fx-fill: rgba(0, 0, 255, 0.3); -fx-stroke: blue;");
+                    // Make snap points visible but semi-transparent
+                    child.setStyle("-fx-fill: rgba(0, 0, 255, 0.3); -fx-stroke: blue;");
                 }
             }
         }
@@ -492,7 +641,6 @@ public class SandboxController implements Initializable {
      */
     private void enableLineResize(Line line, String wireId) {
         final boolean[] resizingStart = new boolean[1]; // true = resizing start, false = end
-        final Delta dragDelta = new Delta();
 
         line.setOnMousePressed(event -> {
             double mouseX = event.getX();
@@ -507,67 +655,40 @@ public class SandboxController implements Initializable {
             resizingStart[0] = Math.hypot(mouseX - startX, mouseY - startY) <
                     Math.hypot(mouseX - endX, mouseY - endY);
 
-            dragDelta.x = mouseX;
-            dragDelta.y = mouseY;
-
             event.consume();
         });
 
         line.setOnMouseDragged(event -> {
+            Component comp = findComponentById(wireId);
+            if (!(comp instanceof Wire wire)) return;
+
+            boolean canResizeStart = (wire.getFromComponentId() == null);
+            boolean canResizeEnd = (wire.getToComponentId() == null);
+
             double newX = event.getX();
             double newY = event.getY();
 
-            if (resizingStart[0]) {
+            // Only allow resizing if that endpoint is not connected
+            if (resizingStart[0] && canResizeStart) {
                 line.setStartX(newX);
                 line.setStartY(newY);
-            } else {
+            } else if (!resizingStart[0] && canResizeEnd) {
                 line.setEndX(newX);
                 line.setEndY(newY);
             }
 
+            // Update model and visuals
             Node wireNode = componentNodesMap.get(wireId);
             if (wireNode != null) {
-                // Update model
-                Component c = findComponentById(wireId);
-                if (c instanceof Wire wireModel) {
-                    double offsetX = wireNode.getLayoutX();
-                    double offsetY = wireNode.getLayoutY();
-                    wireModel.setStartX(line.getStartX() + offsetX);
-                    wireModel.setStartY(line.getStartY() + offsetY);
-                    wireModel.setEndX(line.getEndX() + offsetX);
-                    wireModel.setEndY(line.getEndY() + offsetY);
-                }
+                double offsetX = wireNode.getLayoutX();
+                double offsetY = wireNode.getLayoutY();
 
-                // Update snap points
+                wire.setStartX(line.getStartX() + offsetX);
+                wire.setStartY(line.getStartY() + offsetY);
+                wire.setEndX(line.getEndX() + offsetX);
+                wire.setEndY(line.getEndY() + offsetY);
+
                 updateWireSnapPoints(wireNode, line);
-
-                // Move connected nodes (if any)
-                List<Node> partners = snappedPartners.getOrDefault(wireNode, new ArrayList<>());
-                for (Node partner : partners) {
-                    if (partner instanceof Parent parent) {
-                        for (Node snap : findSnapPoints(partner)) {
-                            // Check if this snap point overlaps with a wire snap point
-                            for (Node wireSnap : findSnapPoints(wireNode)) {
-                                Point2D wireScene = wireSnap.localToScene(wireSnap.getLayoutX(), wireSnap.getLayoutY());
-                                Point2D partnerScene = snap.localToScene(snap.getLayoutX(), snap.getLayoutY());
-
-                                if (wireScene.distance(partnerScene) < SNAP_RADIUS) {
-                                    double dx = wireScene.getX() - partnerScene.getX();
-                                    double dy = wireScene.getY() - partnerScene.getY();
-                                    partner.setLayoutX(partner.getLayoutX() + dx);
-                                    partner.setLayoutY(partner.getLayoutY() + dy);
-
-                                    // Update partner model
-                                    Component pComp = findComponentById(partner.getId());
-                                    if (pComp != null) {
-                                        pComp.setX(partner.getLayoutX());
-                                        pComp.setY(partner.getLayoutY());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
 
             event.consume();
@@ -576,16 +697,6 @@ public class SandboxController implements Initializable {
 
 
 
-    /**
-     * Creates a resize handle for line endpoints
-     */
-    private Rectangle createResizeHandle(double x, double y) {
-        Rectangle handle = new Rectangle(x - 5, y - 5, 10, 10);
-        handle.setFill(Color.BLUE);
-        handle.setOpacity(0.7);
-        handle.setCursor(Cursor.CROSSHAIR);
-        return handle;
-    }
 
     /**
      * Finds a component by its ID
@@ -1138,49 +1249,125 @@ public class SandboxController implements Initializable {
     }
     @FXML
     private void simulateCircuit() {
-        Map<String, Component> componentMap = new HashMap<>();
+        // Create a map for quick component lookup
+        Map<String, Component> idToComponent = new HashMap<>();
+
+        // Reset all components (especially lightbulbs)
         for (Component c : components) {
-            componentMap.put(c.getId(), c);
+            idToComponent.put(c.getId(), c);
+            if (c instanceof Lightbulb bulb) {
+                bulb.setOn(false);
+                updateLightbulbVisual(bulb, false);
+            } else if (c instanceof Wire wire) {
+                // Reset wire state if you track current flow visually
+                // wire.setEnergized(false);
+            }
         }
 
+        // Build the connectivity graph based on snap connections
+        Map<String, Set<String>> graph = buildConnectivityGraph();
+
+        // For debugging
+        System.out.println("Circuit connectivity graph: " + graph);
+
+        // Simulate current flow from each battery
         for (Component c : components) {
             if (c instanceof Battery battery) {
-                simulateFromBattery(battery, componentMap, new HashSet<>());
-            }
-        }
-    }
+                System.out.println("Simulating from battery: " + battery.getId());
 
-    private void simulateFromBattery(Battery battery, Map<String, Component> all, Set<String> visited) {
-        Queue<String> toVisit = new LinkedList<>();
-        toVisit.add(battery.getId());
-        visited.add(battery.getId());
+                // Start a breadth-first search from the battery
+                Set<String> visited = new HashSet<>();
+                Queue<String> queue = new LinkedList<>();
 
-        while (!toVisit.isEmpty()) {
-            String currentId = toVisit.poll();
-            Component current = all.get(currentId);
+                // Add battery as starting point
+                queue.add(battery.getId());
+                visited.add(battery.getId());
 
-            for (Wire wire : getConnectedWires(currentId)) {
-                String nextId = wire.getFromComponentId().equals(currentId) ? wire.getToComponentId() : wire.getFromComponentId();
-                if (!visited.contains(nextId)) {
-                    Component next = all.get(nextId);
-                    if (next instanceof Switch s && !s.isClosed()) continue;
-                    if (next instanceof Lightbulb b) b.setOn(true);
-                    visited.add(nextId);
-                    toVisit.add(nextId);
+                // Process components in the current path
+                while (!queue.isEmpty()) {
+                    String currentId = queue.poll();
+                    Component current = idToComponent.get(currentId);
+
+                    System.out.println("  Current flowing through: " + currentId + " (" + current.getClass().getSimpleName() + ")");
+
+                    // Handle specific components
+                    if (current instanceof Lightbulb bulb) {
+                        bulb.setOn(true);
+                        updateLightbulbVisual(bulb, true);
+                        System.out.println("    Lightbulb turned ON: " + bulb.getId());
+                    }
+
+                    // If it's an open switch, stop the current flow in this branch
+                    if (current instanceof Switch s && !s.isClosed()) {
+                        System.out.println("    Open switch detected, stopping flow in this branch: " + s.getId());
+                        continue;
+                    }
+
+
+                    // Visit connected components
+                    for (String neighborId : graph.getOrDefault(currentId, Set.of())) {
+                        if (!visited.contains(neighborId)) {
+                            visited.add(neighborId);
+                            queue.add(neighborId);
+                        }
+                    }
                 }
             }
         }
     }
 
-    private List<Wire> getConnectedWires(String componentId) {
-        List<Wire> result = new ArrayList<>();
-        for (Component c : components) {
-            if (c instanceof Wire wire) {
-                if (componentId.equals(wire.getFromComponentId()) || componentId.equals(wire.getToComponentId())) {
-                    result.add(wire);
+    // Update the visual representation of a lightbulb based on its state
+    private void updateLightbulbVisual(Lightbulb bulb, boolean isOn) {
+        Node bulbNode = componentNodesMap.get(bulb.getId());
+        if (bulbNode instanceof Parent parent) {
+            // Find the bulb body by fx:id
+            Node body = parent.lookup("#bulbBody");
+
+            if (body instanceof javafx.scene.shape.Shape shape) {
+                shape.setFill(isOn ? Color.YELLOW : Color.web("#f8f8f8")); // Restore default color when off
+            }
+        }
+    }
+
+
+    // Build a connectivity graph based on snap connections between components
+    private Map<String, Set<String>> buildConnectivityGraph() {
+        Map<String, Set<String>> graph = new HashMap<>();
+
+        // Process all snap connections
+        for (Map.Entry<Node, List<Node>> entry : snapConnections.entrySet()) {
+            Node fromSnap = entry.getKey();
+
+            // Skip if snap point doesn't have a parent (shouldn't happen, but check to be safe)
+            if (fromSnap.getParent() == null) continue;
+
+            // Get parent component node
+            Node fromComponentNode = fromSnap.getParent();
+            String fromId = fromComponentNode.getId();
+
+            // Skip if the component ID is null
+            if (fromId == null) continue;
+
+            for (Node toSnap : entry.getValue()) {
+                // Skip if connection target doesn't have a parent
+                if (toSnap.getParent() == null) continue;
+
+                Node toComponentNode = toSnap.getParent();
+                String toId = toComponentNode.getId();
+
+                // Skip if the connected component ID is null
+                if (toId == null) continue;
+
+                // Don't create self-connections
+                if (!fromId.equals(toId)) {
+                    // Add bidirectional connection
+                    graph.computeIfAbsent(fromId, k -> new HashSet<>()).add(toId);
+                    graph.computeIfAbsent(toId, k -> new HashSet<>()).add(fromId);
                 }
             }
         }
-        return result;
+
+        return graph;
     }
+
 }
