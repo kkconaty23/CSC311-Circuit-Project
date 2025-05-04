@@ -25,5 +25,10 @@
 
         <!-- Switch handle -->
         <Circle centerX="40.0" centerY="19.0" radius="8.0" fill="#d78f1d" stroke="BLACK" strokeType="INSIDE" />
+
+        <!-- 🔵 Snap points -->
+        <Circle fx:id="snapLeft" radius="5.0" layoutX="5.0" layoutY="19.0" fill="TRANSPARENT" stroke="TRANSPARENT" />
+        <Circle fx:id="snapRight" radius="5.0" layoutX="85.0" layoutY="19.0" fill="TRANSPARENT" stroke="TRANSPARENT" />
     </children>
 </Pane>
+

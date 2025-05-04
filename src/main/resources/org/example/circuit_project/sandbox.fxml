@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
 
     <!-- Top Bar -->
     <top>
@@ -76,6 +76,7 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="simBtn" mnemonicParsing="false" onAction="#simulateCircuit" prefHeight="42.0" prefWidth="196.0" text="Button" />
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="clearBtn" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#clearBtnClick" prefHeight="0.0" prefWidth="37.0">
                <graphic>

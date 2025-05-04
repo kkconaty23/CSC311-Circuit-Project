@@ -5,6 +5,9 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlID;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * component base class that all other components extend
  * Main uses is giving components IDs and saving their X, Y coordinates
@@ -31,6 +34,11 @@ public abstract class Component {
         this.x = x;
         this.y = y;
     }
+
+    public List<Port> getPorts() {
+        return new ArrayList<>(); // Placeholder, override in subclasses
+    }
+
 
 
     /**

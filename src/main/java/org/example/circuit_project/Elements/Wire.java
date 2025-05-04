@@ -13,6 +13,8 @@ public class Wire extends Component {
     private double endX;
     private double endY;
     private double resistance;
+    private String fromComponentId;
+    private String toComponentId;
 
     /**
      * default required by JAXB
@@ -141,4 +143,12 @@ public class Wire extends Component {
         setX((startX + endX) / 2);
         setY((startY + endY) / 2);
     }
+
+
+    public String getFromComponentId() { return fromComponentId; }
+    public void setFromComponentId(String id) { this.fromComponentId = id; }
+
+    public String getToComponentId() { return toComponentId; }
+    public void setToComponentId(String id) { this.toComponentId = id; }
+
 }
