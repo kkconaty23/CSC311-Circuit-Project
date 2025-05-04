@@ -26,7 +26,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="200.0">
+            <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" onAction="#openTutorialPage" prefHeight="140.0" prefWidth="200.0">
                <font>
                   <Font size="18.0" />
                </font>
