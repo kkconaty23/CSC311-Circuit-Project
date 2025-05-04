@@ -74,6 +74,21 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    @FXML
+    private void openTutorialPage(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/tutorial-page.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1030, 818);
+            stage.setScene(scene);
+            stage.setResizable(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupHoverSync(profileBtn, profileLabel);
