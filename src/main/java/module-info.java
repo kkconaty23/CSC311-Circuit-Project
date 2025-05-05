@@ -11,9 +11,8 @@ module org.example.circuit_project {
 
     exports org.example.circuit_project;
     opens org.example.circuit_project to javafx.fxml;
-    opens org.example.circuit_project.Elements to jakarta.xml.bind;
-
-
+    exports org.example.circuit_project.Components;
+    opens org.example.circuit_project.Components to javafx.fxml;
 
 
 }
