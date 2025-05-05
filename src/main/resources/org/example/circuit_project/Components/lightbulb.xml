@@ -1,9 +1,0 @@
-<component>
-    <type>Lightbulb</type>
-    <x>300</x>         <!-- X position in the sandbox -->
-    <y>200</y>         <!-- Y position in the sandbox -->
-    <radius>30</radius>  <!-- Radius of the lightbulb -->
-    <color>#FFFF00</color> <!-- Color of the lightbulb -->
-    <label>LB1</label>    <!-- Optional: Label for the lightbulb -->
-    <state>off</state>   <!-- State of the lightbulb (on/off) -->
-</component>
