@@ -95,6 +95,7 @@ public class SandboxController implements Initializable {
     private Port currentlyHighlightedPort = null;
 
     private Port firstSelectedPort = null;
+    @FXML
     private Button runBtn;
 
 
