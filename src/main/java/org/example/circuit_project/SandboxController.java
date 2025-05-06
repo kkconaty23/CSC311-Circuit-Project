@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +25,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.circuit_project.Components.*;
@@ -88,6 +91,8 @@ public class SandboxController implements Initializable {
     @FXML private Line wireIcon;
     @FXML public ImageView bulbIcon;
     @FXML public ImageView switchIcon;
+
+    private Port currentlyHighlightedPort = null;
 
     private Port firstSelectedPort = null;
     private Button runBtn;
@@ -466,9 +471,8 @@ public class SandboxController implements Initializable {
                 double ey = ((Number) data.get("endY")).doubleValue();
 
                 Line line = new Line(sx, sy, ex, ey);
-                line.setStrokeWidth(4);
-                line.setStroke(Color.BLACK);
-                line.setCursor(Cursor.HAND);
+                styleWire(line);
+
 
                 Wire wire = new Wire(line);
                 line.setUserData(wire);
@@ -602,10 +606,8 @@ public class SandboxController implements Initializable {
 
         if (sourceNode instanceof Line && sourceNode == wireIcon) {
             Line newLine = new Line(0, 0, 80, 0);
-            newLine.setStrokeWidth(3);
-            newLine.setStroke(Color.BLACK);
-            newLine.setLayoutX(localCoords.getX());
-            newLine.setLayoutY(localCoords.getY());
+            styleWire(newLine);
+
 
             Wire newWire = new Wire(newLine);
             enableLineDrag(newLine);
@@ -635,7 +637,10 @@ public class SandboxController implements Initializable {
 
                 for (Port port : newComponent.getPorts()) {
                     Circle portCircle = new Circle(6);
-                    portCircle.setFill(Color.RED);
+                    portCircle.setStroke(Color.RED);
+                    portCircle.setFill(Color.TRANSPARENT);
+                    portCircle.setStrokeWidth(2);
+                    port.updateVisualState(); // new method from Port.java
                     double x = view.getLayoutX() + port.getXOffset() * view.getFitWidth();
                     double y = view.getLayoutY() + port.getYOffset() * view.getFitHeight();
                     portCircle.setLayoutX(x);
@@ -719,8 +724,8 @@ public class SandboxController implements Initializable {
         Image image = sourceIcon.getImage();
 
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(60);
-        imageView.setFitHeight(60);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
         imageView.setPreserveRatio(true);
 
         return switch (id) {
@@ -866,18 +871,26 @@ public class SandboxController implements Initializable {
         double y = 200;
 
         Line line = new Line(x, y, x + 120, y);
-        line.setStrokeWidth(4);
-        line.setStroke(Color.BLACK);
-        line.setCursor(Cursor.HAND);
+        styleWire(line); // Add this
+
 
         Wire wire = new Wire(line);
         line.setUserData(wire);
 
         // === Create draggable port circles ===
-        Circle port1 = new Circle(6, Color.RED);
-        Circle port2 = new Circle(6, Color.RED);
-        port1.setCursor(Cursor.HAND);
-        port2.setCursor(Cursor.HAND);
+        Port p1 = wire.getPorts().get(0);
+        Port p2 = wire.getPorts().get(1);
+
+        p1.setCircle(new Circle());
+        p2.setCircle(new Circle());
+
+        p1.markAsWirePort();
+        p2.markAsWirePort();
+
+        Circle port1 = p1.getCircle();
+        Circle port2 = p2.getCircle();
+
+
 
         port1.setUserData(wire.getPorts().get(0));
         port2.setUserData(wire.getPorts().get(1));
@@ -889,6 +902,9 @@ public class SandboxController implements Initializable {
 
         wire.getPorts().get(0).setCircle(port1);
         wire.getPorts().get(1).setCircle(port2);
+        wire.getPorts().get(0).markAsWirePort();
+        wire.getPorts().get(1).markAsWirePort();
+
 
         // Add visuals to the scene
         playgroundPane.getChildren().addAll(line, port1, port2);
@@ -954,30 +970,21 @@ public class SandboxController implements Initializable {
             double newY = e.getSceneY() - dragDelta.y;
             Point2D local = playgroundPane.sceneToLocal(newX, newY);
 
-            // Attempt to snap to a nearby port
-            Port snapTarget = findNearbyPort(local, 12); // 12px snap radius
-            if (snapTarget != null) {
-                local = new Point2D(
-                        snapTarget.getCircle().getLayoutX(),
-                        snapTarget.getCircle().getLayoutY()
-                );
+            Port draggedPort = isStart ? wire.getPorts().get(0) : wire.getPorts().get(1);
+            Port snapTarget = findNearbyPort(local, 15); // Snap radius
 
-                // Physically snap the dragged port to the nearby one
-                if (isStart) {
-                    wire.getPorts().get(0).connectTo(snapTarget);
-                    snapTarget.connectTo(wire.getPorts().get(0));
-                } else {
-                    wire.getPorts().get(1).connectTo(snapTarget);
-                    snapTarget.connectTo(wire.getPorts().get(1));
-                }
-
+            if (snapTarget != null && snapTarget.getCircle() != null && snapTarget != currentlyHighlightedPort) {
+                clearHighlightedPort();
+                currentlyHighlightedPort = snapTarget;
+                currentlyHighlightedPort.updateVisualState();
+            } else if (snapTarget == null) {
+                clearHighlightedPort();
             }
 
-            // Move the circle
+            // Move wire freely
             circle.setLayoutX(local.getX());
             circle.setLayoutY(local.getY());
 
-            // Update wire line
             if (isStart) {
                 wire.getLine().setStartX(local.getX());
                 wire.getLine().setStartY(local.getY());
@@ -988,7 +995,79 @@ public class SandboxController implements Initializable {
 
             e.consume();
         });
+
+        circle.setOnMouseReleased(e -> {
+            Point2D local = playgroundPane.sceneToLocal(e.getSceneX(), e.getSceneY());
+            Port draggedPort = isStart ? wire.getPorts().get(0) : wire.getPorts().get(1);
+            Port snapTarget = findNearbyPort(local, 15);
+
+            if (snapTarget != null) {
+                snapPortToTarget(circle, draggedPort, snapTarget);
+            }
+
+            clearHighlightedPort();
+            e.consume();
+        });
     }
+
+
+
+
+
+    private void snapPortToTarget(Circle draggedCircle, Port draggedPort, Port targetPort) {
+        // 🔌 Break previous connections cleanly
+        if (draggedPort.getConnectedTo() != null) {
+            Port prev = draggedPort.getConnectedTo();
+            draggedPort.connectTo(null);
+            if (prev.getConnectedTo() == draggedPort) prev.connectTo(null);
+        }
+
+        if (targetPort.getConnectedTo() != null) {
+            Port prev = targetPort.getConnectedTo();
+            targetPort.connectTo(null);
+            if (prev.getConnectedTo() == targetPort) prev.connectTo(null);
+        }
+
+        // 🧲 Snap visual to new location
+        double snappedX = targetPort.getCircle().getLayoutX();
+        double snappedY = targetPort.getCircle().getLayoutY();
+        draggedCircle.setLayoutX(snappedX);
+        draggedCircle.setLayoutY(snappedY);
+
+        // 🔗 Connect ports
+        draggedPort.connectTo(targetPort);
+        targetPort.connectTo(draggedPort);
+
+        // 📏 Update wire coordinates
+        Wire parentWire = (Wire) draggedPort.getParentComponent();
+        Line line = parentWire.getLine();
+        if (draggedPort == parentWire.getPorts().get(0)) {
+            line.setStartX(snappedX);
+            line.setStartY(snappedY);
+        } else {
+            line.setEndX(snappedX);
+            line.setEndY(snappedY);
+        }
+
+        // 🎨 Update visuals
+        draggedPort.updateVisualState();
+        targetPort.updateVisualState();
+
+        // ✨ Apply glow if both ends are connected
+        Port p1 = parentWire.getPorts().get(0);
+        Port p2 = parentWire.getPorts().get(1);
+        if (p1.getConnectedTo() != null && p2.getConnectedTo() != null) {
+            parentWire.applyActiveGlow();
+        } else {
+            parentWire.clearGlow();
+        }
+    }
+
+
+
+
+
+
     /**
      * Performs a breadth-first search to find all components connected to the given starting component.
      * This method traverses the circuit graph by following port connections.
@@ -1255,6 +1334,7 @@ public class SandboxController implements Initializable {
 
         Map<String, Component> idToComponent = new HashMap<>();
 
+        // Load components
         for (Object o : compList) {
             Map<?, ?> data = (Map<?, ?>) o;
             String type = (String) data.get("type");
@@ -1267,8 +1347,8 @@ public class SandboxController implements Initializable {
                 case "Lightbulb" -> new Lightbulb(new ImageView(bulbIcon.getImage()));
                 case "Switch" -> {
                     Switch sw = new Switch(new ImageView(switchIcon.getImage()));
-                    sw.toggle(); // temporary: toggle to closed if needed
-                    if (!(Boolean) data.get("isClosed")) sw.toggle(); // restore original state
+                    sw.toggle();
+                    if (!(Boolean) data.get("isClosed")) sw.toggle();
                     yield sw;
                 }
                 default -> null;
@@ -1288,19 +1368,22 @@ public class SandboxController implements Initializable {
             enableDrag(view);
 
             for (Port port : c.getPorts()) {
-                Circle circle = new Circle(6, Color.RED);
+                Circle circle = new Circle();
+                port.setCircle(circle);
+                port.updateVisualState();
+
                 double px = view.getLayoutX() + port.getXOffset() * view.getFitWidth();
                 double py = view.getLayoutY() + port.getYOffset() * view.getFitHeight();
                 circle.setLayoutX(px);
                 circle.setLayoutY(py);
                 circle.setUserData(port);
-                port.setCircle(circle);
                 playgroundPane.getChildren().add(circle);
             }
 
             idToComponent.put(id, c);
         }
 
+        // Load wires
         for (Object o : wireList) {
             Map<?, ?> data = (Map<?, ?>) o;
             String idA = (String) data.get("startComponentId");
@@ -1328,42 +1411,80 @@ public class SandboxController implements Initializable {
             double ey = ((Number) data.get("endY")).doubleValue();
 
             Line line = new Line(sx, sy, ex, ey);
-            line.setStrokeWidth(4);
-            line.setStroke(Color.BLACK);
-            line.setCursor(Cursor.HAND);
+            styleWire(line);
 
             Wire wire = new Wire(line);
             line.setUserData(wire);
 
-            Circle circle1 = new Circle(6, Color.RED);
-            Circle circle2 = new Circle(6, Color.RED);
+            Port startPort = wire.getPorts().get(0);
+            Port endPort = wire.getPorts().get(1);
+
+            startPort.setCircle(new Circle());
+            endPort.setCircle(new Circle());
+            startPort.markAsWirePort();
+            endPort.markAsWirePort();
+
+            Circle circle1 = startPort.getCircle();
+            Circle circle2 = endPort.getCircle();
+
             circle1.setLayoutX(sx);
             circle1.setLayoutY(sy);
             circle2.setLayoutX(ex);
             circle2.setLayoutY(ey);
 
-            Port startPort = wire.getPorts().get(0);
-            Port endPort = wire.getPorts().get(1);
-
-            startPort.setCircle(circle1);
-            endPort.setCircle(circle2);
             circle1.setUserData(startPort);
             circle2.setUserData(endPort);
 
-            // reconnect
+            // Connect wire ports to component ports
             Port targetA = compA.getPorts().get(portA);
             Port targetB = compB.getPorts().get(portB);
             startPort.connectTo(targetA);
             endPort.connectTo(targetB);
 
+            // Add visuals
             playgroundPane.getChildren().addAll(line, circle1, circle2);
 
             enableWireMove(line, circle1, circle2);
             enablePortDrag(wire, circle1, true);
             enablePortDrag(wire, circle2, false);
         }
-
     }
+
+    private void styleWire(Line line) {
+        // Thicker, rich stroke
+        line.setStrokeWidth(5.5);
+        line.setStroke(Color.web("#2e2e2e")); // Rich dark gray
+
+        // Rounded ends and joins for a smooth modern appearance
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
+        line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        line.setSmooth(true);
+
+        // Optional texture to simulate braided wire or sheathing
+        line.getStrokeDashArray().clear();
+        line.getStrokeDashArray().addAll(12.0, 3.0); // dash-gap pattern for subtle detail
+
+        // Optional visual depth (shadow/glow)
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setOffsetX(1.5);
+        dropShadow.setOffsetY(1.5);
+        dropShadow.setRadius(3.0);
+        dropShadow.setColor(Color.color(0, 0, 0, 0.3));
+        line.setEffect(dropShadow);
+
+        // Optional hover effect
+        line.setOnMouseEntered(e -> line.setStroke(Color.DARKRED));
+        line.setOnMouseExited(e -> line.setStroke(Color.web("#2e2e2e")));
+    }
+
+    private void clearHighlightedPort() {
+        if (currentlyHighlightedPort != null && currentlyHighlightedPort.getCircle() != null) {
+            currentlyHighlightedPort.updateVisualState();
+        }
+        currentlyHighlightedPort = null;
+    }
+
+
 
 
 }

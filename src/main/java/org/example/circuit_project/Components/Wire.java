@@ -1,6 +1,14 @@
 package org.example.circuit_project.Components;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
+
 import java.util.List;
 import java.util.Set;
 
@@ -106,4 +114,37 @@ public class Wire extends Component {
     public boolean isPowered() {
         return end1.getVoltage() > 0 || end2.getVoltage() > 0;
     }
+
+    public void applyActiveGlow() {
+        DropShadow glow = new DropShadow();
+        glow.setColor(Color.CORNFLOWERBLUE);
+        glow.setOffsetX(0);
+        glow.setOffsetY(0);
+        glow.setRadius(15);
+        glow.setSpread(0.6);
+
+        Timeline pulse = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(glow.radiusProperty(), 10)),
+                new KeyFrame(Duration.seconds(0.7), new KeyValue(glow.radiusProperty(), 20))
+        );
+        pulse.setAutoReverse(true);
+        pulse.setCycleCount(Animation.INDEFINITE);
+        pulse.play();
+
+        line.setEffect(glow);
+        line.setUserData(pulse); // store reference to stop it later
+    }
+
+    public void clearGlow() {
+        if (line.getEffect() instanceof DropShadow) {
+            line.setEffect(null);
+        }
+
+        Object anim = line.getUserData();
+        if (anim instanceof Animation timeline) {
+            timeline.stop();
+        }
+    }
+
+
 }

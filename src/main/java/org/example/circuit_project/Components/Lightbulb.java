@@ -1,8 +1,10 @@
 // === Lightbulb.java ===
 package org.example.circuit_project.Components;
 
+import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import org.example.circuit_project.CircuitUtils;
 
 import java.util.HashSet;
@@ -15,8 +17,8 @@ public class Lightbulb extends Component {
 
     public Lightbulb(ImageView view) {
         super(view);
-        this.input = new Port(this, 0.2, 0.5);
-        this.output = new Port(this, 0.8, 0.5);
+        this.input = new Port(this, 0.4, 1.05);
+        this.output = new Port(this, 0.6, 1.05);
     }
 
     @Override
@@ -62,11 +64,6 @@ public class Lightbulb extends Component {
         }
     }
 
-
-
-
-
-
     private boolean arePortsInSameLoop(Port a, Port b) {
         Set<Component> visited = new HashSet<>();
         return dfsBetweenPorts(a.getParentComponent(), b, visited);
@@ -108,16 +105,6 @@ public class Lightbulb extends Component {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public List<Port> getPorts() {
         return List.of(input, output);
@@ -141,18 +128,29 @@ public class Lightbulb extends Component {
         }
     }
 
-
-
+    @Override
     public void updateVisualState() {
         if (view == null) return;
-        if (isPowered()) {
-            System.out.println("Lightbulb has been propagated");
-            view.setImage(new Image(getClass().getResource("/org/example/circuit_project/images/litLightbulb.png").toExternalForm()));
-        } else {
-            System.out.println("Lightbulb has not been propagated");
-            view.setImage(new Image(getClass().getResource("/org/example/circuit_project/images/unlitLightbulb.png").toExternalForm()));
-        }
+
+        String imagePath = isPowered()
+                ? "/org/example/circuit_project/images/litLightbulb.png"
+                : "/org/example/circuit_project/images/unlitLightbulb.png";
+
+        Image newImage = new Image(getClass().getResource(imagePath).toExternalForm());
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), view);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(e -> {
+            view.setImage(newImage);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), view);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
+        });
+        fadeOut.play();
     }
+
 
 
 }

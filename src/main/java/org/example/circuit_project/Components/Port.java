@@ -1,5 +1,6 @@
 package org.example.circuit_project.Components;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Port {
@@ -8,11 +9,47 @@ public class Port {
     private Circle circle;
     private Port connectedTo;
     private double voltage = 0;
+    private boolean isWireEnd = false;
 
     public Port(Object parent, double xOffset, double yOffset) {
         this.parent = parent;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+
+        // Create the visual circle right away
+        this.circle = new Circle(6); // Default size
+        this.circle.setStroke(Color.RED);
+        this.circle.setFill(Color.TRANSPARENT);
+        this.circle.setStrokeWidth(2);
+    }
+
+    public void markAsWirePort() {
+        this.isWireEnd = true;
+
+        if (this.circle != null) {
+            this.circle.setRadius(4);  // wire tips are smaller
+        }
+
+        updateVisualState();  // apply styling now
+    }
+
+    public void updateVisualState() {
+        if (circle == null) return;
+
+        boolean isConnected = (connectedTo != null);
+
+        if (isWireEnd) {
+            // WIRE TIP: solid small dot (no border)
+            circle.setRadius(4); // just to be sure
+            circle.setFill(isConnected ? Color.LIMEGREEN : Color.RED);
+            circle.setStroke(null);
+        } else {
+            // COMPONENT PORT: larger hollow
+            circle.setRadius(6);
+            circle.setFill(Color.TRANSPARENT);
+            circle.setStroke(isConnected ? Color.LIMEGREEN : Color.RED);
+            circle.setStrokeWidth(2);
+        }
     }
 
     public Object getParent() {
@@ -53,7 +90,6 @@ public class Port {
         if (other != null) {
             this.connectedTo = other;
 
-            // Prevent infinite recursion or duplicate linking
             if (other.connectedTo != this) {
                 other.connectTo(this);
             }
@@ -62,10 +98,10 @@ public class Port {
         } else {
             System.out.println("🔌 Port disconnected");
         }
+
+        updateVisualState();
+        if (other != null) other.updateVisualState();
     }
-
-
-
 
     public boolean isConnected() {
         return connectedTo != null;
@@ -80,10 +116,7 @@ public class Port {
         System.out.println("🔋 Port " + parent.getClass().getSimpleName() + " set to " + voltage + "V");
     }
 
-
-
     public Component getParentComponent() {
         return (Component) parent;
     }
-
 }
