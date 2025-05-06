@@ -417,16 +417,18 @@ public class SandboxController implements Initializable {
                     if (e.getClickCount() == 2) {
                         newSwitch.disconnect();
                         System.out.println("🔌 Switch disconnected (double-click)");
-                    } else if (duration > 500) { // press-and-hold
+                    } else if (duration > 500) { // press-and-hold to toggle
                         newSwitch.toggle();
                         System.out.println("🔁 Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
 
                         Set<Component> connected = getAllConnectedComponents(newSwitch);
-                        for (Component c : connected) c.simulate();
+
+                        for (Component c : connected) c.reset();       // ✅ Important
+                        for (Component c : connected) c.simulate();    // voltage simulation
                         for (Component c : connected) c.propagatePower(new HashSet<>());
                     }
 
-                    e.consume(); // prevent drag
+                    e.consume();
                 });
 
                 imageView.setPickOnBounds(true);
@@ -434,6 +436,7 @@ public class SandboxController implements Initializable {
 
                 yield newSwitch;
             }
+
 
 
 

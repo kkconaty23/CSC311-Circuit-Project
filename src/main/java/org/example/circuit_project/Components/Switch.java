@@ -20,9 +20,10 @@ public class Switch extends Component {
 
     public void toggle() {
         isClosed = !isClosed;
-        System.out.println("Switch toggled! Now " + (isClosed ? "CLOSED" : "OPEN"));
+        System.out.println("🔁 Switch toggled: " + (isClosed ? "CLOSED" : "OPEN"));
         updateVisualState();
     }
+
 
 
     public boolean isClosed() {
@@ -55,19 +56,36 @@ public class Switch extends Component {
 
     @Override
     public void simulate() {
-        if (input.isConnected()) {
-            double voltage = input.getConnectedTo().getVoltage();
-            setVoltage(voltage);
-            output.setVoltage(voltage);
-            System.out.println("Bulb simulate: input=" + input.getVoltage() + ", output=" + output.getVoltage());
-        } else {
-            setVoltage(0); // Make sure this resets when disconnected
-            output.setVoltage(0);
-            System.out.println("Bulb simulate: input NOT connected");
+        input.setVoltage(0);
+        output.setVoltage(0);
+        setVoltage(0);
+
+        if (!input.isConnected() || !output.isConnected()) {
+            System.out.println("⛔ Switch not fully connected – no simulation");
+            return;
         }
 
-        updateVisualState(); // 🔧 YOU NEED THIS TO REFLECT CHANGES
+        if (!isClosed) {
+            System.out.println("⛔ Switch is OPEN – blocking voltage");
+            return;
+        }
+
+        // ✅ Pull the voltage *from the connected port* and assign it to input
+        double incomingVoltage = input.getConnectedTo().getVoltage();
+        input.setVoltage(incomingVoltage); // <== ADD THIS!
+        output.setVoltage(incomingVoltage);
+        setVoltage(incomingVoltage);
+
+        System.out.println("✅ Switch CLOSED – passing voltage: " + incomingVoltage);
+
+        updateVisualState();
     }
+
+
+
+
+
+
 
 
     @Override
@@ -77,8 +95,9 @@ public class Switch extends Component {
 
     @Override
     public boolean isPowered() {
-        return isClosed && input.getVoltage() > 0;
+        return isClosed && input.getVoltage() > 0 && output.getVoltage() > 0;
     }
+
 
     @Override
     public void propagatePower(Set<Component> visited) {

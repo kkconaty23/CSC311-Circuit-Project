@@ -7,14 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- Fixed Profile GUI&#10;- Added Home button">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="one step closer to electricity, switch functionality in progress">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -154,15 +149,15 @@
       <workItem from="1746408247305" duration="1684000" />
       <workItem from="1746447510388" duration="5193000" />
       <workItem from="1746471388797" duration="5235000" />
-      <workItem from="1746485383933" duration="10361000" />
+      <workItem from="1746485383933" duration="11650000" />
     </task>
-    <task id="LOCAL-00001" summary="Create README.md&#10;&#10;added read.me">
+    <task id="LOCAL-00001" summary="one step closer to electricity, switch functionality in progress">
       <option name="closed" value="true" />
-      <created>1743007045753</created>
+      <created>1746496127205</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1743007045753</updated>
+      <updated>1746496127205</updated>
     </task>
     <task id="LOCAL-00002" summary="commit before rebase">
       <option name="closed" value="true" />
@@ -172,6 +167,7 @@
       <option name="project" value="LOCAL" />
       <updated>1745343370853</updated>
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,7 +186,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Fixed Profile GUI&#10;- Added Home button" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Fixed Profile GUI&#10;- Added Home button" />
+    <MESSAGE value="one step closer to electricity, switch functionality in progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="one step closer to electricity, switch functionality in progress" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
