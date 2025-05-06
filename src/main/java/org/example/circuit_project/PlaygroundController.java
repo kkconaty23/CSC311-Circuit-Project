@@ -118,8 +118,7 @@ public class PlaygroundController {
     }
 
     private Node cloneNode(Node node) {
-        if (node instanceof Rectangle) {
-            Rectangle rect = (Rectangle) node;
+        if (node instanceof Rectangle rect) {
             Rectangle copy = new Rectangle(rect.getWidth(), rect.getHeight(), rect.getFill());
             copy.setArcWidth(rect.getArcWidth());
             copy.setArcHeight(rect.getArcHeight());
@@ -128,8 +127,7 @@ public class PlaygroundController {
             copy.setLayoutX(rect.getLayoutX());
             copy.setLayoutY(rect.getLayoutY());
             return copy;
-        } else if (node instanceof Ellipse) {
-            Ellipse ellipse = (Ellipse) node;
+        } else if (node instanceof Ellipse ellipse) {
             Ellipse copy = new Ellipse(ellipse.getCenterX(), ellipse.getCenterY(), ellipse.getRadiusX(), ellipse.getRadiusY());
             copy.setFill(ellipse.getFill());
             copy.setStroke(ellipse.getStroke());
@@ -137,8 +135,7 @@ public class PlaygroundController {
             copy.setLayoutX(ellipse.getLayoutX());
             copy.setLayoutY(ellipse.getLayoutY());
             return copy;
-        } else if (node instanceof Line) {
-            Line line = (Line) node;
+        } else if (node instanceof Line line) {
             Line copy = new Line(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
             copy.setStroke(line.getStroke());
             copy.setStrokeWidth(line.getStrokeWidth());

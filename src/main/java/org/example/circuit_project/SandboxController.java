@@ -31,6 +31,7 @@ import org.example.circuit_project.Elements.Component;
 import org.example.circuit_project.Elements.Lightbulb;
 import org.example.circuit_project.Elements.Wire;
 import org.example.circuit_project.Elements.Switch;
+import org.example.circuit_project.Storage.BlobDbOpps;
 
 import java.io.File;
 import java.io.IOException;
@@ -107,7 +108,18 @@ public class SandboxController implements Initializable {
         saveButton.setTooltip(darkTooltip("Save Circuit"));
         loadButton.setTooltip(darkTooltip("Load Circuit"));
         clearBtn.setTooltip(darkTooltip("Clear Workspace"));
-        homeButton.setTooltip(darkTooltip("Return to Main Menu")); //
+        homeButton.setTooltip(darkTooltip("Return to Main Menu"));
+
+//        try {
+//            BlobDbOpps blobTest = new BlobDbOpps();
+//            if (blobTest.testAzureConnection()) {
+//                System.out.println("Azure storage connection successful");
+//            } else {
+//                System.err.println("Azure storage connection failed");
+//            }
+//        } catch (Exception e) {
+//            System.err.println("Azure connection test error: " + e.getMessage());
+//        }//
     }
 
     /**
@@ -371,7 +383,7 @@ public class SandboxController implements Initializable {
     public void batteryClick(MouseEvent mouseEvent) {
         double x = 100;
         double y = 100;
-        String batteryId = "battery-" + UUID.randomUUID().toString();
+        String batteryId = "battery-" + UUID.randomUUID();
 
         // Create UI component
         Node batteryNode = loadComponent(BATTERY_FXML, x, y, batteryId);
@@ -394,7 +406,7 @@ public class SandboxController implements Initializable {
     public void lightbulbClick(MouseEvent mouseEvent) {
         double x = 100;
         double y = 100;
-        String lightbulbId = "lightbulb-" + UUID.randomUUID().toString();
+        String lightbulbId = "lightbulb-" + UUID.randomUUID();
 
         // Create UI component
         Node lightbulbNode = loadComponent(LIGHTBULB_FXML, x, y, lightbulbId);
@@ -419,7 +431,7 @@ public class SandboxController implements Initializable {
     public void wireClick(MouseEvent mouseEvent) {
         double x = 100;
         double y = 100;
-        String wireId = "wire-" + UUID.randomUUID().toString();
+        String wireId = "wire-" + UUID.randomUUID();
 
         Node wireNode = loadComponent(WIRE_FXML, x, y, wireId);
 
@@ -453,7 +465,7 @@ public class SandboxController implements Initializable {
     public void switchClick(MouseEvent mouseEvent) {
         double x = 100;
         double y = 100;
-        String switchId = "switch-" + UUID.randomUUID().toString();
+        String switchId = "switch-" + UUID.randomUUID();
 
         // Create UI component
         Node switchNode = loadComponent(SWITCH_FXML, x, y, switchId);
@@ -602,8 +614,30 @@ public class SandboxController implements Initializable {
 
         if (file != null) {
             try {
+                // First save locally
                 saveCircuitToXML(file);
-                showAlert("Success", "Circuit Saved", "Circuit saved successfully to " + file.getName());
+                System.out.println("Saved circuit locally to: " + file.getAbsolutePath());
+
+                // Create unique name for the blob
+                String fileName = file.getName();
+                String blobName = "circuit_" + System.currentTimeMillis() + "_" + fileName;
+
+                try {
+                    // Create azure blob client
+                    BlobDbOpps blobDbOpps = new BlobDbOpps();
+
+                    // Upload to Azure
+                    System.out.println("Starting upload to Azure...");
+                    blobDbOpps.uploadFile(blobName, file.getAbsolutePath());
+
+                    showAlert("Success", "Circuit Saved",
+                            "Circuit saved successfully to local file and Azure cloud storage.");
+                } catch (Exception azureEx) {
+                    azureEx.printStackTrace();
+                    // Show error but note that local save succeeded
+                    showAlert("Partial Success", "Circuit Saved Locally Only",
+                            "Circuit saved to local file but Azure upload failed: " + azureEx.getMessage());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Error", "Save Failed", "Failed to save circuit: " + e.getMessage());
