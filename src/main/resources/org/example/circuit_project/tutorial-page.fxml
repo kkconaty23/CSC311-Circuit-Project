@@ -2,20 +2,23 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
 
-<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.TutorialController">
+<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.TutorialController">
 
     <!-- Top Bar -->
     <top>
         <HBox prefHeight="42.0" prefWidth="1481.0" styleClass="toolbar">
             <children>
-                <Button fx:id="homeButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="0.0" prefWidth="37.0">
+                <Button fx:id="homeButton1" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showHomeTooltip" prefHeight="0.0" prefWidth="37.0">
                     <graphic>
                         <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -23,8 +26,11 @@
                             </image>
                         </ImageView>
                     </graphic>
+                    <tooltip>
+                        <Tooltip text="Home" />
+                    </tooltip>
                 </Button>
-                <Button fx:id="logoutIcon2" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#logoutUser2" prefHeight="0.0" prefWidth="37.0">
+                <Button fx:id="logoutIcon2" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showLogoutTooltip" prefHeight="0.0" prefWidth="37.0">
                     <graphic>
                         <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -32,28 +38,37 @@
                             </image>
                         </ImageView>
                     </graphic>
+                    <tooltip>
+                        <Tooltip text="Logout" />
+                    </tooltip>
                 </Button>
                 <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-<!--                <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="0.0" prefWidth="37.0">-->
-<!--                    <graphic>-->
-<!--                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
-<!--                            <image>-->
-<!--                                <Image url="@images/up-loading.png" />-->
-<!--                            </image>-->
-<!--                        </ImageView>-->
-<!--                    </graphic>-->
-<!--                </Button>-->
-<!--                <Button fx:id="saveButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#saveBtnClick" prefHeight="0.0" prefWidth="37.0">-->
-<!--                    <graphic>-->
-<!--                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
-<!--                            <image>-->
-<!--                                <Image url="@images/download.png" />-->
-<!--                            </image>-->
-<!--                        </ImageView>-->
-<!--                    </graphic>-->
-<!--                </Button>-->
+                <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showLoadTooltip" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/up-loading.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Load Circuit" />
+                    </tooltip>
+                </Button>
+                <Button fx:id="saveButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showSaveTooltip" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/download.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Save Circuit" />
+                    </tooltip>
+                </Button>
                 <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                <Button fx:id="toggleGridLinesItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleGridLines" prefHeight="0.0" prefWidth="37.0">
+                <Button fx:id="toggleGridLinesItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showGridTooltip" prefHeight="0.0" prefWidth="37.0">
                     <graphic>
                         <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -61,8 +76,11 @@
                             </image>
                         </ImageView>
                     </graphic>
+                    <tooltip>
+                        <Tooltip text="Toggle Grid Lines" />
+                    </tooltip>
                 </Button>
-                <Button fx:id="toggleDarkModeItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleDarkMode" prefHeight="0.0" prefWidth="37.0">
+                <Button fx:id="toggleDarkModeItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showDarkModeTooltip" prefHeight="0.0" prefWidth="37.0">
                     <graphic>
                         <ImageView fx:id="darkModeIcon" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -70,16 +88,34 @@
                             </image>
                         </ImageView>
                     </graphic>
+                    <tooltip>
+                        <Tooltip text="Toggle Dark Mode" />
+                    </tooltip>
+                </Button>
+                <Button fx:id="runBtn" layoutX="977.0" layoutY="17.0" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showRunTooltip" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/litLightbulb.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Run Circuit" />
+                    </tooltip>
                 </Button>
                 <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                <Button fx:id="clearBtn" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#clearBtnClick" prefHeight="0.0" prefWidth="37.0">
+                <Button fx:id="clearBtn" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#showClearTooltip" prefHeight="0.0" prefWidth="37.0">
                     <graphic>
-                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@images/trash.png" />
                             </image>
                         </ImageView>
                     </graphic>
+                    <tooltip>
+                        <Tooltip text="Clear Canvas" />
+                    </tooltip>
                 </Button>
             </children>
         </HBox>
@@ -96,6 +132,49 @@
 
     <!-- Bottom Toolbar -->
     <bottom>
-        <HBox fx:id="toolTray" alignment="CENTER" prefHeight="100.0" spacing="20.0" style="-fx-background-color: #f0f0f0;" styleClass="toolbar" BorderPane.alignment="CENTER" />
+        <HBox fx:id="toolTray" alignment="CENTER" prefHeight="100.0" spacing="20.0" style="-fx-background-color: #f0f0f0;" styleClass="toolbar" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="homeButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="84.0" prefWidth="45.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/home.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Home" />
+                    </tooltip>
+                </Button>
+                <StackPane>
+                    <children>
+                        <ImageView fx:id="batteryIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#showBatteryTooltip" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/battery.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </StackPane>
+                <StackPane>
+                    <children>
+                        <ImageView fx:id="bulbIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#showBulbTooltip" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/unlitLightbulb.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </StackPane>
+                <Line fx:id="wireIcon" endX="100.0" onMouseClicked="#showWireTooltip" startX="-100.0" strokeWidth="7.0" />
+                <StackPane />
+                <StackPane>
+                    <children>
+                        <ImageView fx:id="switchIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#showSwitchTooltip" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/switch.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </StackPane>
+            </children></HBox>
     </bottom>
 </BorderPane>
