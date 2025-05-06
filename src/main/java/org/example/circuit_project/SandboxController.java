@@ -32,15 +32,31 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.circuit_project.Components.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PipedInputStream;
+
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
 import static java.lang.Math.clamp;
 
+
+// Serializable component and wire structure
+class SerializableComponent {
+    public String id, type;
+    public double x, y, voltage;
+    public boolean isClosed;
+}
+
+class SerializableWire {
+    public String startComponentId;
+    public int startPortIndex;
+    public String endComponentId;
+    public int endPortIndex;
+    public double startX, startY, endX, endY;
+}
 
 public class SandboxController implements Initializable {
 
@@ -64,8 +80,8 @@ public class SandboxController implements Initializable {
     @FXML private Button homeButton;
     @FXML private ImageView darkModeIcon;
     @FXML private Button toggleGridLinesItem;
-//    @FXML private Button loadButton;
-//    @FXML private Button saveButton;
+    @FXML private Button loadButton;
+    @FXML private Button saveButton;
     @FXML private Button clearBtn;
 
     // Elements
@@ -176,61 +192,52 @@ public class SandboxController implements Initializable {
     }
 
     @FXML
-    private void clearBtnClick(){
-        clearPlayground();
+    private void clearBtnClick() {
+        // 1. Remove all nodes from the canvas
+        playgroundPane.getChildren().clear();
+
+        // 2. (Optional) Clear additional state if needed
+        System.out.println("🧼 Canvas cleared!");
     }
 
 
-//    /**
-//     * Show the save file dialog and save the circuit to you local machine (currently)
-//     */
-//    @FXML
-//    public void saveBtnClick(ActionEvent event) {
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Save Circuit");
-//        fileChooser.getExtensionFilters().add(
-//                new FileChooser.ExtensionFilter("XML Files", "*.xml")
-//        );
-//        fileChooser.setInitialFileName("circuit.xml");
-//
-//        File file = fileChooser.showSaveDialog(playgroundPane.getScene().getWindow());
-//
-//        if (file != null) {
-//            try {
-//                saveCircuitToXML(file);
-//                showAlert("Success", "Circuit Saved", "Circuit saved successfully to " + file.getName());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                showAlert("Error", "Save Failed", "Failed to save circuit: " + e.getMessage());
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Show the load file dialog and load a circuit
-//     * pulls up file explorer and allows you to open previous builds
-//     * POTENTIALLY KEEP TIS WAY SINCE IT IS A DESKTOP APPLICATION
-//     */
-//    @FXML
-//    public void loadBtnClick(ActionEvent event) {
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Load Circuit");
-//        fileChooser.getExtensionFilters().add(
-//                new FileChooser.ExtensionFilter("XML Files", "*.xml")
-//        );
-//
-//        File file = fileChooser.showOpenDialog(playgroundPane.getScene().getWindow());
-//
-//        if (file != null) {
-//            try {
-//                loadCircuitFromXML(file);
-//                showAlert("Success", "Circuit Loaded", "Circuit loaded successfully from " + file.getName());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                showAlert("Error", "Load Failed", "Failed to load circuit: " + e.getMessage());
-//            }
-//        }
-//    }
+
+    @FXML
+    public void saveBtnClick(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Circuit Layout");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showSaveDialog(playgroundPane.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                saveLayoutToFile(file);
+                showAlert("Success", "Layout Saved", "Circuit layout saved successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "Save Failed", e.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    public void loadBtnClick(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Circuit Layout");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showOpenDialog(playgroundPane.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                loadLayoutFromFile(file);
+                showAlert("Success", "Layout Loaded", "Circuit layout loaded successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "Load Failed", e.getMessage());
+            }
+        }
+    }
+
 
 
     /**
@@ -766,13 +773,196 @@ public class SandboxController implements Initializable {
             return false;
         }
 
+    private void saveLayoutToFile(File file) throws IOException {
+        List<SerializableComponent> componentData = new ArrayList<>();
+        List<SerializableWire> wireData = new ArrayList<>();
+        Map<Component, String> idMap = new HashMap<>();
+        int idCounter = 0;
+
+        for (Node node : playgroundPane.getChildren()) {
+            if (node.getUserData() instanceof Component c) {
+                String id = "comp-" + (idCounter++);
+                idMap.put(c, id);
+
+                SerializableComponent data = new SerializableComponent();
+                data.id = id;
+                data.type = c.getClass().getSimpleName();
+
+                ImageView view = c.getView();
+                if (view == null) {
+                    System.out.println("⚠️ Skipping component with null view: " + c.getClass().getSimpleName());
+                    continue;
+                }
+
+                data.x = view.getLayoutX();
+                data.y = view.getLayoutY();
+                data.voltage = c.getVoltage();
+
+                if (c instanceof Switch sw) {
+                    data.isClosed = sw.isClosed();
+                }
+
+                componentData.add(data);
+            }
+        }
 
 
+        for (Node node : playgroundPane.getChildren()) {
+            if (node instanceof Line line && node.getUserData() instanceof Wire wire) {
+                Port a = wire.getPorts().get(0);
+                Port b = wire.getPorts().get(1);
 
+                if (a.getConnectedTo() == null || b.getConnectedTo() == null) continue;
 
+                Component compA = a.getConnectedTo().getParentComponent();
+                Component compB = b.getConnectedTo().getParentComponent();
 
+                SerializableWire wireEntry = new SerializableWire();
+                wireEntry.startComponentId = idMap.get(compA);
+                wireEntry.endComponentId = idMap.get(compB);
+                wireEntry.startPortIndex = compA.getPorts().indexOf(a.getConnectedTo());
+                wireEntry.endPortIndex = compB.getPorts().indexOf(b.getConnectedTo());
+                wireEntry.startX = line.getStartX();
+                wireEntry.startY = line.getStartY();
+                wireEntry.endX = line.getEndX();
+                wireEntry.endY = line.getEndY();
 
+                wireData.add(wireEntry);
+            }
+        }
 
+        Map<String, Object> wrapper = new HashMap<>();
+        wrapper.put("components", componentData);
+        wrapper.put("wires", wireData);
 
+        try (FileWriter writer = new FileWriter(file)) {
+            new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(wrapper, writer);
+        }
+    }
+
+    private void loadLayoutFromFile(File file) throws IOException {
+        playgroundPane.getChildren().clear(); // wipe canvas
+
+        Gson gson = new Gson();
+        Reader reader = new FileReader(file);
+
+        Map<?, ?> layout = gson.fromJson(reader, Map.class);
+        reader.close();
+
+        List<?> compList = (List<?>) layout.get("components");
+        List<?> wireList = (List<?>) layout.get("wires");
+
+        Map<String, Component> idToComponent = new HashMap<>();
+
+        for (Object o : compList) {
+            Map<?, ?> data = (Map<?, ?>) o;
+            String type = (String) data.get("type");
+            String id = (String) data.get("id");
+            double x = ((Number) data.get("x")).doubleValue();
+            double y = ((Number) data.get("y")).doubleValue();
+
+            Component c = switch (type) {
+                case "Battery" -> new Battery(new ImageView(batteryIcon.getImage()), 5.0);
+                case "Lightbulb" -> new Lightbulb(new ImageView(bulbIcon.getImage()));
+                case "Switch" -> {
+                    Switch sw = new Switch(new ImageView(switchIcon.getImage()));
+                    sw.toggle(); // temporary: toggle to closed if needed
+                    if (!(Boolean) data.get("isClosed")) sw.toggle(); // restore original state
+                    yield sw;
+                }
+                default -> null;
+            };
+
+            if (c == null) continue;
+
+            ImageView view = c.getView();
+            view.setLayoutX(x);
+            view.setLayoutY(y);
+            view.setFitWidth(60);
+            view.setFitHeight(60);
+            view.setPreserveRatio(true);
+            view.setUserData(c);
+
+            playgroundPane.getChildren().add(view);
+            enableDrag(view);
+
+            for (Port port : c.getPorts()) {
+                Circle circle = new Circle(6, Color.RED);
+                double px = view.getLayoutX() + port.getXOffset() * view.getFitWidth();
+                double py = view.getLayoutY() + port.getYOffset() * view.getFitHeight();
+                circle.setLayoutX(px);
+                circle.setLayoutY(py);
+                circle.setUserData(port);
+                port.setCircle(circle);
+                playgroundPane.getChildren().add(circle);
+            }
+
+            idToComponent.put(id, c);
+        }
+
+        for (Object o : wireList) {
+            Map<?, ?> data = (Map<?, ?>) o;
+            String idA = (String) data.get("startComponentId");
+            String idB = (String) data.get("endComponentId");
+
+            Component compA = idToComponent.get(idA);
+            Component compB = idToComponent.get(idB);
+
+            if (compA == null || compB == null) {
+                System.err.println("⚠️ Skipping wire: missing components " + idA + ", " + idB);
+                continue;
+            }
+
+            int portA = ((Number) data.get("startPortIndex")).intValue();
+            int portB = ((Number) data.get("endPortIndex")).intValue();
+
+            if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
+                System.err.println("⚠️ Skipping wire: invalid port index");
+                continue;
+            }
+
+            double sx = ((Number) data.get("startX")).doubleValue();
+            double sy = ((Number) data.get("startY")).doubleValue();
+            double ex = ((Number) data.get("endX")).doubleValue();
+            double ey = ((Number) data.get("endY")).doubleValue();
+
+            Line line = new Line(sx, sy, ex, ey);
+            line.setStrokeWidth(4);
+            line.setStroke(Color.BLACK);
+            line.setCursor(Cursor.HAND);
+
+            Wire wire = new Wire(line);
+            line.setUserData(wire);
+
+            Circle circle1 = new Circle(6, Color.RED);
+            Circle circle2 = new Circle(6, Color.RED);
+            circle1.setLayoutX(sx);
+            circle1.setLayoutY(sy);
+            circle2.setLayoutX(ex);
+            circle2.setLayoutY(ey);
+
+            Port startPort = wire.getPorts().get(0);
+            Port endPort = wire.getPorts().get(1);
+
+            startPort.setCircle(circle1);
+            endPort.setCircle(circle2);
+            circle1.setUserData(startPort);
+            circle2.setUserData(endPort);
+
+            // reconnect
+            Port targetA = compA.getPorts().get(portA);
+            Port targetB = compB.getPorts().get(portB);
+            startPort.connectTo(targetA);
+            endPort.connectTo(targetB);
+
+            playgroundPane.getChildren().addAll(line, circle1, circle2);
+
+            enableWireMove(line, circle1, circle2);
+            enablePortDrag(wire, circle1, true);
+            enablePortDrag(wire, circle2, false);
+        }
 
     }
+
+
+}

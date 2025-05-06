@@ -36,24 +36,24 @@
                </graphic>
             </Button>
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-<!--            <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="0.0" prefWidth="37.0">-->
-<!--               <graphic>-->
-<!--                  <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
-<!--                     <image>-->
-<!--                        <Image url="@images/up-loading.png" />-->
-<!--                     </image>-->
-<!--                  </ImageView>-->
-<!--               </graphic>-->
-<!--            </Button>-->
-<!--            <Button fx:id="saveButton" disable="true" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#saveBtnClick" prefHeight="0.0" prefWidth="37.0">-->
-<!--               <graphic>-->
-<!--                  <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
-<!--                     <image>-->
-<!--                        <Image url="@images/download.png" />-->
-<!--                     </image>-->
-<!--                  </ImageView>-->
-<!--               </graphic>-->
-<!--            </Button>-->
+            <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="0.0" prefWidth="37.0">
+               <graphic>
+                  <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/up-loading.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="saveButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#saveBtnClick" prefHeight="0.0" prefWidth="37.0">
+               <graphic>
+                  <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/download.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="toggleGridLinesItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleGridLines" prefHeight="0.0" prefWidth="37.0">
                <graphic>
