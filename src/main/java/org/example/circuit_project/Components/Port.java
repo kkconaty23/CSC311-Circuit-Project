@@ -1,5 +1,6 @@
 package org.example.circuit_project.Components;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Port {
@@ -8,11 +9,34 @@ public class Port {
     private Circle circle;
     private Port connectedTo;
     private double voltage = 0;
+    private boolean isWireEnd = false;
 
     public Port(Object parent, double xOffset, double yOffset) {
         this.parent = parent;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+
+        // Create the visual circle right away
+        this.circle = new Circle(6); // Default size
+        this.circle.setStroke(Color.RED);
+        this.circle.setFill(Color.TRANSPARENT);
+        this.circle.setStrokeWidth(2);
+    }
+
+    public void markAsWirePort() {
+        this.isWireEnd = true;
+        this.circle.setRadius(4);  // Smaller for wire tips
+        updateVisualState();
+    }
+
+    public void updateVisualState() {
+        if (isConnected()) {
+            circle.setStroke(Color.DARKGREEN);
+            circle.setFill(isWireEnd ? Color.LIMEGREEN : Color.TRANSPARENT);
+        } else {
+            circle.setStroke(Color.RED);
+            circle.setFill(isWireEnd ? Color.RED : Color.TRANSPARENT);
+        }
     }
 
     public Object getParent() {
@@ -53,7 +77,6 @@ public class Port {
         if (other != null) {
             this.connectedTo = other;
 
-            // Prevent infinite recursion or duplicate linking
             if (other.connectedTo != this) {
                 other.connectTo(this);
             }
@@ -62,10 +85,10 @@ public class Port {
         } else {
             System.out.println("🔌 Port disconnected");
         }
+
+        updateVisualState();
+        if (other != null) other.updateVisualState();
     }
-
-
-
 
     public boolean isConnected() {
         return connectedTo != null;
@@ -80,10 +103,7 @@ public class Port {
         System.out.println("🔋 Port " + parent.getClass().getSimpleName() + " set to " + voltage + "V");
     }
 
-
-
     public Component getParentComponent() {
         return (Component) parent;
     }
-
 }
