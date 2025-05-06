@@ -4,6 +4,7 @@ package org.example.circuit_project;
 //import jakarta.xml.bind.JAXBException;
 //import jakarta.xml.bind.Marshaller;
 //import jakarta.xml.bind.Unmarshaller;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.circuit_project.Components.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,6 +90,8 @@ public class SandboxController implements Initializable {
     @FXML private Line wireIcon;
     @FXML public ImageView bulbIcon;
     @FXML public ImageView switchIcon;
+    @FXML public ImageView logoIcon;
+    @FXML private Pane logPane;
 
     private Port firstSelectedPort = null;
     private Button runBtn;
@@ -1363,6 +1367,19 @@ public class SandboxController implements Initializable {
             enablePortDrag(wire, circle2, false);
         }
 
+    }
+
+    // Log
+    public void showLog() {
+        logPane.setVisible(true);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), logPane);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+    }
+
+    public void hideLogPane() {
+        logPane.setVisible(false);
     }
 
 

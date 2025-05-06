@@ -2,16 +2,21 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
 
     <!-- Top Bar -->
     <top>
@@ -101,6 +106,27 @@
         <AnchorPane fx:id="playgroundPane" prefHeight="887.0" prefWidth="1481.0" style="-fx-background-color: BFBFBF;">
             <children>
                 <Canvas fx:id="gridCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               <Pane fx:id="logPane" layoutX="859.0" layoutY="44.0" opacity="0.75" prefHeight="282.0" prefWidth="348.0" styleClass="about-overlay" visible="false">
+                  <children>
+                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f5f5" height="263.0" layoutY="33.0" stroke="BLACK" strokeType="INSIDE" width="474.0" />
+                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="474.0" />
+                     <Text layoutX="95.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Circuit Logs" textAlignment="CENTER">
+                        <font>
+                           <Font size="26.0" />
+                        </font>
+                     </Text>
+                     <Button layoutX="439.0" layoutY="-3.0" mnemonicParsing="false" onAction="#hideLogPane" prefHeight="45.0" prefWidth="32.0" styleClass="icon-button">
+                        <graphic>
+                           <ImageView fitHeight="35.0" fitWidth="31.0" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/close.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <TextArea editable="false" layoutY="33.0" prefHeight="263.0" prefWidth="474.0" styleClass="about-text" text="Logs Go Here" />
+                  </children>
+               </Pane>
             </children>
         </AnchorPane>
     </center>
@@ -134,6 +160,15 @@
                   <ImageView fx:id="switchIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#onComponentDragStart" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/switch.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="logIcon" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#showLog" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/log.png" />
                      </image>
                   </ImageView>
                </children>
