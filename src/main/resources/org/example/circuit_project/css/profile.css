@@ -1,13 +1,13 @@
 /* profile.css - Styling for the Profile page */
 
-/* Main container */
+    /* Main container */
 .main-container {
     -fx-background-color: white;
 }
 
 /* Sidebar styling */
 .sidebar {
-    -fx-background-color: #121212;
+    -fx-background-color: #0b0f14;
     -fx-text-fill: white;
 }
 

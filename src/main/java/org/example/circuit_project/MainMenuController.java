@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -37,6 +38,8 @@ public class MainMenuController implements Initializable {
     @FXML private Label profileLabel;
     @FXML private Label tutorialLabel;
     @FXML private Label sandboxLabel;
+
+    @FXML private ImageView sandboxPreview;
 
     @FXML
     private void onClick(ActionEvent event) {
@@ -63,6 +66,21 @@ public class MainMenuController implements Initializable {
         try {
 
             Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/profile_page.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1030, 818);
+            stage.setScene(scene);
+            stage.setResizable(true);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @FXML
+    private void openTutorialPage(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/tutorial-page.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 1030, 818);
             stage.setScene(scene);
@@ -140,4 +158,17 @@ public class MainMenuController implements Initializable {
         logoutIcon.setDisable(disable);
         helpIcon.setDisable(disable);
     }
+
+    @FXML
+    public void showSandboxImage() {
+        System.out.println("hovering in"); // <- add this for debug
+        sandboxPreview.setVisible(true);
+    }
+
+    @FXML
+    public void hideSandboxImage() {
+        System.out.println("hovering out"); // <- add this for debug
+        sandboxPreview.setVisible(false);
+    }
+
 }

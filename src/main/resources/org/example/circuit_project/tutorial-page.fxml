@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.TutorialController">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox prefHeight="42.0" prefWidth="1481.0" styleClass="toolbar">
+            <children>
+                <Button fx:id="homeButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/home.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="logoutIcon2" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#logoutUser2" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/logout.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+<!--                <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="0.0" prefWidth="37.0">-->
+<!--                    <graphic>-->
+<!--                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
+<!--                            <image>-->
+<!--                                <Image url="@images/up-loading.png" />-->
+<!--                            </image>-->
+<!--                        </ImageView>-->
+<!--                    </graphic>-->
+<!--                </Button>-->
+<!--                <Button fx:id="saveButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#saveBtnClick" prefHeight="0.0" prefWidth="37.0">-->
+<!--                    <graphic>-->
+<!--                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">-->
+<!--                            <image>-->
+<!--                                <Image url="@images/download.png" />-->
+<!--                            </image>-->
+<!--                        </ImageView>-->
+<!--                    </graphic>-->
+<!--                </Button>-->
+                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                <Button fx:id="toggleGridLinesItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleGridLines" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/grid.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="toggleDarkModeItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleDarkMode" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView fx:id="darkModeIcon" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/moon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                <Button fx:id="clearBtn" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#clearBtnClick" prefHeight="0.0" prefWidth="37.0">
+                    <graphic>
+                        <ImageView disable="true" fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/trash.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Center Workspace -->
+    <center>
+        <AnchorPane fx:id="playgroundPane" prefHeight="887.0" prefWidth="1481.0" style="-fx-background-color: BFBFBF;">
+            <children>
+                <Canvas fx:id="gridCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </children>
+        </AnchorPane>
+    </center>
+
+    <!-- Bottom Toolbar -->
+    <bottom>
+        <HBox fx:id="toolTray" alignment="CENTER" prefHeight="100.0" spacing="20.0" style="-fx-background-color: #f0f0f0;" styleClass="toolbar" BorderPane.alignment="CENTER" />
+    </bottom>
+</BorderPane>

@@ -7,12 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 
 <BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
 
@@ -76,6 +73,15 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="runBtn" layoutX="977.0" layoutY="17.0" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onRunCircuit" prefHeight="0.0" prefWidth="37.0">
+               <graphic>
+                  <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/litLightbulb.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="clearBtn" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#clearBtnClick" prefHeight="0.0" prefWidth="37.0">
                <graphic>
@@ -102,50 +108,36 @@
     <!-- Bottom Toolbar -->
     <bottom>
         <HBox fx:id="toolTray" alignment="CENTER" prefHeight="100.0" spacing="20.0" style="-fx-background-color: #f0f0f0;" styleClass="toolbar" BorderPane.alignment="CENTER">
-            <!-- Battery Icon -->
-            <AnchorPane fx:id="batteryIcon" onMouseClicked="#batteryClick" prefHeight="47.0" prefWidth="106.0">
-                <children>
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="95.0" layoutY="40.0" stroke="BLACK" width="10.0" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" height="32.0" layoutX="-3.0" layoutY="31.0" stroke="BLACK" width="104.0" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d78f1d" height="32.0" layoutX="76.0" layoutY="31.0" stroke="BLACK" width="25.0" />
-                </children>
-            </AnchorPane>
-
-            <!-- Lightbulb Icon -->
-            <AnchorPane fx:id="lightbulbIcon" onMouseClicked="#lightbulbClick" prefHeight="91.0" prefWidth="142.0">
-                <children>
-                    <Ellipse fill="#f8f8f8" layoutX="69.0" layoutY="38.0" radiusX="24.0" radiusY="36.0" stroke="BLACK" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9ba7b2" height="12.0" layoutX="48.0" layoutY="62.0" stroke="BLACK" width="42.0" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#818b94" height="10.0" layoutX="52.0" layoutY="70.0" stroke="BLACK" width="35.0" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#818b94" height="9.0" layoutX="58.0" layoutY="78.0" stroke="BLACK" width="23.0" />
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#818b94" height="12.0" layoutX="66.0" layoutY="81.0" stroke="BLACK" width="6.0" />
-                    <Line endX="-0.5" endY="16.0" layoutX="72.0" layoutY="45.0" startX="-0.5" startY="-21.0" />
-                    <Line endX="1.2" endY="8.7" layoutX="71.0" layoutY="53.0" startX="-15.5" startY="-10.0" />
-                    <Line endY="-9.0" layoutX="79.0" layoutY="43.0" startX="-24.2" startY="-0.7" />
-                </children>
-            </AnchorPane>
-
-            <!-- Wire Icon -->
-            <Line fx:id="wire" endX="100.0" fill="#508dc6" onMouseClicked="#wireClick" startX="-5.0" stroke="#d04949" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="20.0" />
-            <!-- Switch Icon -->
-            <Pane fx:id="switch" onMouseClicked="#switchClick" prefHeight="38.0" prefWidth="90.0" xmlns:fx="http://javafx.com/fxml/1">
-                <children>
-                    <!-- Base/background rectangle -->
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="32.0" layoutX="21.0" layoutY="31.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-
-                    <!-- Left terminal -->
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="21.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-
-                    <!-- Right terminal -->
-                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ababab" height="15.0" layoutX="91.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-
-                    <!-- Switch lever (in closed position) -->
-                    <Line endX="75.0" endY="19.0" layoutX="16.0" layoutY="28.0" startX="15.0" startY="19.0" stroke="BLACK" strokeWidth="3.0" />
-
-                    <!-- Switch handle -->
-                    <Circle centerX="40.0" centerY="19.0" fill="#d78f1d" layoutX="16.0" layoutY="28.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-                </children>
-            </Pane>
-        </HBox>
+         <children>
+            <StackPane>
+               <children>
+                  <ImageView fx:id="batteryIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#onComponentDragStart" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/battery.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <ImageView fx:id="bulbIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#onComponentDragStart" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/unlitLightbulb.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <Line fx:id="wireIcon" endX="100.0" onMouseClicked="#wireClick" startX="-100.0" strokeWidth="7.0" />
+            <StackPane />
+            <StackPane>
+               <children>
+                  <ImageView fx:id="switchIcon" fitHeight="150.0" fitWidth="200.0" onMousePressed="#onComponentDragStart" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/switch.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </children></HBox>
     </bottom>
 </BorderPane>

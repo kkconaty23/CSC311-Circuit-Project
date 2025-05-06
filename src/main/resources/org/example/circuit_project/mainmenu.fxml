@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="642.0" prefWidth="912.0" stylesheets="@css/main-menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.MainMenuController">
+<AnchorPane prefHeight="642.0" prefWidth="912.0" stylesheets="@css/main-menu.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.MainMenuController">
    <children>
       <Pane prefHeight="685.0" prefWidth="912.0">
          <children>
@@ -26,16 +26,25 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" prefHeight="140.0" prefWidth="200.0">
+            <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" onAction="#openTutorialPage" prefHeight="140.0" prefWidth="200.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="newPlaygroundBtn" layoutX="354.0" layoutY="451.0" mnemonicParsing="false" onAction="#onClick" prefHeight="140.0" prefWidth="200.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
+            <AnchorPane layoutX="346.0" layoutY="447.0">
+               <children>
+                  <Button fx:id="newPlaygroundBtn" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#onClick" onMouseEntered="#showSandboxImage" onMouseExited="#hideSandboxImage" prefHeight="140.0" prefWidth="200.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fx:id="sandboxPreview" fitHeight="140.0" fitWidth="170.0" layoutX="23.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@images/sandbox-example.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
             <Label fx:id="tutorialLabel" layoutX="676.0" layoutY="541.0" text="Tutorial" />
             <Label fx:id="sandboxLabel" layoutX="405.0" layoutY="601.0" text="Sandbox" />
             <Label fx:id="profileLabel" layoutX="154.0" layoutY="541.0" text="Profile" />

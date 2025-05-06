@@ -85,5 +85,10 @@
     -fx-line-spacing: 4px;
 }
 
+#sandboxPreview:hover {
+    -fx-opacity: 1;
+}
+
+
 
 
