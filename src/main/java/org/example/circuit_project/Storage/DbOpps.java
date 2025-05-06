@@ -213,9 +213,11 @@ public class DbOpps {
 
         try {
             connection = getConnection();
-            String query = "SELECT BIN_TO_UUID(id) as id_str, name, description, " +
-                    "BIN_TO_UUID(id) as user_id_str, created_at, last_modified, blob_reference " +
-                    "FROM projects WHERE id = UUID_TO_BIN(?) ORDER BY last_modified DESC";
+
+            // Use 'user_id' instead of 'user_id_id'
+            String query = "SELECT id, name, description, user_id as user_id_str, " +
+                    "created_at, last_modified, blob_reference " +
+                    "FROM projects WHERE user_id = ? ORDER BY last_modified DESC";
             statement = connection.prepareStatement(query);
             statement.setString(1, userId);
 
@@ -223,7 +225,7 @@ public class DbOpps {
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String projectId = resultSet.getString("id_str");
+                String projectId = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
                 String projectUserId = resultSet.getString("user_id_str");
@@ -262,24 +264,55 @@ public class DbOpps {
         boolean success = false;
 
         try {
+            // First, ensure we can get a connection
             connection = getConnection();
+            if (connection == null) {
+                System.err.println("Error: Could not establish database connection");
+                return false;
+            }
+
+            // Next, create a simple table to ensure the projects table exists
+            try (Statement createTableStmt = connection.createStatement()) {
+                String createTableSQL = "CREATE TABLE IF NOT EXISTS projects (" +
+                        "id VARCHAR(200) NOT NULL PRIMARY KEY, " +
+                        "name VARCHAR(100) NOT NULL, " +
+                        "description TEXT, " +
+                        "user_id VARCHAR(200) NOT NULL, " +
+                        "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+                        "last_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+                        "blob_reference VARCHAR(255) NOT NULL" +
+                        ")";
+                createTableStmt.executeUpdate(createTableSQL);
+                System.out.println("Projects table verified or created");
+            }
+
+            // Now prepare the insert statement with simple values (no UUID conversion)
             String query = "INSERT INTO projects (id, name, description, user_id, created_at, last_modified, blob_reference) " +
-                    "VALUES (UUID_TO_BIN(?), ?, ?, UUID_TO_BIN(?), ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            System.out.println("Preparing SQL statement: " + query);
             statement = connection.prepareStatement(query);
 
+            // Set the parameters
             statement.setString(1, project.getId());
             statement.setString(2, project.getName());
             statement.setString(3, project.getDescription());
-            statement.setString(4, project.getUserId());
+            statement.setString(4, project.getUserId());  // No UUID conversion needed anymore
             statement.setTimestamp(5, Timestamp.valueOf(project.getCreatedAt()));
             statement.setTimestamp(6, Timestamp.valueOf(project.getLastModified()));
             statement.setString(7, project.getBlobReference());
 
+            // Execute the query
+            System.out.println("Executing insert for project ID: " + project.getId());
             int rowsAffected = statement.executeUpdate();
             success = rowsAffected > 0;
+            System.out.println("Insert result: " + success + " (rows affected: " + rowsAffected + ")");
         } catch (SQLException e) {
+            System.err.println("SQL Error in createProject: " + e.getMessage());
             e.printStackTrace();
-            System.err.println("Error creating project: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error in createProject: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             closeResources(connection, statement, null);
         }
@@ -300,18 +333,27 @@ public class DbOpps {
 
         try {
             connection = getConnection();
+
+            // FIXED QUERY: Remove UUID_TO_BIN() since id is varchar in the database
             String query = "UPDATE projects SET name = ?, description = ?, last_modified = ?, blob_reference = ? " +
-                    "WHERE id = UUID_TO_BIN(?)";
+                    "WHERE id = ?";
+
             statement = connection.prepareStatement(query);
 
             statement.setString(1, project.getName());
             statement.setString(2, project.getDescription());
             statement.setTimestamp(3, Timestamp.valueOf(project.getLastModified()));
             statement.setString(4, project.getBlobReference());
-            statement.setString(5, project.getId());
+            statement.setString(5, project.getId());  // No UUID conversion needed
 
             int rowsAffected = statement.executeUpdate();
             success = rowsAffected > 0;
+
+            // If no rows were updated, the project might not exist yet
+            if (rowsAffected == 0) {
+                System.out.println("No rows affected, project might not exist. Trying createProject instead.");
+                return createProject(project);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error updating project: " + e.getMessage());
@@ -366,11 +408,14 @@ public class DbOpps {
 
         try {
             connection = getConnection();
-            String query = "SELECT BIN_TO_UUID(id) as id_str, name, description, BIN_TO_UUID(user_id) as user_id_str, " +
+
+            // FIXED QUERY: Remove BIN_TO_UUID for id, keep it for user_id
+            String query = "SELECT id, name, description, user_id as user_id_str, " +
                     "created_at, last_modified, blob_reference " +
-                    "FROM projects WHERE id = UUID_TO_BIN(?)";
+                    "FROM projects WHERE id = ?";
+
             statement = connection.prepareStatement(query);
-            statement.setString(1, projectId);
+            statement.setString(1, projectId);  // No UUID conversion needed
 
             resultSet = statement.executeQuery();
 

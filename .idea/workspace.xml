@@ -9,11 +9,12 @@
   <component name="ChangeListManager">
     <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- adjusted listeners&#10;- added regex class&#10;- form validation&#10;- documentation for all methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Elements/Voltmeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Elements/Voltmeter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/PlaygroundController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/PlaygroundController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/ProjectBlobManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/ProjectBlobManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +41,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -75,7 +75,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "profile",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
@@ -88,6 +88,9 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\estos\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\images" />
@@ -95,6 +98,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\images" />
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\css" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.example.circuit_project" />
     </key>
   </component>
   <component name="RunManager">

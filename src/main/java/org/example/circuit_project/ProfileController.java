@@ -181,14 +181,22 @@ public class ProfileController implements Initializable {
      */
     private void openProject(Project project) {
         try {
-            // Store the selected project in a singleton or similar mechanism
+            // Store the selected project in a singleton
             ProjectManager.getInstance().setCurrentProject(project);
 
+            // Load the circuit editor FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and tell it to load the project
+            SandboxController controller = loader.getController();
+            controller.loadProject(project);
+
             // Navigate to circuit editor
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/circuit_editor.fxml"));
             Stage stage = (Stage) projectListView.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setResizable(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

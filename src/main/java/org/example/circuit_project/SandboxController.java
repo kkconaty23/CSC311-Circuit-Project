@@ -1,16 +1,13 @@
 package org.example.circuit_project;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
-import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
+//import jakarta.xml.bind.JAXBContext;
+//import jakarta.xml.bind.JAXBException;
+//import jakarta.xml.bind.Marshaller;
+//import jakarta.xml.bind.Unmarshaller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -27,49 +24,42 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.circuit_project.Elements.Battery;
-import org.example.circuit_project.Elements.Circuit;
-import org.example.circuit_project.Elements.Component;
-import org.example.circuit_project.Elements.Lightbulb;
-import org.example.circuit_project.Elements.Wire;
-import org.example.circuit_project.Elements.Switch;
-import org.example.circuit_project.Storage.BlobDbOpps;
-import javafx.util.Duration;
 import org.example.circuit_project.Components.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.circuit_project.Storage.ProjectBlobManager;
 
 
 import java.io.*;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.lang.Math.clamp;
 
 
-// Serializable component and wire structure
-class SerializableComponent {
-    public String id, type;
-    public double x, y, voltage;
-    public boolean isClosed;
-}
-
-class SerializableWire {
-    public String startComponentId;
-    public int startPortIndex;
-    public String endComponentId;
-    public int endPortIndex;
-    public double startX, startY, endX, endY;
-}
-
+/**
+ * Controller class for the circuit simulator sandbox interface.
+ *
+ * Handles component drag-and-drop, grid display, dark/light mode toggling,
+ * component simulation (e.g., voltage propagation), port snapping, and
+ * interactive features like component disconnection or toggling switches.
+ *
+ * Core responsibilities:
+ * - Manage canvas grid and UI theming
+ * - Handle drag-and-drop creation of batteries, wires, switches, and bulbs
+ * - Connect and disconnect components through user interaction
+ * - Simulate voltage flow in connected circuit loops
+ * - Toggle component states (e.g., switches) via press-and-hold or double-click
+ * - Manage the clearing or navigation of the workspace
+ *
+ * Components like wires and ports are updated dynamically to reflect voltage state and visuals.
+ */
 public class SandboxController implements Initializable {
 
     // FXML Injected UI Components
-    @FXML public Pane batteryIcon;
-    @FXML public Line wire;
     @FXML private Pane playgroundPane;
     @FXML private Canvas gridCanvas;
     @FXML private Button toggleDarkModeItem;
@@ -77,9 +67,6 @@ public class SandboxController implements Initializable {
     @FXML
     private Button simBtn;
 
-    //circuit Components
-    private final List<Component> components = new ArrayList<>();
-    private final Map<String, Node> componentNodesMap = new HashMap<>(); // Maps component IDs to UI nodes
 
     // UI State
     private GraphicsContext gc;
@@ -87,11 +74,6 @@ public class SandboxController implements Initializable {
     private boolean gridLinesEnabled = true;
     private static final double GRID_SPACING = 25.0;
 
-    //component Types
-    private static final String BATTERY_FXML = "/org/example/circuit_project/batteryICON.fxml";
-    private static final String LIGHTBULB_FXML = "/org/example/circuit_project/lightbulbICON.fxml";
-    private static final String WIRE_FXML = "/org/example/circuit_project/wireICON.fxml";
-    private static final String SWITCH_FXML = "/org/example/circuit_project/switchICON.fxml";
 
     @FXML private Button logoutIcon2;
     @FXML private Button homeButton;
@@ -118,9 +100,8 @@ public class SandboxController implements Initializable {
     }
 
     /**
-     * initialize method used for setting the UI on boot up
-     * @param url
-     * @param resourceBundle
+     * Called automatically by JavaFX to initialize the scene.
+     * Sets up canvas bindings, grid rendering, tooltips, and component trays.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -141,18 +122,7 @@ public class SandboxController implements Initializable {
 //        saveButton.setTooltip(darkTooltip("Save Circuit"));
 //        loadButton.setTooltip(darkTooltip("Load Circuit"));
         clearBtn.setTooltip(darkTooltip("Clear Workspace"));
-        homeButton.setTooltip(darkTooltip("Return to Main Menu"));
-
-//        try {
-//            BlobDbOpps blobTest = new BlobDbOpps();
-//            if (blobTest.testAzureConnection()) {
-//                System.out.println("Azure storage connection successful");
-//            } else {
-//                System.err.println("Azure storage connection failed");
-//            }
-//        } catch (Exception e) {
-//            System.err.println("Azure connection test error: " + e.getMessage());
-//        }//
+        homeButton.setTooltip(darkTooltip("Return to Main Menu")); //
     }
 
     /**
@@ -219,701 +189,356 @@ public class SandboxController implements Initializable {
         drawGrid(gc, isDarkMode, gridLinesEnabled);
     }
 
-
-
-
-
-
+    /**
+     * Clears all user-placed components from the playground.
+     */
     @FXML
-    private void clearBtnClick(){
-        clearPlayground();
+    private void clearBtnClick() {
+        // 1. Remove all nodes from the canvas
+        playgroundPane.getChildren().clear();
+
+        // 2. (Optional) Clear additional state if needed
+        System.out.println("🧼 Canvas cleared!");
     }
 
+
     /**
-     * Loads a component from an FXML file and adds it to the playground
+     * Handles the save button click event.
+     * Opens a file chooser dialog to let the user select a destination for saving the current circuit layout as a JSON file.
+     * If successful, the layout is written to the selected file.
      *
-     * @param fxmlPath Path to the FXML file to load
-     * @param x X position for the component
-     * @param y Y position for the component
-     * @param componentId Unique ID for the component, or null to generate one
-     * @return The loaded Node or null if loading failed
-     */
-    private Node loadComponent(String fxmlPath, double x, double y, String componentId) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Node component = loader.load(); // Changed from Parent to Node
-
-            // Generate or use provided ID
-            String id = componentId != null ? componentId : UUID.randomUUID().toString();
-            component.setId(id);
-
-            component.setLayoutX(x);
-            component.setLayoutY(y);
-
-            component.setUserData("dropped"); //Marks the entity as "dropped"
-
-            enableDrag(component);
-            playgroundPane.getChildren().add(component);
-
-            return component;
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to load component", e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Makes a node draggable
-     *
-     * @param node The node to make draggable
-     */
-    private void enableDrag(Node node) {
-        final Delta dragDelta = new Delta();
-
-        node.setOnMousePressed(event -> {
-            // Bring to front when selected
-            node.toFront();
-            dragDelta.x = event.getSceneX() - node.getLayoutX();
-            dragDelta.y = event.getSceneY() - node.getLayoutY();
-            node.setCursor(Cursor.MOVE);
-            event.consume();
-        });
-
-        node.setOnMouseDragged(event -> {
-            node.setLayoutX(event.getSceneX() - dragDelta.x);
-            node.setLayoutY(event.getSceneY() - dragDelta.y);
-
-            // Update component model with new position
-            String nodeId = node.getId();
-            Component component = findComponentById(nodeId);
-            if (component != null) {
-                component.setX(node.getLayoutX());
-                component.setY(node.getLayoutY());
-            }
-
-            event.consume();
-        });
-
-        node.setOnMouseReleased(event -> {
-            node.setCursor(Cursor.HAND);
-        });
-    }
-
-    /**
-     * MAKING IT MORE SNAPPY WITH THE GRIDS (_OPTIONAL_)
-     * Aligns a value to the nearest grid position
-     */
-//    private double alignToGrid(double value) {
-//        return Math.round(value / GRID_SPACING) * GRID_SPACING;
-//    }
-
-    /**
-     * Enables resizing of line components (wires)
-     *NEEDS SOME WORK TO MAKE IT ON THE LINE ADJUSTMENTS
-     * @param line The line to make resizable
-     * @
-     */
-    private void enableLineResize(Line line, String wireId) {
-        final boolean[] resizingStart = new boolean[1]; // true = resizing start, false = end
-        final Delta dragDelta = new Delta();
-
-        line.setOnMousePressed(event -> {
-            double mouseX = event.getX();
-            double mouseY = event.getY();
-
-            double startX = line.getStartX();
-            double startY = line.getStartY();
-            double endX = line.getEndX();
-            double endY = line.getEndY();
-
-            // Decide which endpoint is being dragged
-            resizingStart[0] = Math.hypot(mouseX - startX, mouseY - startY) <
-                    Math.hypot(mouseX - endX, mouseY - endY);
-
-            dragDelta.x = mouseX;
-            dragDelta.y = mouseY;
-
-            event.consume();
-        });
-
-        line.setOnMouseDragged(event -> {
-            double newX = event.getX();
-            double newY = event.getY();
-
-            if (resizingStart[0]) {
-                line.setStartX(newX);
-                line.setStartY(newY);
-            } else {
-                line.setEndX(newX);
-                line.setEndY(newY);
-            }
-
-            //update the corresponding Wire's absolute start/end points
-            Wire wire = (Wire) findComponentById(wireId);
-            Node wireNode = componentNodesMap.get(wireId);
-            if (wire != null && wireNode != null) {
-                double offsetX = wireNode.getLayoutX();
-                double offsetY = wireNode.getLayoutY();
-
-                wire.setStartX(line.getStartX() + offsetX);
-                wire.setStartY(line.getStartY() + offsetY);
-                wire.setEndX(line.getEndX() + offsetX);
-                wire.setEndY(line.getEndY() + offsetY);
-            }
-
-            event.consume();
-        });
-
-        line.setOnMouseMoved(event -> {
-            double mouseX = event.getX();
-            double mouseY = event.getY();
-
-            double startX = line.getStartX();
-            double startY = line.getStartY();
-            double endX = line.getEndX();
-            double endY = line.getEndY();
-
-            if (Math.hypot(mouseX - startX, mouseY - startY) < 10 ||
-                    Math.hypot(mouseX - endX, mouseY - endY) < 10) {
-                line.setCursor(Cursor.CROSSHAIR);
-            } else {
-                line.setCursor(Cursor.DEFAULT);
-            }
-        });
-    }
-
-
-
-    /**
-     * Creates a resize handle for line endpoints
-     */
-    private Rectangle createResizeHandle(double x, double y) {
-        Rectangle handle = new Rectangle(x - 5, y - 5, 10, 10);
-        handle.setFill(Color.BLUE);
-        handle.setOpacity(0.7);
-        handle.setCursor(Cursor.CROSSHAIR);
-        return handle;
-    }
-
-    /**
-     * Finds a component by its ID
-     */
-    private Component findComponentById(String id) {
-        for (Component component : components) {
-            if (component.getId().equals(id)) {
-                return component;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Adds a new battery to the playground in the form of FXML icon
-     * and also creates a new battery instance
-     */
-    @FXML
-    public void batteryClick(MouseEvent mouseEvent) {
-        double x = 100;
-        double y = 100;
-        String batteryId = "battery-" + UUID.randomUUID().toString();
-
-        // Create UI component
-        Node batteryNode = loadComponent(BATTERY_FXML, x, y, batteryId);
-
-        if (batteryNode != null) {
-            // Create data model
-            Battery battery = new Battery(x, y, 9.0); // Default 9V battery
-            battery.setId(batteryId);
-
-            // store component SO IT CAN BE RELOADED
-            components.add(battery);
-            componentNodesMap.put(batteryId, batteryNode);
-        }
-    }
-
-    /**
-     * Adds a new lightbulb to the playground
-     */
-    @FXML
-    public void lightbulbClick(MouseEvent mouseEvent) {
-        double x = 100;
-        double y = 100;
-        String lightbulbId = "lightbulb-" + UUID.randomUUID().toString();
-
-        // Create UI component
-        Node lightbulbNode = loadComponent(LIGHTBULB_FXML, x, y, lightbulbId);
-
-        if (lightbulbNode != null) {
-            // Create data model
-            Lightbulb lightbulb = new Lightbulb(x, y);
-            lightbulb.setId(lightbulbId);
-
-            // Store component
-            components.add(lightbulb);
-            componentNodesMap.put(lightbulbId, lightbulbNode);
-        }
-    }
-
-
-    /**
-     * creates a new dragable wire and creates a wire java obj
-     * @param mouseEvent
-     */
-    @FXML
-    public void wireClick(MouseEvent mouseEvent) {
-        double x = 100;
-        double y = 100;
-        String wireId = "wire-" + UUID.randomUUID().toString();
-
-        Node wireNode = loadComponent(WIRE_FXML, x, y, wireId);
-
-        if (wireNode != null) {
-            Line wireLine = findLineInNode(wireNode);
-
-            if (wireLine != null) {
-                Wire wire = new Wire(
-                        wireLine.getStartX() + x,
-                        wireLine.getStartY() + y,
-                        wireLine.getEndX() + x,
-                        wireLine.getEndY() + y
-                );
-                wire.setId(wireId);
-                wire.setX(x);
-                wire.setY(y);
-
-                // Pass the wireId so resizing updates the model
-                enableLineResize(wireLine, wireId);
-
-                components.add(wire);
-                componentNodesMap.put(wireId, wireNode);
-            }
-        }
-    }
-
-    /**
-     * Adds a new switch to the playground
-     */
-    @FXML
-    public void switchClick(MouseEvent mouseEvent) {
-        double x = 100;
-        double y = 100;
-        String switchId = "switch-" + UUID.randomUUID().toString();
-
-        // Create UI component
-        Node switchNode = loadComponent(SWITCH_FXML, x, y, switchId);
-
-        if (switchNode != null) {
-            // Create data model (initially closed)
-            Switch switchComponent = new Switch(x, y, true);
-            switchComponent.setId(switchId);
-
-            // Set up click handler to toggle switch state
-            setupSwitchToggle(switchNode, switchComponent);
-
-            // Store component
-            components.add(switchComponent);
-            componentNodesMap.put(switchId, switchNode);
-        }
-    }
-
-    /**
-     * Set up toggle functionality for a switch
-     * @param switchNode The switch UI node
-     * @param switchComponent The switch data model
-     */
-    private void setupSwitchToggle(Node switchNode, Switch switchComponent) {
-        // Find the lever line in the switch node
-        Line leverLine = findSwitchLeverInNode(switchNode);
-        if (leverLine == null) return;
-
-        // Set up click handler to toggle switch
-        switchNode.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Double-click to toggle
-                boolean newState = switchComponent.toggle();
-                updateSwitchVisual(leverLine, newState);
-                event.consume();
-            }
-        });
-    }
-
-    /**
-     * Update the visual state of a switch
-     * @param leverLine The lever line UI element
-     * @param closed Whether the switch is closed
-     */
-    private void updateSwitchVisual(Line leverLine, boolean closed) {
-        if (closed) {
-            // Closed position - horizontal line
-            leverLine.setStartX(15.0);
-            leverLine.setStartY(19.0);
-            leverLine.setEndX(75.0);
-            leverLine.setEndY(19.0);
-        } else {
-            // Open position - angled line
-            leverLine.setStartX(15.0);
-            leverLine.setStartY(19.0);
-            leverLine.setEndX(65.0);
-            leverLine.setEndY(5.0);
-        }
-    }
-
-    /**
-     * Utility to find the lever Line object within a Switch Node
-     */
-    private Line findSwitchLeverInNode(Node node) {
-        if (node instanceof Parent) {
-            for (Node child : ((Parent) node).getChildrenUnmodifiable()) {
-                if (child instanceof Line && "leverLine".equals(child.getId())) {
-                    return (Line) child;
-                } else {
-                    Line found = findSwitchLeverInNode(child);
-                    if (found != null) {
-                        return found;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-// Add this method for loading switches from saved circuits
-    /**
-     * Add switches from a circuit to the playground
-     */
-    private void addSwitchesToPlayground(List<Switch> switches) {
-        if (switches == null) return;
-
-        for (Switch switchComponent : switches) {
-            // Create UI component
-            Node switchNode = loadComponent(SWITCH_FXML, switchComponent.getX(), switchComponent.getY(), switchComponent.getId());
-
-            if (switchNode != null) {
-                // Update visual state
-                Line leverLine = findSwitchLeverInNode(switchNode);
-                if (leverLine != null) {
-                    updateSwitchVisual(leverLine, switchComponent.isClosed());
-                }
-
-                // Set up toggle functionality
-                setupSwitchToggle(switchNode, switchComponent);
-
-                // Store component
-                components.add(switchComponent);
-                componentNodesMap.put(switchComponent.getId(), switchNode);
-            }
-        }
-    }
-
-
-    /**
-     * Utility to find a Line object within a Node hierarchy
-     */
-    private Line findLineInNode(Node node) {
-        if (node instanceof Line) {
-            return (Line) node;
-        } else if (node instanceof Parent) {
-            for (Node child : ((Parent) node).getChildrenUnmodifiable()) {
-                Line found = findLineInNode(child);
-                if (found != null) {
-                    return found;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Delta class used for dragging operations
-     */
-    private static class Delta {
-        double x, y;
-    }
-
-
-    /**
-     * Show the save file dialog and save the circuit to you local machine (currently)
+     * @param event the ActionEvent triggered by the save button
      */
     @FXML
     public void saveBtnClick(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Circuit");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("XML Files", "*.xml")
-        );
-        fileChooser.setInitialFileName("circuit.xml");
+        User currentUser = UserManager.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            showAlert("Error", "Not Logged In", "You must be logged in to save a project.");
+            return;
+        }
 
-        File file = fileChooser.showSaveDialog(playgroundPane.getScene().getWindow());
+        // Ask for project name and description
+        TextInputDialog nameDialog = new TextInputDialog();
+        nameDialog.setTitle("Save Project");
+        nameDialog.setHeaderText("Enter a name for your project");
+        nameDialog.setContentText("Project name:");
 
-        if (file != null) {
-            try {
-                saveCircuitToXML(file);
-                showAlert("Success", "Circuit Saved", "Circuit saved successfully to " + file.getName());
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert("Error", "Save Failed", "Failed to save circuit: " + e.getMessage());
+        Optional<String> nameResult = nameDialog.showAndWait();
+        if (nameResult.isEmpty() || nameResult.get().trim().isEmpty()) {
+            return; // User cancelled or entered empty name
+        }
+
+        TextInputDialog descDialog = new TextInputDialog();
+        descDialog.setTitle("Save Project");
+        descDialog.setHeaderText("Enter a description for your project");
+        descDialog.setContentText("Description:");
+
+        String name = nameResult.get().trim();
+        String description = descDialog.showAndWait().orElse("").trim();
+
+        // Get project or create a new one
+        Project project = ProjectManager.getInstance().getCurrentProject();
+        if (project == null) {
+            project = new Project(name, description, currentUser.getID());
+            ProjectManager.getInstance().setCurrentProject(project);
+            System.out.println("Created new project with ID: " + project.getId());
+        } else {
+            project.setName(name);
+            project.setDescription(description);
+            project.setLastModified(LocalDateTime.now());
+            System.out.println("Updated existing project with ID: " + project.getId());
+        }
+
+        // IMPORTANT FIX: Ensure blob reference exists
+        if (project.getBlobReference() == null || project.getBlobReference().isEmpty()) {
+            project.setBlobReference(UUID.randomUUID().toString() + ".json");
+            System.out.println("Generated new blob reference: " + project.getBlobReference());
+        }
+        try {
+            // Serialize circuit data
+            Map<String, Object> circuit = new HashMap<>();
+            List<Map<String, Object>> componentData = new ArrayList<>();
+            List<Map<String, Object>> wireData = new ArrayList<>();
+            Map<Component, String> idMap = new HashMap<>();
+            int idCounter = 0;
+
+            // Serialize components
+            for (Node node : playgroundPane.getChildren()) {
+                if (node.getUserData() instanceof Component c) {
+                    String id = "comp-" + (idCounter++);
+                    idMap.put(c, id);
+
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("id", id);
+                    data.put("type", c.getClass().getSimpleName());
+
+                    ImageView view = c.getView();
+                    if (view == null) {
+                        System.out.println("⚠️ Skipping component with null view: " + c.getClass().getSimpleName());
+                        continue;
+                    }
+
+                    data.put("x", view.getLayoutX());
+                    data.put("y", view.getLayoutY());
+                    data.put("voltage", c.getVoltage());
+
+                    if (c instanceof Switch sw) {
+                        data.put("isClosed", sw.isClosed());
+                    }
+
+                    componentData.add(data);
+                }
             }
+
+            System.out.println("Serialized " + componentData.size() + " components");
+
+            // Serialize wires
+            for (Node node : playgroundPane.getChildren()) {
+                if (node instanceof Line line && node.getUserData() instanceof Wire wire) {
+                    Port a = wire.getPorts().get(0);
+                    Port b = wire.getPorts().get(1);
+
+                    if (a.getConnectedTo() == null || b.getConnectedTo() == null) {
+                        System.out.println("⚠️ Skipping wire with disconnected ports");
+                        continue;
+                    }
+
+                    Component compA = a.getConnectedTo().getParentComponent();
+                    Component compB = b.getConnectedTo().getParentComponent();
+
+                    Map<String, Object> wireEntry = new HashMap<>();
+                    wireEntry.put("startComponentId", idMap.get(compA));
+                    wireEntry.put("endComponentId", idMap.get(compB));
+                    wireEntry.put("startPortIndex", compA.getPorts().indexOf(a.getConnectedTo()));
+                    wireEntry.put("endPortIndex", compB.getPorts().indexOf(b.getConnectedTo()));
+                    wireEntry.put("startX", line.getStartX());
+                    wireEntry.put("startY", line.getStartY());
+                    wireEntry.put("endX", line.getEndX());
+                    wireEntry.put("endY", line.getEndY());
+
+                    wireData.add(wireEntry);
+                }
+            }
+
+            System.out.println("Serialized " + wireData.size() + " wires");
+
+            circuit.put("components", componentData);
+            circuit.put("wires", wireData);
+
+            // Convert to JSON
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String jsonData = gson.toJson(circuit);
+            System.out.println("JSON data size: " + jsonData.length() + " characters");
+            System.out.println("First 100 chars of JSON: " + jsonData.substring(0, Math.min(100, jsonData.length())));
+
+            // Save to blob storage and database
+            System.out.println("Attempting to save project: " + project.getId());
+            System.out.println("Blob reference: " + project.getBlobReference());
+
+            ProjectBlobManager blobManager = new ProjectBlobManager();
+            boolean success = false;
+
+            try {
+                success = blobManager.saveProject(project, jsonData);
+                System.out.println("Save result from blobManager: " + success);
+            } catch (Exception saveEx) {
+                System.err.println("Exception during blobManager.saveProject: " + saveEx.getMessage());
+                saveEx.printStackTrace();
+                throw saveEx; // Re-throw to be caught by outer catch
+            }
+
+            if (success) {
+                showAlert("Success", "Project Saved",
+                        "Your project '" + name + "' has been saved successfully.");
+            } else {
+                System.err.println("Save returned false but no exception was thrown. Check blob storage and DB connections.");
+                showAlert("Error", "Save Failed",
+                        "There was a problem saving your project. Please try again.");
+            }
+        } catch (Exception e) {
+            System.err.println("Exception in saveBtnClick: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Error", "Save Failed", e.getMessage());
+        }
+    }
+    public void loadProject(Project project) {
+        if (project == null) {
+            showAlert("Error", "Invalid Project", "No project was selected to load.");
+            return;
+        }
+
+        try {
+            // Clear current playground
+            playgroundPane.getChildren().clear();
+            drawGrid(gc, isDarkMode, gridLinesEnabled);
+
+            // Load from blob storage
+            ProjectBlobManager blobManager = new ProjectBlobManager();
+            String jsonData = blobManager.loadProject(project);
+
+            if (jsonData == null || jsonData.isEmpty()) {
+                showAlert("Error", "Load Failed", "Failed to load project data from storage.");
+                return;
+            }
+
+            // Parse JSON
+            Gson gson = new Gson();
+            Map<?, ?> circuit = gson.fromJson(jsonData, Map.class);
+
+            List<?> compList = (List<?>) circuit.get("components");
+            List<?> wireList = (List<?>) circuit.get("wires");
+
+            Map<String, Component> idToComponent = new HashMap<>();
+
+            // Recreate components
+            for (Object o : compList) {
+                Map<?, ?> data = (Map<?, ?>) o;
+                String type = (String) data.get("type");
+                String id = (String) data.get("id");
+                double x = ((Number) data.get("x")).doubleValue();
+                double y = ((Number) data.get("y")).doubleValue();
+
+                Component c = switch (type) {
+                    case "Battery" -> new Battery(new ImageView(batteryIcon.getImage()), 5.0);
+                    case "Lightbulb" -> new Lightbulb(new ImageView(bulbIcon.getImage()));
+                    case "Switch" -> {
+                        Switch sw = new Switch(new ImageView(switchIcon.getImage()));
+                        sw.toggle(); // temporary: toggle to closed if needed
+                        Boolean isClosed = (Boolean) data.get("isClosed");
+                        if (isClosed != null && !isClosed) sw.toggle(); // restore original state
+                        yield sw;
+                    }
+                    default -> null;
+                };
+
+                if (c == null) continue;
+
+                ImageView view = c.getView();
+                view.setLayoutX(x);
+                view.setLayoutY(y);
+                view.setFitWidth(60);
+                view.setFitHeight(60);
+                view.setPreserveRatio(true);
+                view.setUserData(c);
+
+                playgroundPane.getChildren().add(view);
+                enableDrag(view);
+
+                for (Port port : c.getPorts()) {
+                    Circle circle = new Circle(6, Color.RED);
+                    double px = view.getLayoutX() + port.getXOffset() * view.getFitWidth();
+                    double py = view.getLayoutY() + port.getYOffset() * view.getFitHeight();
+                    circle.setLayoutX(px);
+                    circle.setLayoutY(py);
+                    circle.setUserData(port);
+                    port.setCircle(circle);
+                    playgroundPane.getChildren().add(circle);
+                }
+
+                idToComponent.put(id, c);
+            }
+
+            // Recreate wires and connections
+            for (Object o : wireList) {
+                Map<?, ?> data = (Map<?, ?>) o;
+                String idA = (String) data.get("startComponentId");
+                String idB = (String) data.get("endComponentId");
+
+                Component compA = idToComponent.get(idA);
+                Component compB = idToComponent.get(idB);
+
+                if (compA == null || compB == null) {
+                    System.err.println("⚠️ Skipping wire: missing components " + idA + ", " + idB);
+                    continue;
+                }
+
+                int portA = ((Number) data.get("startPortIndex")).intValue();
+                int portB = ((Number) data.get("endPortIndex")).intValue();
+
+                if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
+                    System.err.println("⚠️ Skipping wire: invalid port index");
+                    continue;
+                }
+
+                double sx = ((Number) data.get("startX")).doubleValue();
+                double sy = ((Number) data.get("startY")).doubleValue();
+                double ex = ((Number) data.get("endX")).doubleValue();
+                double ey = ((Number) data.get("endY")).doubleValue();
+
+                Line line = new Line(sx, sy, ex, ey);
+                line.setStrokeWidth(4);
+                line.setStroke(Color.BLACK);
+                line.setCursor(Cursor.HAND);
+
+                Wire wire = new Wire(line);
+                line.setUserData(wire);
+
+                Circle circle1 = new Circle(6, Color.RED);
+                Circle circle2 = new Circle(6, Color.RED);
+                circle1.setLayoutX(sx);
+                circle1.setLayoutY(sy);
+                circle2.setLayoutX(ex);
+                circle2.setLayoutY(ey);
+
+                Port startPort = wire.getPorts().get(0);
+                Port endPort = wire.getPorts().get(1);
+
+                startPort.setCircle(circle1);
+                endPort.setCircle(circle2);
+                circle1.setUserData(startPort);
+                circle2.setUserData(endPort);
+
+                // reconnect
+                Port targetA = compA.getPorts().get(portA);
+                Port targetB = compB.getPorts().get(portB);
+                startPort.connectTo(targetA);
+                endPort.connectTo(targetB);
+
+                playgroundPane.getChildren().addAll(line, circle1, circle2);
+
+                enableWireMove(line, circle1, circle2);
+                enablePortDrag(wire, circle1, true);
+                enablePortDrag(wire, circle2, false);
+            }
+
+            // Store the current project
+            ProjectManager.getInstance().setCurrentProject(project);
+
+            showAlert("Success", "Project Loaded",
+                    "Project '" + project.getName() + "' has been loaded successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Load Failed", "Failed to load project: " + e.getMessage());
         }
     }
 
     /**
-     * Show the load file dialog and load a circuit
-     * pulls up file explorer and allows you to open previous builds
-     * POTENTIALLY KEEP TIS WAY SINCE IT IS A DESKTOP APPLICATION
+     * Handles the load button click event.
+     * Opens a file chooser dialog to let the user select a JSON file representing a previously saved circuit layout.
+     * If successful, the layout is loaded and rendered into the sandbox.
+     *
+     * @param event the ActionEvent triggered by the load button
      */
     @FXML
     public void loadBtnClick(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Load Circuit");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("XML Files", "*.xml")
-        );
-
+        fileChooser.setTitle("Load Circuit Layout");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         File file = fileChooser.showOpenDialog(playgroundPane.getScene().getWindow());
 
         if (file != null) {
             try {
-                loadCircuitFromXML(file);
-                showAlert("Success", "Circuit Loaded", "Circuit loaded successfully from " + file.getName());
-            } catch (Exception e) {
+                loadLayoutFromFile(file);
+                showAlert("Success", "Layout Loaded", "Circuit layout loaded successfully.");
+            } catch (IOException e) {
                 e.printStackTrace();
-                showAlert("Error", "Load Failed", "Failed to load circuit: " + e.getMessage());
+                showAlert("Error", "Load Failed", e.getMessage());
             }
         }
     }
 
-    /**
-     * Save the current circuit to XML
-     * creates a new circuit xml file that the user can rename
-     */
-    public void saveCircuitToXML(File file) {
-        try {
 
-            Circuit circuit = new Circuit(); //create a new circuit object with all components
-            circuit.setName("Circuit " + System.currentTimeMillis());
-            circuit.setId(System.currentTimeMillis());
-
-            // Add all components to the circuit
-            for (Component component : components) {
-                if (component instanceof Battery) {
-                    circuit.addBattery((Battery) component);
-                } else if (component instanceof Lightbulb) {
-                    circuit.addLightbulb((Lightbulb) component);
-                } else if (component instanceof Wire) {
-                    circuit.addWire((Wire) component);
-                }
-                else if (component instanceof Switch) {
-                    circuit.addSwitch((Switch) component);
-                }
-            }
-
-            // Create JAXB context for all relevant classes
-            JAXBContext context = JAXBContext.newInstance(
-                    Circuit.class, Battery.class, Lightbulb.class, Wire.class
-            );
-
-            // Create and configure the marshaller
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-            // Marshal the circuit to XML
-            marshaller.marshal(circuit, file);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to save circuit: " + e.getMessage(), e);//error checking
-        }
-    }
-
-    /**
-     * Load a circuit from XML
-     */
-    public void loadCircuitFromXML(File file) {
-        try {
-            // Create JAXB context for all relevant classes
-            JAXBContext context = JAXBContext.newInstance(
-                    Circuit.class, Battery.class, Lightbulb.class, Wire.class, Switch.class
-            );
-
-            // Create and configure the unmarshaller
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-
-            // Unmarshal (deserialize) the XML file into a Circuit object
-            Circuit circuit = (Circuit) unmarshaller.unmarshal(file);
-
-            // Clear current playground and data
-            playgroundPane.getChildren().clear();
-            components.clear();
-            componentNodesMap.clear();
-
-            drawGrid(gc, isDarkMode, gridLinesEnabled);
-
-
-
-            // Load batteries
-            if (circuit.getBatteries() != null) {
-                for (Battery battery : circuit.getBatteries()) {
-                    Node batteryNode = loadComponent(BATTERY_FXML, battery.getX(), battery.getY(), battery.getId());
-                    if (batteryNode != null) {
-                        components.add(battery);
-                        componentNodesMap.put(battery.getId(), batteryNode);
-                    }
-                }
-            }
-
-            // Load lightbulbs
-            if (circuit.getLightbulbs() != null) {
-                for (Lightbulb lightbulb : circuit.getLightbulbs()) {
-                    Node lightbulbNode = loadComponent(LIGHTBULB_FXML, lightbulb.getX(), lightbulb.getY(), lightbulb.getId());
-                    if (lightbulbNode != null) {
-                        components.add(lightbulb);
-                        componentNodesMap.put(lightbulb.getId(), lightbulbNode);
-                    }
-                }
-            }
-
-            // Load wires
-            if (circuit.getWires() != null) {
-                for (Wire wire : circuit.getWires()) {
-                    Node wireNode = loadComponent(WIRE_FXML, wire.getX(), wire.getY(), wire.getId());
-                    if (wireNode != null) {
-                        Line wireLine = findLineInNode(wireNode);
-                        if (wireLine != null) {
-                            double offsetX = wireNode.getLayoutX();
-                            double offsetY = wireNode.getLayoutY();
-                            wireLine.setStartX(wire.getStartX() - offsetX);
-                            wireLine.setStartY(wire.getStartY() - offsetY);
-                            wireLine.setEndX(wire.getEndX() - offsetX);
-                            wireLine.setEndY(wire.getEndY() - offsetY);
-
-                            enableLineResize(wireLine, wire.getId());
-                        }
-
-                        components.add(wire);
-                        componentNodesMap.put(wire.getId(), wireNode);
-                    }
-                }
-            }
-
-            // Load switches
-            if (circuit.getSwitches() != null) {
-                addSwitchesToPlayground(circuit.getSwitches());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to load circuit: " + e.getMessage(), e);
-        }
-    }
-
-
-    /**
-     * Update the UI with components from a loaded circuit
-     * puts the components back into their position
-     */
-    private void updateUIWithCircuit(Circuit circuit) {
-
-        clearPlayground(); //clear the playground
-
-        //get all componentes from the circuit xml and add the m to correct position
-        addBatteriesToPlayground(circuit.getBatteries());
-        addLightbulbsToPlayground(circuit.getLightbulbs());
-        addWiresToPlayground(circuit.getWires());
-        addSwitchesToPlayground(circuit.getSwitches());
-    }
-
-    /**
-     * Clear the playground of all components
-     */
-    private void clearPlayground() {
-        // Remove all nodes except the grid canvas
-        playgroundPane.getChildren().removeIf(node -> {
-            return "dropped".equals(node.getUserData());
-                });
-
-        // Clear component collections
-        components.clear();
-        componentNodesMap.clear();
-    }
-
-    /**
-     * helper method
-     * Add batteries from a circuit to the playground
-     */
-    private void addBatteriesToPlayground(List<Battery> batteries) {
-        if (batteries == null) return;
-
-        for (Battery battery : batteries) {
-            // Create UI component
-            Node batteryNode = loadComponent(BATTERY_FXML, battery.getX(), battery.getY(), battery.getId());
-
-            if (batteryNode != null) {
-                // Store component
-                components.add(battery);
-                componentNodesMap.put(battery.getId(), batteryNode);
-            }
-        }
-    }
-
-    /**
-     * helper method
-     * Add lightbulbs from a circuit to the playground
-     */
-    private void addLightbulbsToPlayground(List<Lightbulb> lightbulbs) {
-        if (lightbulbs == null) return;
-
-        for (Lightbulb lightbulb : lightbulbs) {
-            // Create UI component
-            Node lightbulbNode = loadComponent(LIGHTBULB_FXML, lightbulb.getX(), lightbulb.getY(), lightbulb.getId());
-
-            if (lightbulbNode != null) {
-                // Store component
-                components.add(lightbulb);
-                componentNodesMap.put(lightbulb.getId(), lightbulbNode);
-            }
-        }
-    }
-
-    /**
-     * helper method
-     * Add wires from a circuit to the playground
-     */
-    private void addWiresToPlayground(List<Wire> wires) {
-        if (wires == null) return;
-
-        for (Wire wire : wires) {
-            // Create UI component at the wire's position
-            Node wireNode = loadComponent(WIRE_FXML, wire.getX(), wire.getY(), wire.getId());
-
-            if (wireNode != null) {
-                // Find the Line within the loaded FXML
-                Line wireLine = findLineInNode(wireNode);
-
-                if (wireLine != null) {
-                    // Calculate the offset-adjusted positions
-                    // The line's endpoints are relative to its container's position
-                    double startX = wire.getStartX() - wire.getX();
-                    double startY = wire.getStartY() - wire.getY();
-                    double endX = wire.getEndX() - wire.getX();
-                    double endY = wire.getEndY() - wire.getY();
-
-                    // Update line endpoints
-                    wireLine.setStartX(startX);
-                    wireLine.setStartY(startY);
-                    wireLine.setEndX(endX);
-                    wireLine.setEndY(endY);
-
-                    // Enable line resizing
-                    enableLineResize(wireLine, wire.getId());
-
-                    // Store component
-                    components.add(wire);
-                    componentNodesMap.put(wire.getId(), wireNode);
-                }
-            }
-        }
-    }
-
-    // Methods for Voltmeter
 
     /**
      * Show an alert dialog
@@ -926,6 +551,10 @@ public class SandboxController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Logs the user out and navigates them back to the login screen.
+     * Loads the login.fxml file and sets it as the current scene.
+     */
     @FXML
     public void logoutUser2() {
         try {
@@ -939,6 +568,11 @@ public class SandboxController implements Initializable {
         }
     }
 
+    /**
+     * Navigates the user to the main menu scene.
+     * Loads the mainmenu.fxml file and replaces the current scene with it.
+     * If an error occurs, displays an alert with the failure reason.
+     */
     @FXML
     public void goToMainMenu(){
         try {
@@ -953,6 +587,14 @@ public class SandboxController implements Initializable {
         }
     }
 
+    /**
+     * Handles the start of a component drag event.
+     * - If the source is the wire icon, creates and places a new draggable wire.
+     * - If the source is a component icon (battery, bulb, switch), creates an instance,
+     *   places it in the scene, sets up dragging, snapping, and double-click disconnection.
+     *
+     * @param event the MouseEvent triggered when dragging starts from the component tray
+     */
     @FXML
     private void onComponentDragStart(MouseEvent event) {
         Node sourceNode = (Node) event.getSource();
@@ -1007,12 +649,12 @@ public class SandboxController implements Initializable {
     }
 
 
-        /**
-         * Enables dragging for a component node and automatically updates the position
-         * of its ports and any connected wires during the drag.
-         *
-         * @param node The component node to make draggable.
-         */
+    /**
+     * Enables dragging for a component node and automatically updates the position
+     * of its ports and any connected wires during the drag.
+     *
+     * @param node The component node to make draggable.
+     */
 
     private void enableDrag(Node node) {
         final Delta dragDelta = new Delta();
@@ -1055,11 +697,23 @@ public class SandboxController implements Initializable {
     }
 
 
-
+    /**
+     * Helper class used to store delta values for drag calculations.
+     * Holds the x and y offset during drag operations.
+     */
     private static class Delta {
         double x, y;
     }
 
+    /**
+     * Creates a new component (Battery, Lightbulb, or Switch) based on the icon source and drop position.
+     * - For switches: adds a press-and-hold listener to toggle state, and double-click to disconnect.
+     * - Sets up a new ImageView and returns the initialized component.
+     *
+     * @param sourceIcon   the ImageView that was dragged from the component tray
+     * @param dropPosition the position where the new component is dropped
+     * @return a new Component instance (Battery, Lightbulb, or Switch), or null if unrecognized
+     */
     private Component createComponentFromSource(ImageView sourceIcon, Point2D dropPosition) {
         String id = sourceIcon.getId();
         Image image = sourceIcon.getImage();
@@ -1115,22 +769,31 @@ public class SandboxController implements Initializable {
         };
     }
 
+    /**
+     * Clamps a given value between the provided minimum and maximum bounds.
+     *
+     * @param value the value to clamp
+     * @param min   the minimum allowed value
+     * @param max   the maximum allowed value
+     * @return the clamped value
+     */
     private double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
 
-    private Point2D calculatePortPosition(Component component, Port port) {
-        ImageView view = component.getView();
-        double imageX = view.getLayoutX();
-        double imageY = view.getLayoutY();
-        double width = view.getBoundsInParent().getWidth();
-        double height = view.getBoundsInParent().getHeight();
-
-        double portX = imageX + port.getXOffset() * width;
-        double portY = imageY + port.getYOffset() * height;
-
-        return new Point2D(portX, portY);
-    }
+//TODO delete this maybe
+//    private Point2D calculatePortPosition(Component component, Port port) {
+//        ImageView view = component.getView();
+//        double imageX = view.getLayoutX();
+//        double imageY = view.getLayoutY();
+//        double width = view.getBoundsInParent().getWidth();
+//        double height = view.getBoundsInParent().getHeight();
+//
+//        double portX = imageX + port.getXOffset() * width;
+//        double portY = imageY + port.getYOffset() * height;
+//
+//        return new Point2D(portX, portY);
+//    }
 
     /**
      * Searches the playground for a nearby Port within a given radius.
@@ -1155,6 +818,12 @@ public class SandboxController implements Initializable {
         return null;
     }
 
+    /**
+     * Enables dragging of a Line's start and end points by mouse interaction.
+     * Used for visualizing wire adjustment in the playground.
+     *
+     * @param line the Line representing the wire to enable dragging on
+     */
     private void enableLineDrag(Line line) {
         final Delta dragStart = new Delta();
 
@@ -1184,6 +853,13 @@ public class SandboxController implements Initializable {
             });
         });
     }
+    /**
+     * Handles the click action when the user adds a wire to the playground.
+     * Initializes a new wire line and its associated draggable port circles.
+     * Connects visual elements and interaction logic to the scene.
+     *
+     * @param mouseEvent the mouse event that triggered this method
+     */
     @FXML
     public void wireClick(MouseEvent mouseEvent) {
         double x = 200;
@@ -1221,6 +897,14 @@ public class SandboxController implements Initializable {
         enablePortDrag(wire, port1, true);
         enablePortDrag(wire, port2, false);
     }
+    /**
+     * Enables the entire wire (line and its two ports) to be moved together
+     * by dragging the line. Updates both the line endpoints and the port positions.
+     *
+     * @param line   the Line representing the wire
+     * @param port1  the Circle representing the first port
+     * @param port2  the Circle representing the second port
+     */
     private void enableWireMove(Line line, Circle port1, Circle port2) {
         final Delta dragDelta = new Delta();
 
@@ -1305,6 +989,13 @@ public class SandboxController implements Initializable {
             e.consume();
         });
     }
+    /**
+     * Performs a breadth-first search to find all components connected to the given starting component.
+     * This method traverses the circuit graph by following port connections.
+     *
+     * @param start the component to begin traversal from
+     * @return a set of all components that are connected directly or indirectly to the start component
+     */
     private Set<Component> getAllConnectedComponents(Component start) {
         Set<Component> visited = new HashSet<>();
         Queue<Component> queue = new LinkedList<>();
@@ -1327,6 +1018,18 @@ public class SandboxController implements Initializable {
         return visited;
     }
 
+    /**
+     * Handles the "Run Circuit" button click.
+     * This method:
+     * <ul>
+     *     <li>Resets all components on the playground</li>
+     *     <li>Identifies the battery and switches</li>
+     *     <li>Determines whether the circuit is closed or broken due to open switches</li>
+     *     <li>Simulates voltage flow through components in a correct and staged order</li>
+     *     <li>Propagates power for visual updates</li>
+     * </ul>
+     * If no battery is found, it cancels the simulation. It performs a second simulation pass for consistency.
+     */
     @FXML
     private void onRunCircuit() {
         System.out.println("\n\n✅ Run Circuit button clicked");
@@ -1446,44 +1149,25 @@ public class SandboxController implements Initializable {
             }
         }
     }
-
-
-
-    private boolean isInClosedLoop(Component component, Battery battery) {
-        Set<Component> visited = new HashSet<>();
-        return dfsBetweenPorts(component, battery.getPorts().get(1), visited); // battery negative port
-    }
-
-
-    private static boolean arePortsInSameLoop(Port a, Port b) {
-        Set<Component> visited = new HashSet<>();
-        return dfsBetweenPorts(a.getParentComponent(), b, visited);
-    }
-
-    private static boolean dfsBetweenPorts(Component current, Port targetPort, Set<Component> visited) {
-        if (!visited.add(current)) return false;
-
-        for (Port port : current.getPorts()) {
-            Port connected = port.getConnectedTo();
-            if (connected != null) {
-                if (connected == targetPort) return true;
-                Component next = connected.getParentComponent();
-                if (dfsBetweenPorts(next, targetPort, visited)) return true;
-            }
+    /**
+     * Checks whether the given component has at least one connected port.
+     *
+     * @param c the component to check
+     * @return true if any of the component's ports are connected; false otherwise
+     */
+    private boolean hasAnyConnectedPorts(Component c) {
+        for (Port p : c.getPorts()) {
+            if (p.getConnectedTo() != null) return true;
         }
-
         return false;
     }
-
-
-
-        private boolean hasAnyConnectedPorts(Component c) {
-            for (Port p : c.getPorts()) {
-                if (p.getConnectedTo() != null) return true;
-            }
-            return false;
-        }
-
+    /**
+     * Saves the current circuit layout to a specified JSON file.
+     * Serializes all components and wires into a structured format for later restoration.
+     *
+     * @param file the file to save the layout into
+     * @throws IOException if writing to the file fails
+     */
     private void saveLayoutToFile(File file) throws IOException {
         List<SerializableComponent> componentData = new ArrayList<>();
         List<SerializableWire> wireData = new ArrayList<>();
@@ -1550,7 +1234,13 @@ public class SandboxController implements Initializable {
             new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(wrapper, writer);
         }
     }
-
+    /**
+     * Loads a saved circuit layout from a JSON file.
+     * Reconstructs the components, wires, and their connections onto the canvas (playgroundPane).
+     *
+     * @param file the file to load the layout from
+     * @throws IOException if reading the file fails or file is invalid
+     */
     private void loadLayoutFromFile(File file) throws IOException {
         playgroundPane.getChildren().clear(); // wipe canvas
 
