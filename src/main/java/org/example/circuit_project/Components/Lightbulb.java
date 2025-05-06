@@ -3,6 +3,9 @@ package org.example.circuit_project.Components;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.example.circuit_project.CircuitUtils;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,22 +21,99 @@ public class Lightbulb extends Component {
 
     @Override
     public void simulate() {
-        if (input.isConnected()) {
-            double voltage = input.getConnectedTo().getVoltage();
-            System.out.println("🔌 Lightbulb connected to: " + input.getConnectedTo().getParent().getClass().getSimpleName());
-            System.out.println("⚡ Voltage received from connected port: " + voltage);
-            input.setVoltage(voltage);
-            setVoltage(voltage);
-            output.setVoltage(voltage);
-            System.out.println("Bulb simulate: input=" + input.getVoltage() + ", output=" + output.getVoltage());
+        Port inputTo = input.getConnectedTo();
+        Port outputTo = output.getConnectedTo();
+
+        // 🔒 Step 1: Require both connections to be physically present
+        if (inputTo == null || outputTo == null) {
+            input.setVoltage(0);
+            output.setVoltage(0);
+            setVoltage(0);
+            System.out.println("🚫 Lightbulb simulate: one or both ports NOT connected");
+            return;
+        }
+
+        // 🔒 Step 2: Ensure both are connected in the same loop
+        if (!CircuitUtils.arePortsInSameLoop(inputTo, outputTo)) {
+            input.setVoltage(0);
+            output.setVoltage(0);
+            setVoltage(0);
+            System.out.println("🚫 Lightbulb simulate: ports not in same loop");
+            return;
+        }
+
+        // ⚡ Step 3: Check for voltage difference
+        double voltageA = inputTo.getVoltage();
+        double voltageB = outputTo.getVoltage();
+
+        System.out.println("🔍 Bulb input connected to voltage: " + voltageA);
+        System.out.println("🔍 Bulb output connected to voltage: " + voltageB);
+
+        if (voltageA != voltageB) {
+            input.setVoltage(voltageA);
+            output.setVoltage(voltageB);
+            setVoltage(Math.abs(voltageA - voltageB));
+            System.out.println("💡 Lightbulb activated in closed loop with voltage: " + getVoltage());
         } else {
             input.setVoltage(0);
             output.setVoltage(0);
             setVoltage(0);
-            System.out.println("Bulb simulate: input NOT connected");
+            System.out.println("⚠️ Loop exists but no voltage difference");
         }
+    }
+
+
+
+
+
+
+    private boolean arePortsInSameLoop(Port a, Port b) {
+        Set<Component> visited = new HashSet<>();
+        return dfsBetweenPorts(a.getParentComponent(), b, visited);
+    }
+
+    private boolean dfsBetweenPorts(Component current, Port targetPort, Set<Component> visited) {
+        if (!visited.add(current)) return false;
+
+        for (Port port : current.getPorts()) {
+            Port connected = port.getConnectedTo();
+            if (connected != null) {
+                if (connected == targetPort) return true;
+                Component next = connected.getParentComponent();
+                if (dfsBetweenPorts(next, targetPort, visited)) return true;
+            }
+        }
+
+        return false;
+    }
+    public void reset() {
+        for (Port port : getPorts()) {
+            port.setVoltage(0);
+        }
+        setVoltage(0); // For components that store internal voltage
+        isPowered();
         updateVisualState();
     }
+    @Override
+    public void disconnect() {
+        for (Port port : getPorts()) {
+            if (port.getConnectedTo() != null) {
+                port.getConnectedTo().connectTo(null); // safely breaks the other side
+            }
+            port.connectTo(null); // safely breaks this side
+
+
+            reset();
+            updateVisualState();
+        }
+    }
+
+
+
+
+
+
+
 
 
 
@@ -45,8 +125,9 @@ public class Lightbulb extends Component {
 
     @Override
     public boolean isPowered() {
-        return input.getVoltage() > 0;
+        return input.isConnected() && output.isConnected() && getVoltage() > 0;
     }
+
 
 
     @Override

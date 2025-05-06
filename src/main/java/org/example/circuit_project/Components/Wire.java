@@ -30,6 +30,20 @@ public class Wire extends Component {
             line.setEndY(end2.getCircle().getLayoutY());
         }
     }
+    @Override
+    public void disconnect() {
+        for (Port port : getPorts()) {
+            Port other = port.getConnectedTo();
+            if (other != null) {
+                other.connectTo(null);
+            }
+            port.connectTo(null);
+        }
+
+        reset();
+        updateVisualState();
+    }
+
 
     @Override
     public void simulate() {
@@ -37,7 +51,17 @@ public class Wire extends Component {
             double voltageA = end1.getConnectedTo().getVoltage();
             double voltageB = end2.getConnectedTo().getVoltage();
 
-            double chosenVoltage = voltageA != 0 ? voltageA : voltageB;
+            boolean aHasVoltage = voltageA != 0;
+            boolean bHasVoltage = voltageB != 0;
+
+            double chosenVoltage = 0;
+            if (aHasVoltage && !bHasVoltage) {
+                chosenVoltage = voltageA;
+            } else if (!aHasVoltage && bHasVoltage) {
+                chosenVoltage = voltageB;
+            } else if (aHasVoltage && bHasVoltage) {
+                chosenVoltage = voltageA; // Arbitrary pick — both should match
+            }
 
             end1.setVoltage(chosenVoltage);
             end2.setVoltage(chosenVoltage);
@@ -49,6 +73,15 @@ public class Wire extends Component {
             System.out.println("❌ Wire simulate: Not fully connected. Zeroing ports.");
         }
     }
+
+
+    public void reset() {
+        for (Port port : getPorts()) {
+            port.setVoltage(0);
+        }
+        setVoltage(0); // For components that store internal voltage
+    }
+
 
     @Override
     public List<Port> getPorts() {

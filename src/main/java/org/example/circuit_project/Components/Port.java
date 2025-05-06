@@ -40,11 +40,30 @@ public class Port {
     }
 
     public void connectTo(Port other) {
-        if (this.connectedTo == other) return; // prevent duplicate connections
-        this.connectedTo = other;
-        other.connectedTo = this;
-        System.out.println("🔗 " + this.parent.getClass().getSimpleName() + " port connected to " + other.parent.getClass().getSimpleName());
+        // Disconnect existing connection first
+        if (this.connectedTo != null) {
+            Port old = this.connectedTo;
+            this.connectedTo = null;
+            if (old.connectedTo == this) {
+                old.connectedTo = null;
+            }
+        }
+
+        // Connect to new port if not null
+        if (other != null) {
+            this.connectedTo = other;
+
+            // Prevent infinite recursion or duplicate linking
+            if (other.connectedTo != this) {
+                other.connectTo(this);
+            }
+
+            System.out.println("🔗 " + this.parent.getClass().getSimpleName() + " port connected to " + other.parent.getClass().getSimpleName());
+        } else {
+            System.out.println("🔌 Port disconnected");
+        }
     }
+
 
 
 

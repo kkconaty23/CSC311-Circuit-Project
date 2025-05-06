@@ -309,6 +309,17 @@ public class SandboxController implements Initializable {
                 playgroundPane.getChildren().add(view);
                 enableDrag(view);
 
+                view.setOnMouseClicked(e -> {
+                    if (e.getClickCount() == 2) {
+                        if (view.getUserData() instanceof Component c) {
+                            c.disconnect();
+                            c.reset();
+                            c.updateVisualState();
+                            System.out.println("🔌 Component disconnected by double-click.");
+                        }
+                    }
+                });
+
                 for (Port port : newComponent.getPorts()) {
                     Circle portCircle = new Circle(6);
                     portCircle.setFill(Color.RED);
@@ -393,20 +404,38 @@ public class SandboxController implements Initializable {
             case "switchIcon" -> {
                 Switch newSwitch = new Switch(imageView);
 
-                imageView.setOnMouseClicked(e -> {
-                    newSwitch.toggle();
+                final long[] pressStart = new long[1];
 
-                    Set<Component> connected = getAllConnectedComponents(newSwitch);
-                    for (Component c : connected) {
-                        c.simulate(); // run voltage flow first
-                    }
-                    for (Component c : connected) {
-                        c.propagatePower(new HashSet<>()); // now safely update visuals
-                    }
+                imageView.setOnMousePressed(e -> {
+                    pressStart[0] = System.currentTimeMillis();
+                    e.consume();
                 });
+
+                imageView.setOnMouseReleased(e -> {
+                    long duration = System.currentTimeMillis() - pressStart[0];
+
+                    if (e.getClickCount() == 2) {
+                        newSwitch.disconnect();
+                        System.out.println("🔌 Switch disconnected (double-click)");
+                    } else if (duration > 500) { // press-and-hold
+                        newSwitch.toggle();
+                        System.out.println("🔁 Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
+
+                        Set<Component> connected = getAllConnectedComponents(newSwitch);
+                        for (Component c : connected) c.simulate();
+                        for (Component c : connected) c.propagatePower(new HashSet<>());
+                    }
+
+                    e.consume(); // prevent drag
+                });
+
+                imageView.setPickOnBounds(true);
+                imageView.setMouseTransparent(false);
 
                 yield newSwitch;
             }
+
+
 
             default -> null;
         };
@@ -629,41 +658,118 @@ public class SandboxController implements Initializable {
         System.out.println("✅ Run Circuit button clicked");
 
         Set<Component> components = new HashSet<>();
+
+        // 🔁 First: collect all components and reset their state
         for (Node node : playgroundPane.getChildren()) {
             if (node.getUserData() instanceof Component c) {
+                c.reset();  // ✅ Clear voltages and propagation flags
                 components.add(c);
             }
         }
 
-        System.out.println("✅ Collected " + components.size() + " components");
-
-        // 🔁 Sort: Battery → Wire → others
-        List<Component> sorted = new ArrayList<>(components);
-        sorted.sort((a, b) -> {
-            if (a instanceof Battery) return -1;
-            if (b instanceof Battery) return 1;
-            if (a instanceof Wire) return -1;
-            if (b instanceof Wire) return 1;
-            return 0;
-        });
-
-        for (Component c : sorted) {
-            System.out.println("🔄 Simulating: " + c.getClass().getSimpleName());
-            c.simulate();
+        // 🔋 Find the battery
+        Battery battery = null;
+        for (Component c : components) {
+            if (c instanceof Battery b) {
+                battery = b;
+                break;
+            }
         }
-        System.out.println("✅ Simulation step complete");
 
-        for (Component c : sorted) {
-            System.out.println("📡 Propagating visuals for: " + c.getClass().getSimpleName());
+        if (battery == null) {
+            System.out.println("❌ No battery found. Cannot simulate.");
+            return;
+        }
+
+        // 🔍 Only keep components part of a loop from + to -
+        List<Component> filtered = new ArrayList<>();
+        for (Component c : components) {
+            if (c instanceof Battery || (hasAnyConnectedPorts(c) && isInClosedLoop(c, battery))) {
+                filtered.add(c);
+            } else {
+                System.out.println("⛔ Skipping " + c.getClass().getSimpleName() + " – not in closed loop");
+            }
+        }
+
+        // 🔋 Simulate batteries first to set voltage
+        for (Component c : filtered) {
+            if (c instanceof Battery) {
+                c.simulate();
+            }
+        }
+
+// 🔌 Then simulate wires to spread voltage
+        for (Component c : filtered) {
+            if (c instanceof Wire) {
+                c.simulate();
+            }
+        }
+
+
+        // 💡 Then simulate the rest (bulbs, switches, etc.)
+        for (Component c : filtered) {
+            if (!(c instanceof Battery || c instanceof Wire)) {
+                c.simulate();
+            }
+        }
+
+        // ⚡ Propagate power across the network
+        for (Component c : filtered) {
             c.propagatePower(new HashSet<>());
         }
-        System.out.println("✅ Propagation complete");
+
+        // 🔁 Final simulation pass for full sync
+        for (Component c : components) {
+            c.simulate();
+            c.propagatePower(new HashSet<>());
+        }
+
     }
 
 
 
+    private boolean isInClosedLoop(Component component, Battery battery) {
+        Set<Component> visited = new HashSet<>();
+        return dfsBetweenPorts(component, battery.getPorts().get(1), visited); // battery negative port
+    }
+
+
+    private static boolean arePortsInSameLoop(Port a, Port b) {
+        Set<Component> visited = new HashSet<>();
+        return dfsBetweenPorts(a.getParentComponent(), b, visited);
+    }
+
+    private static boolean dfsBetweenPorts(Component current, Port targetPort, Set<Component> visited) {
+        if (!visited.add(current)) return false;
+
+        for (Port port : current.getPorts()) {
+            Port connected = port.getConnectedTo();
+            if (connected != null) {
+                if (connected == targetPort) return true;
+                Component next = connected.getParentComponent();
+                if (dfsBetweenPorts(next, targetPort, visited)) return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    
+        private boolean hasAnyConnectedPorts(Component c) {
+            for (Port p : c.getPorts()) {
+                if (p.getConnectedTo() != null) return true;
+            }
+            return false;
+        }
 
 
 
 
-}
+
+
+
+
+
+
+    }

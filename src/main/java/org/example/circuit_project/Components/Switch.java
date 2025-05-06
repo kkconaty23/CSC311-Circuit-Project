@@ -20,12 +20,38 @@ public class Switch extends Component {
 
     public void toggle() {
         isClosed = !isClosed;
-        updateVisualState(); // 🔽 Add this right after flipping the state
+        System.out.println("Switch toggled! Now " + (isClosed ? "CLOSED" : "OPEN"));
+        updateVisualState();
     }
+
 
     public boolean isClosed() {
         return isClosed;
     }
+
+    public void reset() {
+        for (Port port : getPorts()) {
+            port.setVoltage(0);
+        }
+        setVoltage(0); // For components that store internal voltage
+    }
+    @Override
+    public void disconnect() {
+        for (Port port : getPorts()) {
+            Port other = port.getConnectedTo();
+            if (other != null) {
+                other.connectTo(null);
+            }
+            port.connectTo(null);
+        }
+
+        reset();
+        updateVisualState();
+        System.out.println("Disconnecting Switch: isClosed = " + isClosed + ", ports: " + getPorts().size());
+
+    }
+
+
 
     @Override
     public void simulate() {
@@ -78,11 +104,14 @@ public class Switch extends Component {
 
     public void updateVisualState() {
         if (view == null) return;
-        if (isPowered()) {
-            view.setImage(new Image(getClass().getResource("/org/example/circuit_project/images/SwitchClosed.png").toExternalForm()));
-        } else {
-            view.setImage(new Image(getClass().getResource("/org/example/circuit_project/images/switch.png").toExternalForm()));
-        }
+
+        String img = isClosed
+                ? "/org/example/circuit_project/images/SwitchClosed.png"
+                : "/org/example/circuit_project/images/switch.png";
+
+        System.out.println("🔄 Updating switch view to: " + img);
+        view.setImage(new Image(getClass().getResource(img).toExternalForm()));
     }
+
 
 }

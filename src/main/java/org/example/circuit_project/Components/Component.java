@@ -48,5 +48,26 @@ public abstract class Component {
     public int hashCode() {
         return System.identityHashCode(this);
     }
+    public void reset() {
+        for (Port port : getPorts()) {
+            port.setVoltage(0);
+        }
+        setVoltage(0); // For components that store internal voltage
+    }
+    public void disconnect() {
+        for (Port port : getPorts()) {
+            Port connected = port.getConnectedTo();
+            if (connected != null) {
+                connected.connectTo(null);
+                port.connectTo(null);
+            }
+        }
+    }
+    // Optional override in subclasses
+    public void updateVisualState() {
+        // Default: do nothing
+    }
+
+
 
 }

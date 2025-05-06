@@ -18,10 +18,42 @@ public class Battery extends Component {
 
     @Override
     public void simulate() {
-        positive.setVoltage(outputVoltage);    // Full voltage out
-        negative.setVoltage(0);                // Ground
-        System.out.println("Battery simulate: positive=" + outputVoltage + ", negative=0");
+        if (positive.isConnected() && negative.isConnected()) {
+            positive.setVoltage(outputVoltage);    // Full voltage out
+            negative.setVoltage(0);                // Ground
+            setVoltage(outputVoltage);
+            System.out.println("Battery simulate: positive=" + outputVoltage + ", negative=0");
+        } else {
+            // Reset if not fully connected
+            positive.setVoltage(0);
+            negative.setVoltage(0);
+            setVoltage(0);
+            System.out.println("Battery simulate: one or both terminals not connected – no output");
+        }
     }
+
+    public void reset() {
+        for (Port port : getPorts()) {
+            port.setVoltage(0);
+        }
+        setVoltage(0); // For components that store internal voltage
+    }
+    @Override
+    public void disconnect() {
+        for (Port port : getPorts()) {
+            Port other = port.getConnectedTo();
+            if (other != null) {
+                other.connectTo(null);
+            }
+            port.connectTo(null);
+        }
+
+        reset();
+        updateVisualState();
+    }
+
+
+
 
 
 
