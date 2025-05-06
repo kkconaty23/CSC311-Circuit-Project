@@ -7,17 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="list adjusted successfully and now displays more projects !">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit">
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/litLightbulb.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/litLightbulb.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/unlitLightbulb.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/unlitLightbulb.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/battery.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/battery.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +153,7 @@
       <workItem from="1746041876370" duration="3108000" />
       <workItem from="1746046703725" duration="364000" />
       <workItem from="1746070911377" duration="6464000" />
-      <workItem from="1746556185086" duration="3519000" />
+      <workItem from="1746556185086" duration="4712000" />
     </task>
     <task id="LOCAL-00001" summary="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next">
       <option name="closed" value="true" />
@@ -176,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746513705361</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit">
+      <option name="closed" value="true" />
+      <created>1746559913699</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746559913699</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,7 +199,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next" />
     <MESSAGE value="list adjusted successfully and now displays more projects !" />
-    <option name="LAST_COMMIT_MESSAGE" value="list adjusted successfully and now displays more projects !" />
+    <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
