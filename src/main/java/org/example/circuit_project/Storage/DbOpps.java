@@ -214,15 +214,17 @@ public class DbOpps {
         try {
             connection = getConnection();
 
-            // Use 'user_id' instead of 'user_id_id'
+            // Fix the WHERE clause to use user_id (not id)
             String query = "SELECT id, name, description, user_id as user_id_str, " +
                     "created_at, last_modified, blob_reference " +
                     "FROM projects WHERE user_id = ? ORDER BY last_modified DESC";
+
+            System.out.println("Fetching projects for user ID: " + userId);
             statement = connection.prepareStatement(query);
             statement.setString(1, userId);
 
-            System.out.println("Executing query with user ID: " + userId);
             resultSet = statement.executeQuery();
+            int count = 0;
 
             while (resultSet.next()) {
                 String projectId = resultSet.getString("id");
@@ -239,9 +241,12 @@ public class DbOpps {
                 Project project = new Project(projectId, name, description, projectUserId,
                         createdAt, lastModified, blobReference);
                 projects.add(project);
+                count++;
 
-                System.out.println("Loaded project: " + name + " (ID: " + projectId + ")");
+                System.out.println("Loaded project " + count + ": " + name + " (ID: " + projectId + ")");
             }
+
+            System.out.println("Total projects loaded: " + count);
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error retrieving user projects: " + e.getMessage());

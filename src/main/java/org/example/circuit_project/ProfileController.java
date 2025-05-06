@@ -47,8 +47,8 @@ public class ProfileController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserProfile();
-        loadUserProjects();
         setupProjectListView();
+        loadUserProjects();
     }
 
     /**
@@ -64,16 +64,32 @@ public class ProfileController implements Initializable {
      * This method loads all projects associated with the current user
      */
     private void loadUserProjects() {
-        DbOpps connection = new DbOpps();
-        List<Project> projects = connection.getUserProjects(currentUser.getID());
-        userProjects = FXCollections.observableArrayList(projects);
+        User currentUser = UserManager.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        DbOpps dbOpps = new DbOpps();
+        List<Project> projects = dbOpps.getUserProjects(currentUser.getID());
+
+        // Initialize the observable list
+        userProjects = FXCollections.observableArrayList();
+
+        // Add all projects to the observable list
+        if (projects != null && !projects.isEmpty()) {
+            userProjects.addAll(projects);
+            System.out.println("Added " + projects.size() + " projects to observable list");
+        } else {
+            System.out.println("No projects found for user");
+        }
+
+        // Set the observable list to the list view
+        projectListView.setItems(userProjects);
     }
 
     /**
      * Sets up the project list view with custom cell factory to display project info and actions
      */
     private void setupProjectListView() {
-        projectListView.setItems(userProjects);
+//        projectListView.setItems(userProjects);
         projectListView.setCellFactory(param -> new ProjectListCell());
     }
 

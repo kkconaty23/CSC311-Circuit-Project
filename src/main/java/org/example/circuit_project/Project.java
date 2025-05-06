@@ -1,6 +1,7 @@
 package org.example.circuit_project;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -18,12 +19,12 @@ public class Project {
     /**
      * Constructor for creating a Project object
      *
-     * @param id Unique identifier for the project
-     * @param name Project name
-     * @param description Project description
-     * @param userId ID of the user who owns the project
-     * @param createdAt Date and time when the project was created
-     * @param lastModified Date and time when the project was last modified
+     * @param id            Unique identifier for the project
+     * @param name          Project name
+     * @param description   Project description
+     * @param userId        ID of the user who owns the project
+     * @param createdAt     Date and time when the project was created
+     * @param lastModified  Date and time when the project was last modified
      * @param blobReference Reference to the project data in blob storage
      */
     public Project(String id, String name, String description, String userId,
@@ -40,9 +41,9 @@ public class Project {
     /**
      * Constructor for creating a new project
      *
-     * @param name Project name
+     * @param name        Project name
      * @param description Project description
-     * @param userId ID of the user who owns the project
+     * @param userId      ID of the user who owns the project
      */
     public Project(String name, String description, String userId) {
         this.id = UUID.randomUUID().toString();
@@ -103,6 +104,6 @@ public class Project {
 
     @Override
     public String toString() {
-        return name;
+        return name + " (Last modified: " + lastModified.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + ")";
     }
 }
