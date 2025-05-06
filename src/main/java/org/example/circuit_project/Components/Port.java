@@ -25,17 +25,30 @@ public class Port {
 
     public void markAsWirePort() {
         this.isWireEnd = true;
-        this.circle.setRadius(4);  // Smaller for wire tips
-        updateVisualState();
+
+        if (this.circle != null) {
+            this.circle.setRadius(4);  // wire tips are smaller
+        }
+
+        updateVisualState();  // apply styling now
     }
 
     public void updateVisualState() {
-        if (isConnected()) {
-            circle.setStroke(Color.DARKGREEN);
-            circle.setFill(isWireEnd ? Color.LIMEGREEN : Color.TRANSPARENT);
+        if (circle == null) return;
+
+        boolean isConnected = (connectedTo != null);
+
+        if (isWireEnd) {
+            // WIRE TIP: solid small dot (no border)
+            circle.setRadius(4); // just to be sure
+            circle.setFill(isConnected ? Color.LIMEGREEN : Color.RED);
+            circle.setStroke(null);
         } else {
-            circle.setStroke(Color.RED);
-            circle.setFill(isWireEnd ? Color.RED : Color.TRANSPARENT);
+            // COMPONENT PORT: larger hollow
+            circle.setRadius(6);
+            circle.setFill(Color.TRANSPARENT);
+            circle.setStroke(isConnected ? Color.LIMEGREEN : Color.RED);
+            circle.setStrokeWidth(2);
         }
     }
 
