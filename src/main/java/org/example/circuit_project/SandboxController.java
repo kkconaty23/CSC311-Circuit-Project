@@ -665,7 +665,7 @@ public class SandboxController implements Initializable {
 
     @FXML
     private void onRunCircuit() {
-        System.out.println("✅ Run Circuit button clicked");
+        System.out.println("\n\n✅ Run Circuit button clicked");
 
         Set<Component> components = new HashSet<>();
 
@@ -674,6 +674,7 @@ public class SandboxController implements Initializable {
             if (node.getUserData() instanceof Component c) {
                 c.reset();  // ✅ Clear voltages and propagation flags
                 components.add(c);
+                System.out.println("Reset component: " + c.getClass().getSimpleName());
             }
         }
 
@@ -691,49 +692,95 @@ public class SandboxController implements Initializable {
             return;
         }
 
-        // 🔍 Only keep components part of a loop from + to -
-        List<Component> filtered = new ArrayList<>();
+        // Find all switches in the circuit
+        List<Switch> switches = new ArrayList<>();
         for (Component c : components) {
-            if (c instanceof Battery || (hasAnyConnectedPorts(c) && isInClosedLoop(c, battery))) {
-                filtered.add(c);
-            } else {
-                System.out.println("⛔ Skipping " + c.getClass().getSimpleName() + " – not in closed loop");
+            if (c instanceof Switch s) {
+                switches.add(s);
+                System.out.println("Found switch: closed=" + s.isClosed());
             }
         }
 
-        // 🔋 Simulate batteries first to set voltage
+        // Evaluate if the circuit is interrupted by open switches
+        boolean circuitBroken = false;
+        for (Switch s : switches) {
+            if (!s.isClosed()) {
+                System.out.println("⚠️ Circuit contains OPEN switch!");
+                circuitBroken = true;
+                break;
+            }
+        }
+
+        // 🔍 Only keep components that are connected
+        List<Component> filtered = new ArrayList<>();
+        for (Component c : components) {
+            // Always include batteries and switches for simulation
+            if (c instanceof Battery || c instanceof Switch) {
+                filtered.add(c);
+                continue;
+            }
+
+            // Check if component is connected to the circuit
+            if (hasAnyConnectedPorts(c)) {
+                filtered.add(c);
+            } else {
+                System.out.println("⛔ Skipping " + c.getClass().getSimpleName() + " – not connected");
+            }
+        }
+
+        // First simulate batteries to set voltage
         for (Component c : filtered) {
             if (c instanceof Battery) {
                 c.simulate();
+                System.out.println("Battery simulated");
             }
         }
 
-// 🔌 Then simulate wires to spread voltage
-        for (Component c : filtered) {
-            if (c instanceof Wire) {
+        // If circuit is broken by an open switch, simulate switches but skip other components
+        if (circuitBroken) {
+            System.out.println("⚠️ Circuit is BROKEN - simulating switches only to enforce open state");
+            for (Component c : filtered) {
+                if (c instanceof Switch) {
+                    c.simulate();
+                }
+            }
+        } else {
+            System.out.println("✅ Circuit is CLOSED - simulating all components");
+
+            // Simulate in correct order: wires -> switches -> other components
+            for (Component c : filtered) {
+                if (c instanceof Wire) {
+                    c.simulate();
+                }
+            }
+
+            for (Component c : filtered) {
+                if (c instanceof Switch) {
+                    c.simulate();
+                }
+            }
+
+            for (Component c : filtered) {
+                if (!(c instanceof Battery || c instanceof Wire || c instanceof Switch)) {
+                    c.simulate();
+                }
+            }
+
+            // Second pass to ensure proper propagation
+            System.out.println("🔄 Second simulation pass");
+            for (Component c : filtered) {
                 c.simulate();
             }
         }
 
-
-        // 💡 Then simulate the rest (bulbs, switches, etc.)
+        // Final propagation pass to update visual states
+        System.out.println("🔄 Final power propagation");
+        Set<Component> visited = new HashSet<>();
         for (Component c : filtered) {
-            if (!(c instanceof Battery || c instanceof Wire)) {
-                c.simulate();
+            if (c instanceof Battery) {
+                c.propagatePower(visited);
             }
         }
-
-        // ⚡ Propagate power across the network
-        for (Component c : filtered) {
-            c.propagatePower(new HashSet<>());
-        }
-
-        // 🔁 Final simulation pass for full sync
-        for (Component c : components) {
-            c.simulate();
-            c.propagatePower(new HashSet<>());
-        }
-
     }
 
 

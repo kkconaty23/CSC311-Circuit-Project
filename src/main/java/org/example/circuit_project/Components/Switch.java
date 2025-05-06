@@ -1,4 +1,3 @@
-// === Switch.java ===
 package org.example.circuit_project.Components;
 
 import javafx.scene.image.Image;
@@ -24,8 +23,6 @@ public class Switch extends Component {
         updateVisualState();
     }
 
-
-
     public boolean isClosed() {
         return isClosed;
     }
@@ -36,6 +33,7 @@ public class Switch extends Component {
         }
         setVoltage(0); // For components that store internal voltage
     }
+
     @Override
     public void disconnect() {
         for (Port port : getPorts()) {
@@ -49,13 +47,11 @@ public class Switch extends Component {
         reset();
         updateVisualState();
         System.out.println("Disconnecting Switch: isClosed = " + isClosed + ", ports: " + getPorts().size());
-
     }
-
-
 
     @Override
     public void simulate() {
+        // Always start with zero voltage
         input.setVoltage(0);
         output.setVoltage(0);
         setVoltage(0);
@@ -65,28 +61,29 @@ public class Switch extends Component {
             return;
         }
 
-        if (!isClosed) {
-            System.out.println("⛔ Switch is OPEN – blocking voltage");
-            return;
+        // Find which port has voltage coming in (could be either input or output depending on circuit)
+        double inputVoltage = 0;
+        if (input.getConnectedTo() != null) {
+            inputVoltage = input.getConnectedTo().getVoltage();
+            input.setVoltage(inputVoltage);
         }
 
-        // ✅ Pull the voltage *from the connected port* and assign it to input
-        double incomingVoltage = input.getConnectedTo().getVoltage();
-        input.setVoltage(incomingVoltage); // <== ADD THIS!
-        output.setVoltage(incomingVoltage);
-        setVoltage(incomingVoltage);
+        if (!isClosed) {
+            System.out.println("⛔ Switch is OPEN – blocking voltage: " + (inputVoltage > 0 ? "Found " + inputVoltage + "V" : "No voltage"));
+            return; // Don't pass voltage when switch is open
+        }
 
-        System.out.println("✅ Switch CLOSED – passing voltage: " + incomingVoltage);
+        // When closed, pass voltage from input to output
+        if (inputVoltage > 0) {
+            output.setVoltage(inputVoltage);
+            setVoltage(inputVoltage);
+            System.out.println("✅ Switch CLOSED – passing voltage: " + inputVoltage);
+        } else {
+            System.out.println("✅ Switch CLOSED – but no voltage to pass");
+        }
 
         updateVisualState();
     }
-
-
-
-
-
-
-
 
     @Override
     public List<Port> getPorts() {
@@ -95,13 +92,30 @@ public class Switch extends Component {
 
     @Override
     public boolean isPowered() {
-        return isClosed && input.getVoltage() > 0 && output.getVoltage() > 0;
+        // A switch is only powered when closed AND both ports have voltage
+        if (!isClosed) {
+            return false;
+        }
+        return (input.getVoltage() > 0 && output.getVoltage() > 0);
     }
-
 
     @Override
     public void propagatePower(Set<Component> visited) {
         if (!visited.add(this)) return; // 👈 Prevents loops
+
+        // Critical fix: Only propagate power through the switch if it's closed
+        if (!isClosed) {
+            System.out.println("⛔ Switch is OPEN – blocking power propagation");
+            updateVisualState();
+            return;
+        }
+
+        // Only propagate if switch has power itself
+        if (getVoltage() <= 0) {
+            System.out.println("⛔ Switch has no voltage to propagate");
+            updateVisualState();
+            return;
+        }
 
         if (input.isConnected()) {
             Object parent = input.getConnectedTo().getParent();
@@ -109,6 +123,7 @@ public class Switch extends Component {
                 c.propagatePower(visited);
             }
         }
+
         if (output.isConnected()) {
             Object parent = output.getConnectedTo().getParent();
             if (parent instanceof Component c) {
@@ -116,10 +131,8 @@ public class Switch extends Component {
             }
         }
 
-
         updateVisualState();
     }
-
 
     public void updateVisualState() {
         if (view == null) return;
@@ -131,6 +144,4 @@ public class Switch extends Component {
         System.out.println("🔄 Updating switch view to: " + img);
         view.setImage(new Image(getClass().getResource(img).toExternalForm()));
     }
-
-
 }
