@@ -7,11 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="list adjusted successfully and now displays more projects !">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Project.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +100,19 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.circuit_project.Login" />
+      <module name="PintFinder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.circuit_project.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="CSC311-Circuit-Project" />
       <method v="2">
@@ -112,6 +124,11 @@
       <option name="filePath" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Login" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -151,15 +168,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746512627635</updated>
     </task>
-    <task id="LOCAL-00002" summary="commit before rebase">
+    <task id="LOCAL-00002" summary="list adjusted successfully and now displays more projects !">
       <option name="closed" value="true" />
-      <created>1745343370853</created>
+      <created>1746513705361</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1745343370853</updated>
+      <updated>1746513705361</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +195,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next" />
-    <option name="LAST_COMMIT_MESSAGE" value="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next" />
+    <MESSAGE value="list adjusted successfully and now displays more projects !" />
+    <option name="LAST_COMMIT_MESSAGE" value="list adjusted successfully and now displays more projects !" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

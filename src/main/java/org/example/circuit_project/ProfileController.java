@@ -47,6 +47,7 @@ public class ProfileController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserProfile();
+        userProjects = FXCollections.observableArrayList();
         setupProjectListView();
         loadUserProjects();
     }
@@ -70,6 +71,7 @@ public class ProfileController implements Initializable {
         DbOpps dbOpps = new DbOpps();
         List<Project> projects = dbOpps.getUserProjects(currentUser.getID());
 
+        userProjects.clear();
         // Initialize the observable list
         userProjects = FXCollections.observableArrayList();
 
@@ -91,6 +93,7 @@ public class ProfileController implements Initializable {
     private void setupProjectListView() {
 //        projectListView.setItems(userProjects);
         projectListView.setCellFactory(param -> new ProjectListCell());
+        projectListView.setMaxHeight(Double.MAX_VALUE);
     }
 
     /**

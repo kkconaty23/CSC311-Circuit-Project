@@ -126,7 +126,7 @@
                             <Label prefWidth="100" text="Actions" HBox.hgrow="ALWAYS" />
                         </HBox>
 
-                        <ListView fx:id="projectListView" prefHeight="200" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="projectListView" VBox.vgrow="ALWAYS" />
 
                         <HBox spacing="10">
                             <Button onAction="#importProject" styleClass="action-button" text="Import Project" />
