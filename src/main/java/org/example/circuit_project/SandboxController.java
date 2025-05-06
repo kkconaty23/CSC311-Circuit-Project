@@ -1548,6 +1548,19 @@ public class SandboxController implements Initializable {
         currentlyHighlightedPort = null;
     }
 
+    // Log
+    public void showLog() {
+        logPane.setVisible(true);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), logPane);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+    }
+
+    public void hideLogPane() {
+        logPane.setVisible(false);
+    }
+
 
     // Log
     public void showLog() {
