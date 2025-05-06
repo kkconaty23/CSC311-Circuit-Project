@@ -7,7 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="list adjusted successfully and now displays more projects !">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +33,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="regex" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -60,26 +64,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.HelloApplication.executor": "Run",
-    "Application.Login.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "CSS-update",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Login.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -98,7 +102,7 @@
   <component name="RunManager">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.circuit_project.Login" />
-      <module name="Circuit" />
+      <module name="PintFinder" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="org.example.circuit_project.*" />
@@ -126,6 +130,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -147,7 +159,6 @@
       <workItem from="1746041876370" duration="3108000" />
       <workItem from="1746046703725" duration="364000" />
       <workItem from="1746070911377" duration="6464000" />
-      <workItem from="1746556185086" duration="7516000" />
     </task>
     <task id="LOCAL-00001" summary="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next">
       <option name="closed" value="true" />
@@ -165,31 +176,7 @@
       <option name="project" value="LOCAL" />
       <updated>1746513705361</updated>
     </task>
-    <task id="LOCAL-00003" summary="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit">
-      <option name="closed" value="true" />
-      <created>1746559913699</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1746559913699</updated>
-    </task>
-    <task id="LOCAL-00004" summary="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires">
-      <option name="closed" value="true" />
-      <created>1746561200316</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1746561200316</updated>
-    </task>
-    <task id="LOCAL-00005" summary="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires">
-      <option name="closed" value="true" />
-      <created>1746563595132</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1746563595132</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,9 +196,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next" />
     <MESSAGE value="list adjusted successfully and now displays more projects !" />
-    <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
-    <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
+    <option name="LAST_COMMIT_MESSAGE" value="list adjusted successfully and now displays more projects !" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
