@@ -201,6 +201,10 @@ public class LoginController implements Initializable {
 
         String uniqueID = UUID.randomUUID().toString();
 
+        if(connection.checkForUser(emailCheckField.getText())){
+            registerErrorLabel.setText("Email is already in use");
+            return;
+        }
         connection.insertUser(uniqueID, emailCheckField.getText(), passwordField.getText(),
                 firstNameField.getText(), lastNameField.getText(), formattedDOB);
 
