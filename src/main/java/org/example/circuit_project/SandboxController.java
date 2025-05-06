@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +26,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -470,9 +473,8 @@ public class SandboxController implements Initializable {
                 double ey = ((Number) data.get("endY")).doubleValue();
 
                 Line line = new Line(sx, sy, ex, ey);
-                line.setStrokeWidth(4);
-                line.setStroke(Color.BLACK);
-                line.setCursor(Cursor.HAND);
+                styleWire(line);
+
 
                 Wire wire = new Wire(line);
                 line.setUserData(wire);
@@ -606,10 +608,8 @@ public class SandboxController implements Initializable {
 
         if (sourceNode instanceof Line && sourceNode == wireIcon) {
             Line newLine = new Line(0, 0, 80, 0);
-            newLine.setStrokeWidth(3);
-            newLine.setStroke(Color.BLACK);
-            newLine.setLayoutX(localCoords.getX());
-            newLine.setLayoutY(localCoords.getY());
+            styleWire(newLine);
+
 
             Wire newWire = new Wire(newLine);
             enableLineDrag(newLine);
@@ -873,9 +873,8 @@ public class SandboxController implements Initializable {
         double y = 200;
 
         Line line = new Line(x, y, x + 120, y);
-        line.setStrokeWidth(4);
-        line.setStroke(Color.BLACK);
-        line.setCursor(Cursor.HAND);
+        styleWire(line); // Add this
+
 
         Wire wire = new Wire(line);
         line.setUserData(wire);
@@ -1350,9 +1349,8 @@ public class SandboxController implements Initializable {
             double ey = ((Number) data.get("endY")).doubleValue();
 
             Line line = new Line(sx, sy, ex, ey);
-            line.setStrokeWidth(4);
-            line.setStroke(Color.BLACK);
-            line.setCursor(Cursor.HAND);
+            styleWire(line);
+
 
             Wire wire = new Wire(line);
             line.setUserData(wire);
@@ -1398,6 +1396,33 @@ public class SandboxController implements Initializable {
             enablePortDrag(wire, circle2, false);
         }
     }
+    private void styleWire(Line line) {
+        // Thicker, rich stroke
+        line.setStrokeWidth(5.5);
+        line.setStroke(Color.web("#2e2e2e")); // Rich dark gray
+
+        // Rounded ends and joins for a smooth modern appearance
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
+        line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        line.setSmooth(true);
+
+        // Optional texture to simulate braided wire or sheathing
+        line.getStrokeDashArray().clear();
+        line.getStrokeDashArray().addAll(12.0, 3.0); // dash-gap pattern for subtle detail
+
+        // Optional visual depth (shadow/glow)
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setOffsetX(1.5);
+        dropShadow.setOffsetY(1.5);
+        dropShadow.setRadius(3.0);
+        dropShadow.setColor(Color.color(0, 0, 0, 0.3));
+        line.setEffect(dropShadow);
+
+        // Optional hover effect
+        line.setOnMouseEntered(e -> line.setStroke(Color.DARKRED));
+        line.setOnMouseExited(e -> line.setStroke(Color.web("#2e2e2e")));
+    }
+
 
     // Log
     public void showLog() {
