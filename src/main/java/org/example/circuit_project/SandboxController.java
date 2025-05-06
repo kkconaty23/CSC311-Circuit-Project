@@ -1015,34 +1015,30 @@ public class SandboxController implements Initializable {
 
 
     private void snapPortToTarget(Circle draggedCircle, Port draggedPort, Port targetPort) {
-        // Break previous connections manually
+        // 🔌 Break previous connections cleanly
         if (draggedPort.getConnectedTo() != null) {
             Port prev = draggedPort.getConnectedTo();
-            draggedPort.connectTo(null); // break connection
-            if (prev.getConnectedTo() == draggedPort) {
-                prev.connectTo(null); // bidirectional cleanup
-            }
+            draggedPort.connectTo(null);
+            if (prev.getConnectedTo() == draggedPort) prev.connectTo(null);
         }
 
         if (targetPort.getConnectedTo() != null) {
             Port prev = targetPort.getConnectedTo();
             targetPort.connectTo(null);
-            if (prev.getConnectedTo() == targetPort) {
-                prev.connectTo(null);
-            }
+            if (prev.getConnectedTo() == targetPort) prev.connectTo(null);
         }
 
-        // Snap visual
+        // 🧲 Snap visual to new location
         double snappedX = targetPort.getCircle().getLayoutX();
         double snappedY = targetPort.getCircle().getLayoutY();
         draggedCircle.setLayoutX(snappedX);
         draggedCircle.setLayoutY(snappedY);
 
-        // Connect logically
+        // 🔗 Connect ports
         draggedPort.connectTo(targetPort);
         targetPort.connectTo(draggedPort);
 
-        // Update wire visuals
+        // 📏 Update wire coordinates
         Wire parentWire = (Wire) draggedPort.getParentComponent();
         Line line = parentWire.getLine();
         if (draggedPort == parentWire.getPorts().get(0)) {
@@ -1053,10 +1049,20 @@ public class SandboxController implements Initializable {
             line.setEndY(snappedY);
         }
 
-        // Refresh port visuals
+        // 🎨 Update visuals
         draggedPort.updateVisualState();
         targetPort.updateVisualState();
+
+        // ✨ Apply glow if both ends are connected
+        Port p1 = parentWire.getPorts().get(0);
+        Port p2 = parentWire.getPorts().get(1);
+        if (p1.getConnectedTo() != null && p2.getConnectedTo() != null) {
+            parentWire.applyActiveGlow();
+        } else {
+            parentWire.clearGlow();
+        }
     }
+
 
 
 
