@@ -1,5 +1,6 @@
 package org.example.circuit_project.Components;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,12 @@ public class Battery extends Component {
         this.outputVoltage = voltage;
         this.positive = new Port(this, 0.5, -0.2);
         this.negative = new Port(this, 0.5, 1.2);
+
+        if (view != null) {
+            view.setImage(new Image(getClass().getResource("/org/example/circuit_project/images/battery.png").toExternalForm()));
+        }
     }
+
 
     @Override
     public void simulate() {

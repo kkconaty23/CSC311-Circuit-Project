@@ -8,9 +8,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="list adjusted successfully and now displays more projects !">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/litLightbulb.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/litLightbulb.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/unlitLightbulb.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/images/unlitLightbulb.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +40,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="regex" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -71,7 +78,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "CSS-update",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
@@ -102,7 +109,7 @@
   <component name="RunManager">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.circuit_project.Login" />
-      <module name="PintFinder" />
+      <module name="Circuit" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="org.example.circuit_project.*" />
@@ -130,14 +137,6 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -159,6 +158,7 @@
       <workItem from="1746041876370" duration="3108000" />
       <workItem from="1746046703725" duration="364000" />
       <workItem from="1746070911377" duration="6464000" />
+      <workItem from="1746556185086" duration="3519000" />
     </task>
     <task id="LOCAL-00001" summary="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next">
       <option name="closed" value="true" />

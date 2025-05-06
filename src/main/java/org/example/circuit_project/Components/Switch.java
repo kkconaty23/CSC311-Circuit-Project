@@ -1,7 +1,10 @@
 package org.example.circuit_project.Components;
 
+import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
+
 import java.util.List;
 import java.util.Set;
 
@@ -134,14 +137,27 @@ public class Switch extends Component {
         updateVisualState();
     }
 
+    @Override
     public void updateVisualState() {
         if (view == null) return;
 
-        String img = isClosed
+        String imagePath = isClosed
                 ? "/org/example/circuit_project/images/SwitchClosed.png"
                 : "/org/example/circuit_project/images/switch.png";
 
-        System.out.println("🔄 Updating switch view to: " + img);
-        view.setImage(new Image(getClass().getResource(img).toExternalForm()));
+        Image newImage = new Image(getClass().getResource(imagePath).toExternalForm());
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), view);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(e -> {
+            view.setImage(newImage);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), view);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
+        });
+        fadeOut.play();
     }
+
 }
