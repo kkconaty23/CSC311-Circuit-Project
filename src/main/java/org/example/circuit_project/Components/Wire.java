@@ -1,8 +1,10 @@
 package org.example.circuit_project.Components;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
-import java.util.List;
-import java.util.Set;
+import org.example.circuit_project.SandboxController;
+
+import java.util.*;
 
 public class Wire extends Component {
     private final Line line;
@@ -30,20 +32,108 @@ public class Wire extends Component {
             line.setEndY(end2.getCircle().getLayoutY());
         }
     }
+
     @Override
     public void disconnect() {
+        // Disconnect all ports
         for (Port port : getPorts()) {
             Port other = port.getConnectedTo();
             if (other != null) {
+                // Find controller before disconnecting
+                SandboxController controller = null;
+                Component otherComponent = other.getParentComponent();
+                if (otherComponent != null && otherComponent.getView() != null &&
+                        otherComponent.getView().getScene() != null &&
+                        otherComponent.getView().getScene().getUserData() instanceof SandboxController) {
+
+                    controller = (SandboxController) otherComponent.getView().getScene().getUserData();
+                }
+
+                // Disconnect
                 other.connectTo(null);
+                port.connectTo(null);
+
+                // If auto-simulate is enabled, force a full reset and re-simulation
+                if (controller != null && controller.isAutoSimulateEnabled()) {
+                    controller.resetAllComponents();
+                    controller.runCircuitSimulation();
+                    break; // Only need to do this once
+                }
             }
-            port.connectTo(null);
         }
 
+        // Reset this wire
         reset();
-        updateVisualState();
     }
 
+    private boolean shouldAutoSimulate() {
+        for (Component component : getAllConnected(this)) {
+            if (component.getView() != null &&
+                    component.getView().getScene() != null &&
+                    component.getView().getScene().getUserData() instanceof SandboxController) {
+                return ((SandboxController) component.getView().getScene().getUserData())
+                        .isAutoSimulateEnabled();
+            }
+        }
+        return false;
+    }
+
+    private Battery findBatteryIn(Set<Component> components) {
+        for (Component c : components) {
+            if (c instanceof Battery) return (Battery)c;
+        }
+
+        // Also search for batteries connected to these components
+        for (Component c : components) {
+            for (Port p : c.getPorts()) {
+                if (p.isConnected()) {
+                    Component other = p.getConnectedTo().getParentComponent();
+                    if (other instanceof Battery) return (Battery)other;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Set<Component> getAllConnected(Component start) {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+
+    // Helper to check if auto-simulation is enabled
+    private boolean isAutoSimulationEnabled() {
+        // Try to find a component that can access the scene
+        for (Port port : getPorts()) {
+            Component parentComponent = port.getParentComponent();
+            if (parentComponent != null && parentComponent.getView() != null) {
+                ImageView view = parentComponent.getView();
+                if (view.getScene() != null &&
+                        view.getScene().getUserData() instanceof SandboxController) {
+
+                    SandboxController controller =
+                            (SandboxController) view.getScene().getUserData();
+                    return controller.isAutoSimulateEnabled();
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public void simulate() {
@@ -74,14 +164,12 @@ public class Wire extends Component {
         }
     }
 
-
     public void reset() {
         for (Port port : getPorts()) {
             port.setVoltage(0);
         }
         setVoltage(0); // For components that store internal voltage
     }
-
 
     @Override
     public List<Port> getPorts() {

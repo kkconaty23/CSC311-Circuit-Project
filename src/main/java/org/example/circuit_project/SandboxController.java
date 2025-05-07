@@ -98,6 +98,8 @@ public class SandboxController implements Initializable {
     @FXML
     private Button runBtn;
 
+    @FXML private CheckBox autoSimulateCheckbox;
+    private boolean autoSimulateEnabled = true;
 
 
     Tooltip darkTooltip(String text) {
@@ -129,6 +131,20 @@ public class SandboxController implements Initializable {
 //        loadButton.setTooltip(darkTooltip("Load Circuit"));
         clearBtn.setTooltip(darkTooltip("Clear Workspace"));
         homeButton.setTooltip(darkTooltip("Return to Main Menu")); //
+
+        if (autoSimulateCheckbox != null) {
+            autoSimulateCheckbox.setSelected(autoSimulateEnabled);
+            autoSimulateCheckbox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                autoSimulateEnabled = newVal;
+            });
+        }
+
+    }
+
+    public void setAsSceneController() {
+        if (playgroundPane.getScene() != null) {
+            playgroundPane.getScene().setUserData(this);
+        }
     }
 
     /**
@@ -976,13 +992,28 @@ public class SandboxController implements Initializable {
                 clearHighlightedPort();
             }
 
+            // If we're dragging away from a connection, break the connection
+            if (draggedPort.isConnected()) {
+                double distanceToConnected = calculateDistance(
+                        local.getX(), local.getY(),
+                        draggedPort.getConnectedTo().getCircle().getLayoutX(),
+                        draggedPort.getConnectedTo().getCircle().getLayoutY()
+                );
+
+                // If dragged far enough from connection point, disconnect
+                if (distanceToConnected > 20) { // threshold distance
+                    Port connectedPort = draggedPort.getConnectedTo();
+                    draggedPort.connectTo(null);
+                    // Auto-simulation happens through the connectTo method
+                }
+            }
+
             // Move wire freely
             circle.setLayoutX(local.getX());
             circle.setLayoutY(local.getY());
             if (wire != null) {
                 wire.updateLinePosition();
             }
-
 
             if (isStart) {
                 wire.getLine().setStartX(local.getX());
@@ -1009,6 +1040,9 @@ public class SandboxController implements Initializable {
         });
     }
 
+    private double calculateDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
 
 
 
@@ -1488,8 +1522,36 @@ public class SandboxController implements Initializable {
         }
         currentlyHighlightedPort = null;
     }
+    public boolean isAutoSimulateEnabled() {
+        return autoSimulateEnabled;
+    }
+    /**
+     * Public method to run the circuit simulation that can be called from other classes
+     */
+    /**
+     * Public method to run the circuit simulation that can be called from other classes
+     */
+    public void runCircuitSimulation() {
+        // Force reset all components first
+        for (Node node : playgroundPane.getChildren()) {
+            if (node.getUserData() instanceof Component c) {
+                c.reset();
+            }
+        }
 
+        // Then run the simulation
+        onRunCircuit();
+    }
 
-
-
+    /**
+     * Forces all components to reset, especially useful for disconnections
+     */
+    public void resetAllComponents() {
+        for (Node node : playgroundPane.getChildren()) {
+            if (node.getUserData() instanceof Component c) {
+                c.reset();
+                c.updateVisualState();
+            }
+        }
+    }
 }

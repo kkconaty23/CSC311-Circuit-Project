@@ -6,7 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.example.circuit_project.CircuitUtils;
+import org.example.circuit_project.SandboxController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,17 +95,42 @@ public class Lightbulb extends Component {
     }
     @Override
     public void disconnect() {
+        // Disconnect all ports
         for (Port port : getPorts()) {
             if (port.getConnectedTo() != null) {
-                port.getConnectedTo().connectTo(null); // safely breaks the other side
+                port.getConnectedTo().connectTo(null);
             }
-            port.connectTo(null); // safely breaks this side
+            port.connectTo(null);
+        }
 
+        // Force the bulb to turn off immediately
+        setVoltage(0);
+        reset();
+        updateVisualState();
 
-            reset();
-            updateVisualState();
+        // Find controller to force a reset of all components if auto-simulate is enabled
+        if (view != null && view.getScene() != null &&
+                view.getScene().getUserData() instanceof SandboxController) {
+
+            SandboxController controller = (SandboxController) view.getScene().getUserData();
+            if (controller.isAutoSimulateEnabled()) {
+                // Reset all components and run simulation
+                controller.resetAllComponents();
+                controller.runCircuitSimulation();
+            }
         }
     }
+
+    // Helper method to check if auto-simulation is enabled
+    private boolean isAutoSimulateEnabled() {
+        if (view != null && view.getScene() != null &&
+                view.getScene().getUserData() instanceof SandboxController) {
+            return ((SandboxController) view.getScene().getUserData()).isAutoSimulateEnabled();
+        }
+        return false;
+    }
+
+// Helper method to che
 
     @Override
     public List<Port> getPorts() {

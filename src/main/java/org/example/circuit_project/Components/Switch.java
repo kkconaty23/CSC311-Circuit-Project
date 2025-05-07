@@ -4,9 +4,9 @@ import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.example.circuit_project.SandboxController;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Switch extends Component {
     private final Port input;
@@ -21,12 +21,120 @@ public class Switch extends Component {
     }
 
 
-
-
     public void toggle() {
+        // Change state
         isClosed = !isClosed;
         System.out.println("Switch toggled: " + (isClosed ? "CLOSED" : "OPEN"));
         updateVisualState();
+
+        // Find all components in the circuit
+        Battery battery = null;
+        Lightbulb bulb = null;
+        Set<Component> allComponents = getAllConnectedComponents();
+
+        // Find battery and bulb
+        for (Component c : allComponents) {
+            if (c instanceof Battery) {
+                battery = (Battery) c;
+            } else if (c instanceof Lightbulb) {
+                bulb = (Lightbulb) c;
+            }
+        }
+
+        // Reset the entire circuit
+        for (Component c : allComponents) {
+            c.reset();
+        }
+
+        // Only proceed if we have a battery
+        if (battery != null) {
+            // Battery always operates first
+            battery.simulate();
+
+            // Pass current through wires and switch
+            for (Component c : allComponents) {
+                if (c instanceof Wire) {
+                    c.simulate();
+                }
+            }
+
+            // The switch itself (already updated state)
+            this.simulate();
+
+            // More wire updates to propagate voltage past the switch
+            for (Component c : allComponents) {
+                if (c instanceof Wire) {
+                    c.simulate();
+                }
+            }
+
+            // Finally run the bulb
+            if (bulb != null) {
+                bulb.simulate();
+            }
+
+            // Run everything one more time for consistency
+            for (Component c : allComponents) {
+                c.simulate();
+            }
+
+            // Visual updates through power propagation
+            Set<Component> visited = new HashSet<>();
+            battery.propagatePower(visited);
+        } else {
+            // Fallback to standard port-based auto-simulation
+            if (input.isConnected() || output.isConnected()) {
+                input.triggerAutomaticSimulation();
+            }
+        }
+    }
+
+    // Helper method to find the battery in connected circuit
+    private Battery findBatteryInCircuit() {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                if (current instanceof Battery) {
+                    return (Battery) current;
+                }
+
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    // Helper method to get all connected components
+    private Set<Component> getAllConnectedComponents() {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return visited;
     }
 
     public boolean isClosed() {
@@ -42,6 +150,16 @@ public class Switch extends Component {
 
     @Override
     public void disconnect() {
+        // Store a reference to a connected port before disconnecting
+        Port triggerPort = null;
+        for (Port port : getPorts()) {
+            if (port.isConnected()) {
+                triggerPort = port.getConnectedTo();
+                break;
+            }
+        }
+
+        // Disconnect all ports
         for (Port port : getPorts()) {
             Port other = port.getConnectedTo();
             if (other != null) {
@@ -53,6 +171,11 @@ public class Switch extends Component {
         reset();
         updateVisualState();
         System.out.println("Disconnecting Switch: isClosed = " + isClosed + ", ports: " + getPorts().size());
+
+        // Trigger auto-simulation if a port was connected
+        if (triggerPort != null) {
+            triggerPort.triggerAutomaticSimulation();
+        }
     }
 
     @Override

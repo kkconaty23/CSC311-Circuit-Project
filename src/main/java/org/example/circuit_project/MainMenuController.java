@@ -41,18 +41,23 @@ public class MainMenuController implements Initializable {
 
     @FXML private ImageView sandboxPreview;
 
-    @FXML
-    private void onClick(ActionEvent event) {
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1030, 818);
+    public void onClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
+            Parent sandboxRoot = loader.load();
+
+            // Get the controller instance
+            SandboxController controller = loader.getController();
+
+            Stage stage = (Stage) newPlaygroundBtn.getScene().getWindow(); // Replace 'yourButtonId' with your actual button id
+            Scene scene = new Scene(sandboxRoot);
             stage.setScene(scene);
-            stage.setResizable(true);
+
+            // Now call the new method on the controller
+            controller.setAsSceneController();
+
             stage.show();
-
-
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
