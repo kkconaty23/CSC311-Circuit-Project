@@ -41,12 +41,20 @@
             <HBox alignment="CENTER" spacing="15" />
          <Pane prefHeight="340.0" prefWidth="208.0">
             <children>
-                   <Button layoutX="14.0" layoutY="14.0" prefHeight="41.0" prefWidth="37.0" style="-fx-background-color: white;" styleClass="nav-button" />
-               <ImageView fitHeight="34.0" fitWidth="39.0" layoutX="16.0" layoutY="18.0" onMouseClicked="#goBackToMainMenu" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@images/home.png" />
-                  </image>
-               </ImageView>
+                <Button fx:id="mainMenuBtn"
+                        layoutX="14.0" layoutY="14.0"
+                        onAction="#goBackToMainMenu"
+                        prefHeight="41.0" prefWidth="41.0"
+                        styleClass="nav-button">
+                    <graphic>
+                        <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
+                            <image>
+                                <Image url="@images/home.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
             </children>
          </Pane>
         </VBox>

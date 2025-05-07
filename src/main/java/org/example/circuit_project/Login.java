@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import static javafx.application.Application.launch;
 
-
 public class Login extends Application  {
 
 
@@ -43,7 +42,6 @@ public class Login extends Application  {
             stage.getIcons().add(icon);
 
             stage.show();
-
         }
 
         /**

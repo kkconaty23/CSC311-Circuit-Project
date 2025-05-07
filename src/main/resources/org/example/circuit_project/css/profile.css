@@ -1,17 +1,19 @@
-/* profile.css - Styling for the Profile page */
-
-    /* Main container */
-.main-container {
+/* ================== GENERAL LAYOUT ================== */
+.main-container,
+.profile-container,
+.section-pane,
+.section-pane > .content,
+.content-area,
+.content-area > .viewport {
     -fx-background-color: white;
 }
 
-/* Sidebar styling */
 .sidebar {
     -fx-background-color: #0b0f14;
     -fx-text-fill: white;
 }
 
-/* Logo styling */
+/* ================== LOGO + BRANDING ================== */
 .logo-container {
     -fx-padding: 10;
 }
@@ -33,21 +35,38 @@
     -fx-max-height: 100;
 }
 
-/* Navigation buttons */
-.nav-button {
-    -fx-background-color: transparent;
+.school-label {
     -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* ================== NAVIGATION BUTTON ================== */
+.nav-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
     -fx-font-size: 16px;
     -fx-min-width: 30px;
     -fx-min-height: 30px;
     -fx-padding: 5;
+    -fx-cursor: hand;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0.3, 0, 3);
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-transition: all 0.3s ease-in-out;
 }
 
 .nav-button:hover {
-    -fx-background-color: #333333;
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #0b0f14;
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.4), 12, 0.5, 0, 4);
 }
 
-/* Menu buttons */
+
+/* ================== MENU BUTTONS ================== */
 .menu-button {
     -fx-background-color: transparent;
     -fx-text-fill: white;
@@ -55,41 +74,18 @@
     -fx-min-width: 150px;
     -fx-alignment: center-left;
     -fx-padding: 10;
+    -fx-cursor: hand;
 }
 
-.menu-button:hover {
-    -fx-background-color: #333333;
-}
-
+.menu-button:hover,
 .active-menu-button {
     -fx-background-color: #333333;
 }
 
-.school-label {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-}
-
-.content-area {
-    -fx-background-color: white;
-    -fx-background: white;
-}
-
-.content-area > .viewport {
-    -fx-background-color: white;
-}
-
-.profile-container {
-    -fx-background-color: white;
-}
-
+/* ================== PAGE HEADER + SECTIONS ================== */
 .page-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-}
-
-.section-pane {
-    -fx-background-color: white;
 }
 
 .section-pane > .title {
@@ -98,16 +94,11 @@
     -fx-font-weight: bold;
 }
 
-.section-pane > .content {
-    -fx-padding: 15;
-    -fx-background-color: white;
-}
-
+/* ================== FORMS & FIELDS ================== */
 .field-label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
-
 
 .profile-field {
     -fx-background-color: #f5f5f5;
@@ -117,25 +108,38 @@
     -fx-padding: 8;
 }
 
-
+/* ================== ACTION BUTTONS ================== */
 .action-button {
     -fx-background-color: #121212;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 8 15;
     -fx-background-radius: 4;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
 }
 
 .action-button:hover {
     -fx-background-color: #333333;
 }
 
+/* ================== PROJECT LIST HEADER ================== */
 .project-header {
     -fx-font-weight: bold;
     -fx-padding: 5;
     -fx-background-color: #f5f5f5;
 }
 
+/* ================== SEPARATOR ================== */
 .separator {
     -fx-background: #e0e0e0;
 }
+
+.content-area {
+    -fx-background-color: white;
+    -fx-border-color: #0b0f14;
+    -fx-border-width: 2px;
+    -fx-border-radius: 0;
+    -fx-padding: 10;
+}
+

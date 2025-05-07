@@ -24,3 +24,11 @@
     -fx-scale-y: 1.03;
 }
 
+.login-container {
+    -fx-border-color: #0D1117;
+    -fx-border-width: 2px;
+    -fx-border-radius: 0;
+    -fx-background-color: white;
+    -fx-padding: 10;
+}
+
