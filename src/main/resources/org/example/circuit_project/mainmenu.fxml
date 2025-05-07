@@ -22,10 +22,18 @@
                </image>
             </ImageView>
             <Button fx:id="profileBtn" alignment="CENTER" layoutX="96.0" layoutY="384.0" mnemonicParsing="false" onAction="#openProfilePage" prefHeight="140.0" prefWidth="200.0">
+               <graphic>
+                  <ImageView fitHeight="120.0" fitWidth="239.0" preserveRatio="true">
+                     <image>
+                        <Image url="@images/profile-image.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
+
             <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" onAction="#openTutorialPage" prefHeight="140.0" prefWidth="200.0">
                <font>
                   <Font size="18.0" />
@@ -33,16 +41,18 @@
             </Button>
             <AnchorPane layoutX="346.0" layoutY="447.0">
                <children>
-                  <Button fx:id="newPlaygroundBtn" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#onClick" onMouseEntered="#showSandboxImage" onMouseExited="#hideSandboxImage" prefHeight="140.0" prefWidth="200.0">
+                  <Button fx:id="newPlaygroundBtn" mnemonicParsing="false" onAction="#onClick" onMouseEntered="#showSandboxImage" onMouseExited="#hideSandboxImage" prefHeight="144.0" prefWidth="208.0">
+                     <graphic>
+                        <ImageView fx:id="sandboxPreview" fitHeight="140.0" fitWidth="193.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/circuit-Image.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <ImageView fx:id="sandboxPreview" fitHeight="140.0" fitWidth="170.0" layoutX="23.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@images/sandbox-example.png" />
-                     </image>
-                  </ImageView>
                </children>
             </AnchorPane>
             <Label fx:id="tutorialLabel" layoutX="676.0" layoutY="541.0" text="Tutorial" />
