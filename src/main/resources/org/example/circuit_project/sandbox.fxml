@@ -105,10 +105,10 @@
         <AnchorPane fx:id="playgroundPane" prefHeight="887.0" prefWidth="1481.0" style="-fx-background-color: BFBFBF;">
             <children>
                 <Canvas fx:id="gridCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               <Pane fx:id="logPane" layoutX="838.0" layoutY="44.0" opacity="0.75" prefHeight="296.0" prefWidth="384.0" styleClass="about-overlay" visible="false">
+               <Pane fx:id="logPane" layoutX="838.0" layoutY="24.0" opacity="0.75" prefHeight="296.0" prefWidth="385.0" styleClass="about-overlay" stylesheets="@css/main-menu.css" visible="false">
                   <children>
-                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="38.0" stroke="BLACK" strokeType="INSIDE" width="384.0" />
-                     <Button layoutX="330.0" layoutY="-3.0" mnemonicParsing="false" onAction="#hideLogPane" prefHeight="53.0" prefWidth="17.0" styleClass="icon-button">
+                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="45.0" stroke="BLACK" strokeType="INSIDE" width="385.0" />
+                     <Button layoutX="337.0" layoutY="3.0" mnemonicParsing="false" onAction="#hideLogPane" prefHeight="53.0" prefWidth="17.0" styleClass="icon-log-button">
                         <graphic>
                            <ImageView fitHeight="35.0" fitWidth="31.0" preserveRatio="true">
                               <image>
@@ -117,14 +117,14 @@
                            </ImageView>
                         </graphic>
                      </Button>
-                     <Text layoutX="95.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Circuit Logs" textAlignment="CENTER">
+                     <Text layoutX="130.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="log-heading" text="Circuit Logs" textAlignment="CENTER">
                         <font>
                            <Font size="26.0" />
                         </font>
                      </Text>
-                     <ScrollPane fx:id="logScrollPane" fitToWidth="true" layoutY="33.0" prefHeight="265.0" prefWidth="385.0">
+                     <ScrollPane fx:id="logScrollPane" fitToWidth="true" layoutY="38.0" prefHeight="260.0" prefWidth="385.0" stylesheets="@css/main-menu.css">
                         <content>
-                           <VBox fx:id="logContainer" alignment="TOP_CENTER" prefHeight="250.0" prefWidth="374.0" />
+                           <VBox fx:id="logContainer" alignment="TOP_CENTER" prefHeight="250.0" prefWidth="374.0" styleClass="log-container-text" />
                         </content>
                      </ScrollPane>
                   </children>

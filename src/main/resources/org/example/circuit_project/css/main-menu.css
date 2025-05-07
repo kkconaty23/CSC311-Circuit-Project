@@ -63,6 +63,39 @@
     -fx-effect: none;
 }
 
+.icon-log-button,
+.icon-log-button:hover,
+.icon-log-button:focused {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: none;
+}
+
+.log-container-text > * {
+    -fx-fill: #8B0000; /* Dark red */
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI", "Verdana", sans-serif;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 4, 0.2, 2, 2);
+    -fx-text-alignment: center;
+    -fx-padding: 4px;
+}
+
+.log-heading {
+    -fx-fill: #000000;              /* Solid black text color */
+    -fx-font-size: 26px;            /* Matches FXML font size */
+    -fx-font-weight: bold;          /* Emphasize heading */
+    -fx-text-alignment: center;     /* Center align if inside wider parent */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0.5, 1, 1); /* Soft shadow */
+}
+
+
+
 /* ==================== ABOUT OVERLAY ==================== */
 .about-overlay {
     -fx-background-color: rgba(25, 25, 25, 0.95);

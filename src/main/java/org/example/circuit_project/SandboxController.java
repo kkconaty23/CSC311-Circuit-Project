@@ -810,7 +810,7 @@ public class SandboxController implements Initializable {
                     } else if (duration > 500) { // press-and-hold to toggle
                         newSwitch.toggle();
                         System.out.println("Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
-                        addLog("Switch toggled via hold (\" + (newSwitch.isClosed() ? \"CLOSED\" : \"OPEN\") + \")");
+                        addLog("Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
 
                         Set<Component> connected = getAllConnectedComponents(newSwitch);
 
@@ -1251,7 +1251,7 @@ public class SandboxController implements Initializable {
                     filtered.add(s);
                 } else {
                     System.out.println("Skipping switch – not connected");
-                    addLog("Skipping switch <UNK> not connected");
+                    addLog("Skipping switch - not connected");
                 }
                 continue;
             }
@@ -1262,7 +1262,7 @@ public class SandboxController implements Initializable {
                 filtered.add(c);
             } else {
                 System.out.println("Skipping " + c.getClass().getSimpleName() + " – not connected");
-                addLog("Skipping " + c.getClass().getSimpleName() + " <UNK> not connected");
+                addLog("Skipping " + c.getClass().getSimpleName() + " - not connected");
             }
         }
 
