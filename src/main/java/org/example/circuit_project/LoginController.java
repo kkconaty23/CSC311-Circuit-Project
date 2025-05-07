@@ -26,8 +26,6 @@ import java.util.UUID;
 public class LoginController implements Initializable {
 
     @FXML private Pane slidingPane;
-    @FXML private Button slideRightButton;
-    @FXML private Button slideLeftButton;
     @FXML private Button loginButton;
     @FXML private Button registerButton;
     @FXML private TextField emailCheckField;
@@ -205,21 +203,35 @@ public class LoginController implements Initializable {
                 firstNameField.getText(), lastNameField.getText(), formattedDOB);
 
         registerErrorLabel.setText("Registration successful!");
-    }
 
-    @FXML
-    private void slideToRegister() {
         TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
         slide.setToX(0);
-        slide.setOnFinished(e -> slidingPane.setPrefWidth(400));
+        slide.setOnFinished(e -> toggleFormButton.setText("I need an account"));
+        slide.play();
+
+        isOnRegisterPage = false;
+    }
+
+    private boolean isOnRegisterPage = true;
+    @FXML private Button toggleFormButton;
+
+
+    @FXML
+    private void onToggleForm() {
+        TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
+
+        if (isOnRegisterPage) {
+            // Slide right: show login
+            slide.setToX(500);
+            toggleFormButton.setText("I have an account");
+        } else {
+            // Slide left: show register
+            slide.setToX(0);
+            toggleFormButton.setText("I need an account");
+        }
+
+        isOnRegisterPage = !isOnRegisterPage;
         slide.play();
     }
 
-    @FXML
-    private void slideToLogin() {
-        TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
-        slidingPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        slide.setToX(500);
-        slide.play();
-    }
 }

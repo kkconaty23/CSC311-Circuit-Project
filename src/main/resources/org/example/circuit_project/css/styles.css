@@ -1,5 +1,5 @@
-.text-field:focused, .password-field:focused{
-    -fx-border-color: #0D1117;
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #4f4f4f;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-background-insets: 0;
@@ -24,11 +24,31 @@
     -fx-scale-y: 1.03;
 }
 
-.login-container {
-    -fx-border-color: #0D1117;
-    -fx-border-width: 2px;
-    -fx-border-radius: 0;
-    -fx-background-color: white;
-    -fx-padding: 10;
+/* 🎯 Toggle Button Style */
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #ffffff55;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
+    -fx-transition: all 0.3s ease-in-out;
 }
 
+.toggle-button:hover {
+    -fx-border-color: white;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+.login-container {
+    -fx-background-color: white;
+    -fx-border-color: #0D1117;
+    -fx-border-width: 2px;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);
+}
