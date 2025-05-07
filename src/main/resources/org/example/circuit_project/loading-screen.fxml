@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@css/loading-screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoadingScreenController">
+<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@css/loading-screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.MiscControllers.LoadingScreenController">
    <children>
       <VBox alignment="CENTER" spacing="20">
        <ImageView fx:id="loadingGif" fitHeight="700.0" fitWidth="995.0" preserveRatio="true" />

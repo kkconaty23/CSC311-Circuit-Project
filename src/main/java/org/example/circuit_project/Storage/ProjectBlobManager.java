@@ -3,7 +3,7 @@
  */
 package org.example.circuit_project.Storage;
 
-import org.example.circuit_project.Project;
+import org.example.circuit_project.Project.Project;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

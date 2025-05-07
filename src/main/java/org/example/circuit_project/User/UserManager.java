@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.User;
 
 /**
  * Singleton class that manages the current logged-in {@link User}.

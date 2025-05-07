@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Sandbox;
 
 
 /**
@@ -12,7 +12,7 @@ package org.example.circuit_project;
  *     <li>{@code startX}, {@code startY}, {@code endX}, {@code endY} for line placement</li>
  * </ul>
  */
-class SerializableWire {
+public class SerializableWire {
 
     /** Default constructor required for deserialization libraries (e.g., Gson) */
     public SerializableWire() {

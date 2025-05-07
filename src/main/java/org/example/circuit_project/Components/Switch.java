@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import org.example.circuit_project.SandboxController;
 
 import java.util.*;
 

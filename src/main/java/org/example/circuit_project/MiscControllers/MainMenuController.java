@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.MiscControllers;
 
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.circuit_project.Sandbox.SandboxController;
 
 /*
  * This is the screen that will be displayed after the user is logged in.
@@ -50,7 +51,7 @@ public class MainMenuController implements Initializable {
             SandboxController controller = loader.getController();
 
             Stage stage = (Stage) newPlaygroundBtn.getScene().getWindow(); // Replace 'yourButtonId' with your actual button id
-            Scene scene = new Scene(sandboxRoot);
+            Scene scene = new Scene(sandboxRoot, 1000, 679);
             stage.setScene(scene);
             stage.setResizable(true); // < - Right here for Presentation
 

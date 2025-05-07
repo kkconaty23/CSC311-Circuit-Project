@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.User;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,17 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.example.circuit_project.Project.Project;
+import org.example.circuit_project.Project.ProjectManager;
+import org.example.circuit_project.Sandbox.SandboxController;
 import org.example.circuit_project.Storage.DbOpps;
-import org.example.circuit_project.Storage.BlobDbOpps;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 
 /**
@@ -231,7 +230,7 @@ public class ProfileController implements Initializable {
 
             // Navigate to circuit editor
             Stage stage = (Stage) projectListView.getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 1000, 679);
             stage.setScene(scene);
             stage.setResizable(true);
             stage.show();

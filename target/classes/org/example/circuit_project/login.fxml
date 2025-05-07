@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Group stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoginController">
+<Group stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.User.LoginController">
    <children>
       <AnchorPane layoutY="1.0" prefHeight="679.0" prefWidth="1000.0" styleClass="login-container">
          <children>

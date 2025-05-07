@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.User;
 
 /**
  * Represents a user in the circuit simulator application.
@@ -48,27 +48,27 @@ public class User {
     }
 
     /** @return User ID */
-    String getID() {
+    public String getID() {
         return ID;
     }
 
     /** @return User's first name */
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
     /** @return User's last name */
-    String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
     /** @return User's email */
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
     /** @return User's password */
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 

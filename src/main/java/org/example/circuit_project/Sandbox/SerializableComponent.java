@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Sandbox;
 
 /**
  * A lightweight data container used for serializing and deserializing circuit components
@@ -13,7 +13,7 @@ package org.example.circuit_project;
  *     <li>{@code isClosed} - For switches, whether the circuit is closed</li>
  * </ul>
  */
-class SerializableComponent {
+public class SerializableComponent {
 
     /** Default constructor required for deserialization (e.g., Gson, Jackson) */
     public SerializableComponent() {

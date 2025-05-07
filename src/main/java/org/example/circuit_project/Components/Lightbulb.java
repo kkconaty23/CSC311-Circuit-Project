@@ -5,10 +5,9 @@ import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import org.example.circuit_project.CircuitUtils;
-import org.example.circuit_project.SandboxController;
+import org.example.circuit_project.Sandbox.CircuitUtils;
+import org.example.circuit_project.Sandbox.SandboxController;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

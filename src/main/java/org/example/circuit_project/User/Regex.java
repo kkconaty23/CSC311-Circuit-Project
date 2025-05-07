@@ -1,19 +1,9 @@
-package org.example.circuit_project;
+package org.example.circuit_project.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Utility class for validating user input using regular expressions.
- * <p>
- * This class checks:
- * <ul>
- *     <li>First and last names (letters/apostrophes, 2–25 characters)</li>
- *     <li>Emails (must end with @farmingdale.edu)</li>
- *     <li>Passwords (non-whitespace)</li>
- *     <li>Field match checks for emails and passwords</li>
- * </ul>
- */
+
 public class Regex {
     // Email pattern for @farmingdale.edu
     private final Pattern emailPattern = Pattern.compile("^[A-Za-z0-9._%+-]+@farmingdale\\.edu$");

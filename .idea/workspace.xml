@@ -7,12 +7,48 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="removed redundancy, added javadocs">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- email check implemented to ensure no user can register an account if email already exists in DB">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/CircuitUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/CircuitUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/LoadingScreenController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/LoadingScreenController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/LoginController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/LoginController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/MainMenuController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/MainMenuController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/ProfileController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/ProfileController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/Project.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/Project.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/ProjectManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/ProjectManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/Regex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/Regex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/SandboxController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/SandboxController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/TutorialController.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/TutorialController.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/User.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/User.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/UserManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/org.example.circuit_project/org/example/circuit_project/UserManager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/CircuitUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Sandbox/CircuitUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Switch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Wire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoadingScreenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MiscControllers/LoadingScreenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MiscControllers/MainMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/ProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Project/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/ProjectManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Project/ProjectManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Regex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/Regex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Sandbox/SandboxController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SerializableComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Sandbox/SerializableComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SerializableWire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Sandbox/SerializableWire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/ProjectBlobManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/ProjectBlobManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/TutorialController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/MiscControllers/TutorialController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/UserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/loading-screen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/loading-screen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/mainmenu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/mainmenu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/profile_page.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/tutorial-page.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/tutorial-page.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/images/raw.png" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/circuit_project/images/raw.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,26 +103,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Login.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "Application.Login.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "refactor",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -99,16 +135,17 @@
       <recent name="C:\Users\Justin\IdeaProjects\CSC311-Circuit-Project\src\main\resources\org\example\circuit_project\css" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.example.circuit_project.Controllers" />
       <recent name="org.example.circuit_project" />
     </key>
   </component>
   <component name="RunManager">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.circuit_project.Login" />
-      <module name="Circuit" />
+      <module name="PintFinder" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.example.circuit_project.*" />
+          <option name="PATTERN" value="org.example.circuit_project.Controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -196,23 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746575226048</updated>
     </task>
-    <task id="LOCAL-00006" summary="removed redundancy, added javadocs">
+    <task id="LOCAL-00006" summary="- email check implemented to ensure no user can register an account if email already exists in DB">
       <option name="closed" value="true" />
-      <created>1746581557986</created>
+      <created>1746586881043</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1746581557986</updated>
+      <updated>1746586881043</updated>
     </task>
-    <task id="LOCAL-00007" summary="removed redundancy, added javadocs">
-      <option name="closed" value="true" />
-      <created>1746581671733</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1746581671733</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,7 +264,24 @@
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
     <MESSAGE value="tutorial page" />
-    <MESSAGE value="removed redundancy, added javadocs" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed redundancy, added javadocs" />
+    <MESSAGE value="- email check implemented to ensure no user can register an account if email already exists in DB" />
+    <option name="LAST_COMMIT_MESSAGE" value="- email check implemented to ensure no user can register an account if email already exists in DB" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/User/LoginController.java</url>
+          <line>53</line>
+          <properties field="currentUser" class="org.example.circuit_project.LoginController" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/Sandbox/SandboxController.java</url>
+          <line>285</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,7 +1,7 @@
 package org.example.circuit_project.Storage;
 
-import org.example.circuit_project.Project;
-import org.example.circuit_project.User;
+import org.example.circuit_project.Project.Project;
+import org.example.circuit_project.User.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This class is used to connect and query SQL commands to the circuitsim database hosted on a Flexible server via Azure.

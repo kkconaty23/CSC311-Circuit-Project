@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.User;
 
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.circuit_project.Storage.DbOpps;

@@ -23,6 +23,14 @@ module org.example.circuit_project {
 
     exports org.example.circuit_project.Components;
     opens org.example.circuit_project.Components to javafx.fxml;
+    exports org.example.circuit_project.User;
+    opens org.example.circuit_project.User to javafx.fxml;
+    exports org.example.circuit_project.Project;
+    opens org.example.circuit_project.Project to javafx.fxml;
+    exports org.example.circuit_project.Sandbox;
+    opens org.example.circuit_project.Sandbox to javafx.fxml;
+    exports org.example.circuit_project.MiscControllers;
+    opens org.example.circuit_project.MiscControllers to javafx.fxml;
 
 
 }

@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Sandbox;
 
 import org.example.circuit_project.Components.Component;
 import org.example.circuit_project.Components.Port;

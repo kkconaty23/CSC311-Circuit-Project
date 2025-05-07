@@ -2,7 +2,7 @@ package org.example.circuit_project.Components;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import org.example.circuit_project.SandboxController;
+import org.example.circuit_project.Sandbox.SandboxController;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.MiscControllers;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;

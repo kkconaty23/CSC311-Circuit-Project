@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Sandbox;
 
 //import jakarta.xml.bind.JAXBContext;
 //import jakarta.xml.bind.JAXBException;
@@ -32,7 +32,11 @@ import javafx.stage.Stage;
 import org.example.circuit_project.Components.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.circuit_project.Project.Project;
+import org.example.circuit_project.Project.ProjectManager;
 import org.example.circuit_project.Storage.ProjectBlobManager;
+import org.example.circuit_project.User.User;
+import org.example.circuit_project.User.UserManager;
 
 
 import java.io.*;

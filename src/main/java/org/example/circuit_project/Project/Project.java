@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Project;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

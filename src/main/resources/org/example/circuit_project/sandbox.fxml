@@ -13,7 +13,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Tooltip?>
 
-<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.SandboxController">
+<BorderPane stylesheets="@css/sandbox.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.Sandbox.SandboxController">
 
     <!-- Top Bar -->
     <top>

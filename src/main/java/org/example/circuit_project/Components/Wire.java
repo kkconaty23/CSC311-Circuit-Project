@@ -2,7 +2,7 @@ package org.example.circuit_project.Components;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
-import org.example.circuit_project.SandboxController;
+import org.example.circuit_project.Sandbox.SandboxController;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package org.example.circuit_project;
+package org.example.circuit_project.Project;
 
 /**
  * Singleton class to manage the currently active {@link Project} in the circuit editor.
