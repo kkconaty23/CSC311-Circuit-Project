@@ -26,6 +26,19 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller for the tutorial screen in the circuit simulator application.
+ * <p>
+ * Provides interactive tooltip-based guidance for buttons and components to help
+ * users understand the UI. Also includes navigation back to the main menu.
+ *
+ * Features:
+ * <ul>
+ *     <li>Custom tooltips for each button and icon</li>
+ *     <li>Popup styling and dynamic positioning near the hovered control</li>
+ *     <li>Main menu navigation</li>
+ * </ul>
+ */
 public class TutorialController {
 
     @FXML
@@ -70,9 +83,10 @@ public class TutorialController {
     private Popup currentPopup = null;
 
     /**
-     * Creates and shows a custom tooltip popup near the source
-     * @param source The control that triggered the tooltip
-     * @param message The message to display
+     * Displays a custom-styled tooltip popup near the specified UI control.
+     *
+     * @param source  The UI control (Button, ImageView, or Line) that triggered the tooltip
+     * @param message The tooltip message to display
      */
     private void showCustomTooltip(Object source, String message) {
         // Remove any existing popup
@@ -120,7 +134,7 @@ public class TutorialController {
     }
 
     /**
-     * Hides the current popup if it exists
+     * Hides the currently displayed tooltip popup, if any.
      */
     private void hideCurrentPopup() {
         if (currentPopup != null) {
@@ -129,65 +143,81 @@ public class TutorialController {
         }
     }
 
+    /** Shows tooltip for the Home button. */
     @FXML
     void showHomeTooltip(ActionEvent event) {
         showCustomTooltip(homeButton, "Navigate to Home Screen");
     }
 
+    /** Shows tooltip for the Logout button. */
     @FXML
     void showLogoutTooltip(ActionEvent event) {
         showCustomTooltip(logoutIcon2, "Log out from the application");
     }
 
+    /** Shows tooltip for the Load button. */
     @FXML
     void showLoadTooltip(ActionEvent event) {
         showCustomTooltip(loadButton, "Load a saved circuit");
     }
 
+    /** Shows tooltip for the Save button. */
     @FXML
     void showSaveTooltip(ActionEvent event) {
         showCustomTooltip(saveButton, "Save current circuit");
     }
 
+    /** Shows tooltip for the Grid toggle button. */
     @FXML
     void showGridTooltip(ActionEvent event) {
         showCustomTooltip(toggleGridLinesItem, "Show or hide grid lines");
     }
 
+    /** Shows tooltip for the Dark Mode toggle button. */
     @FXML
     void showDarkModeTooltip(ActionEvent event) {
         showCustomTooltip(toggleDarkModeItem, "Switch between light and dark mode");
     }
 
+    /** Shows tooltip for the Run button. */
     @FXML
     void showRunTooltip(ActionEvent event) {
         showCustomTooltip(runBtn, "Run circuit simulation");
     }
 
+    /** Shows tooltip for the Clear button. */
     @FXML
     void showClearTooltip(ActionEvent event) {
         showCustomTooltip(clearBtn, "Clear current circuit");
     }
 
+    /** Shows tooltip when hovering over the battery icon. */
     @FXML
     void showBatteryTooltip(MouseEvent event) {
         showCustomTooltip(batteryIcon, "Battery component - power source");
     }
 
+    /** Shows tooltip when hovering over the bulb icon. */
     @FXML
     void showBulbTooltip(MouseEvent event) {
         showCustomTooltip(bulbIcon, "Light bulb component");
     }
 
+    /** Shows tooltip when hovering over the wire icon. */
     @FXML
     void showWireTooltip(MouseEvent event) {
         showCustomTooltip(wireIcon, "Wire - connects components");
     }
 
+    /** Shows tooltip when hovering over the switch icon. */
     @FXML
     void showSwitchTooltip(MouseEvent event) {
         showCustomTooltip(switchIcon, "Switch - controls circuit flow");
     }
+
+    /**
+     * Navigates the user back to the main menu screen.
+     */
     @FXML
     public void goToMainMenu(){
         try {
