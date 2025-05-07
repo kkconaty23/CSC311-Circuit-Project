@@ -119,6 +119,9 @@ CREATE TABLE IF NOT EXISTS projects (
 
 
 ---
+### Documentation
+[View the Javadocs](docs/index.html)
+
 
 ## Credits
 * [Justin Derenthal](https://github.com/JderenthalCS)
