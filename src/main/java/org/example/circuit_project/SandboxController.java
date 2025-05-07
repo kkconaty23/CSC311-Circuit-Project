@@ -5,6 +5,7 @@ package org.example.circuit_project;
 //import jakarta.xml.bind.Marshaller;
 //import jakarta.xml.bind.Unmarshaller;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -40,7 +42,11 @@ import org.example.circuit_project.Storage.ProjectBlobManager;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.clamp;
 
@@ -95,10 +101,17 @@ public class SandboxController implements Initializable {
     @FXML public ImageView switchIcon;
     @FXML public ImageView logoIcon;
 
+
     // Log Pane
     @FXML private Pane logPane;
     private double offsetX;
     private double offsetY;
+    @FXML private ScrollPane logScrollPane;
+    @FXML private VBox logContainer;
+    // ArrayList of logs
+    private List<String> logs = new ArrayList<>();
+    private int lastLogIndex = 0;
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     private Port currentlyHighlightedPort = null;
 
@@ -140,6 +153,8 @@ public class SandboxController implements Initializable {
 
         logPane.setOnMousePressed(this::handleMousePressed);
         logPane.setOnMouseDragged(this::handleMouseDragged);
+
+        startLogging();
 
     }
 
@@ -259,17 +274,20 @@ public class SandboxController implements Initializable {
             project = new Project(name, description, currentUser.getID());
             ProjectManager.getInstance().setCurrentProject(project);
             System.out.println("Created new project with ID: " + project.getId());
+            addLog("Created new project with ID: " + project.getId());
         } else {
             project.setName(name);
             project.setDescription(description);
             project.setLastModified(LocalDateTime.now());
             System.out.println("Updated existing project with ID: " + project.getId());
+            addLog("Updated existing project with ID: " + project.getId());
         }
 
         // IMPORTANT FIX: Ensure blob reference exists
         if (project.getBlobReference() == null || project.getBlobReference().isEmpty()) {
             project.setBlobReference(UUID.randomUUID().toString() + ".json");
             System.out.println("Generated new blob reference: " + project.getBlobReference());
+            addLog("Generated new blob reference: " + project.getBlobReference());
         }
         try {
             // Serialize circuit data
@@ -292,6 +310,7 @@ public class SandboxController implements Initializable {
                     ImageView view = c.getView();
                     if (view == null) {
                         System.out.println("Skipping component with null view: " + c.getClass().getSimpleName());
+                        addLog("Skipping component with null view: " + c.getClass().getSimpleName());
                         continue;
                     }
 
@@ -308,6 +327,7 @@ public class SandboxController implements Initializable {
             }
 
             System.out.println("Serialized " + componentData.size() + " components");
+            addLog("Serialized " + componentData.size() + " components");
 
             // Serialize wires
             for (Node node : playgroundPane.getChildren()) {
@@ -317,6 +337,7 @@ public class SandboxController implements Initializable {
 
                     if (a.getConnectedTo() == null || b.getConnectedTo() == null) {
                         System.out.println("Skipping wire with disconnected ports");
+                        addLog("Skipping wire with disconnected ports");
                         continue;
                     }
 
@@ -338,6 +359,7 @@ public class SandboxController implements Initializable {
             }
 
             System.out.println("Serialized " + wireData.size() + " wires");
+            addLog("Serialized " + wireData.size() + " wires");
 
             circuit.put("components", componentData);
             circuit.put("wires", wireData);
@@ -346,11 +368,15 @@ public class SandboxController implements Initializable {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String jsonData = gson.toJson(circuit);
             System.out.println("JSON data size: " + jsonData.length() + " characters");
+            addLog("JSON data size: " + jsonData.length() + " characters");
             System.out.println("First 100 chars of JSON: " + jsonData.substring(0, Math.min(100, jsonData.length())));
+            addLog("First 100 chars of JSON: " + jsonData.substring(0, Math.min(100, jsonData.length())));
 
             // Save to blob storage and database
             System.out.println("Attempting to save project: " + project.getId());
+            addLog("Attempting to save project: " + project.getId());
             System.out.println("Blob reference: " + project.getBlobReference());
+            addLog("Blob reference: " + project.getBlobReference());
 
             ProjectBlobManager blobManager = new ProjectBlobManager();
             boolean success = false;
@@ -358,8 +384,10 @@ public class SandboxController implements Initializable {
             try {
                 success = blobManager.saveProject(project, jsonData);
                 System.out.println("Save result from blobManager: " + success);
+                addLog("Save result from blobManager: " + success);
             } catch (Exception saveEx) {
                 System.err.println("Exception during blobManager.saveProject: " + saveEx.getMessage());
+                addLog("Exception during blobManager.saveProject: " + saveEx.getMessage());
                 saveEx.printStackTrace();
                 throw saveEx; // Re-throw to be caught by outer catch
             }
@@ -482,6 +510,7 @@ public class SandboxController implements Initializable {
 
                 if (compA == null || compB == null) {
                     System.err.println("Skipping wire: missing components " + idA + ", " + idB);
+                    addLog("Skipping wire: missing components " + idA + ", " + idB);
                     continue;
                 }
 
@@ -490,6 +519,7 @@ public class SandboxController implements Initializable {
 
                 if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
                     System.err.println("Skipping wire: invalid port index");
+                    addLog("Skipping wire: invalid port index");
                     continue;
                 }
 
@@ -659,6 +689,7 @@ public class SandboxController implements Initializable {
                             c.reset();
                             c.updateVisualState();
                             System.out.println("Component disconnected by double-click.");
+                            addLog("Component disconnected by double-click.");
                         }
                     }
                 });
@@ -775,9 +806,11 @@ public class SandboxController implements Initializable {
                     if (e.getClickCount() == 2) {
                         newSwitch.disconnect();
                         System.out.println("🔌 Switch disconnected (double-click)");
+                        addLog("Switch disconnected (double-click)");
                     } else if (duration > 500) { // press-and-hold to toggle
                         newSwitch.toggle();
                         System.out.println("Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
+                        addLog("Switch toggled via hold (\" + (newSwitch.isClosed() ? \"CLOSED\" : \"OPEN\") + \")");
 
                         Set<Component> connected = getAllConnectedComponents(newSwitch);
 
@@ -947,6 +980,7 @@ public class SandboxController implements Initializable {
             if (e.getClickCount() == 2 && line.getUserData() instanceof Wire wire) {
                 wire.disconnect();
                 System.out.println("Wire disconnected by double-click");
+                addLog("Wire disconnected by double-click");
             }
         });
 
@@ -1162,6 +1196,7 @@ public class SandboxController implements Initializable {
                 c.reset();  //Clear voltages and propagation flags
                 components.add(c);
                 System.out.println("Reset component: " + c.getClass().getSimpleName());
+                addLog("Reset component: " + c.getClass().getSimpleName());
             }
         }
 
@@ -1176,6 +1211,7 @@ public class SandboxController implements Initializable {
 
         if (battery == null) {
             System.out.println("No battery found. Cannot simulate.");
+            addLog("No battery found. Cannot simulate.");
             return;
         }
 
@@ -1185,6 +1221,7 @@ public class SandboxController implements Initializable {
             if (c instanceof Switch s) {
                 switches.add(s);
                 System.out.println("Found switch: closed=" + s.isClosed());
+                logs.add("Found switch: closed=" + s.isClosed());
             }
         }
 
@@ -1194,6 +1231,7 @@ public class SandboxController implements Initializable {
             if (!hasAnyConnectedPorts(s)) continue;
             if (!s.isClosed()) {
                 System.out.println("Circuit contains OPEN switch!");
+                addLog("Circuit contains OPEN switch!");
                 circuitBroken = true;
                 break;
             }
@@ -1213,6 +1251,7 @@ public class SandboxController implements Initializable {
                     filtered.add(s);
                 } else {
                     System.out.println("Skipping switch – not connected");
+                    addLog("Skipping switch <UNK> not connected");
                 }
                 continue;
             }
@@ -1223,6 +1262,7 @@ public class SandboxController implements Initializable {
                 filtered.add(c);
             } else {
                 System.out.println("Skipping " + c.getClass().getSimpleName() + " – not connected");
+                addLog("Skipping " + c.getClass().getSimpleName() + " <UNK> not connected");
             }
         }
 
@@ -1231,12 +1271,14 @@ public class SandboxController implements Initializable {
             if (c instanceof Battery) {
                 c.simulate();
                 System.out.println("Battery simulated");
+                addLog("Battery simulated");
             }
         }
 
         // If circuit is broken by an open switch, simulate switches but skip other components
         if (circuitBroken) {
             System.out.println("Circuit is BROKEN - simulating switches only to enforce open state");
+            addLog("Circuit is BROKEN - simulating switches only to enforce open state");
             for (Component c : filtered) {
                 if (c instanceof Switch) {
                     c.simulate();
@@ -1244,6 +1286,7 @@ public class SandboxController implements Initializable {
             }
         } else {
             System.out.println("Circuit is CLOSED - simulating all components");
+            addLog("Circuit is CLOSED - simulating all components");
 
             // Simulate in correct order: wires -> switches -> other components
             for (Component c : filtered) {
@@ -1266,6 +1309,7 @@ public class SandboxController implements Initializable {
 
             // Second pass to ensure proper propagation
             System.out.println("Second simulation pass");
+            addLog("Second simulation pass");
             for (Component c : filtered) {
                 c.simulate();
             }
@@ -1273,6 +1317,7 @@ public class SandboxController implements Initializable {
 
         // Final propagation pass to update visual states
         System.out.println("Final power propagation");
+        addLog("Final power propagation");
         Set<Component> visited = new HashSet<>();
         for (Component c : filtered) {
             if (c instanceof Battery) {
@@ -1315,6 +1360,7 @@ public class SandboxController implements Initializable {
                 ImageView view = c.getView();
                 if (view == null) {
                     System.out.println("Skipping component with null view: " + c.getClass().getSimpleName());
+                    addLog("Skipping component with null view: " + c.getClass().getSimpleName());
                     continue;
                 }
 
@@ -1444,6 +1490,7 @@ public class SandboxController implements Initializable {
 
             if (compA == null || compB == null) {
                 System.err.println("Skipping wire: missing components " + idA + ", " + idB);
+                addLog("Skipping wire: missing components " + idA + ", " + idB);
                 continue;
             }
 
@@ -1452,6 +1499,7 @@ public class SandboxController implements Initializable {
 
             if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
                 System.err.println("Skipping wire: invalid port index");
+                addLog("Skipping wire: invalid port index");
                 continue;
             }
 
@@ -1567,6 +1615,7 @@ public class SandboxController implements Initializable {
 
     public void hideLogPane() {
         logPane.setVisible(false);
+        shutdown();
     }
 
     private void handleMousePressed(MouseEvent event) {
@@ -1579,19 +1628,31 @@ public class SandboxController implements Initializable {
         logPane.setLayoutY(event.getSceneY() - offsetY);
     }
 
-
-    // Log
-    public void showLog() {
-        logPane.setVisible(true);
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), logPane);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        fadeIn.play();
+    private void updateLogDisplay() {
+        while (lastLogIndex < logs.size()) {
+            String message = logs.get(lastLogIndex++);
+            Label logEntry = new Label(message);
+            logEntry.setWrapText(true);
+            logContainer.getChildren().add(logEntry);
+        }
     }
 
-    public void hideLogPane() {
-        logPane.setVisible(false);
+    public void addLog(String message) {
+        synchronized (logs) {
+            logs.add(message);
+        }
     }
+
+    public void startLogging() {
+        executor.scheduleAtFixedRate(() -> {
+            Platform.runLater(this::updateLogDisplay);
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    public void shutdown() {
+        executor.shutdownNow();
+    }
+
 
 
 

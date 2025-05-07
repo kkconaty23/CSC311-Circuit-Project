@@ -7,12 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="list adjusted successfully and now displays more projects !">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_22_2025_1_29_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="removed redundancy, added javadocs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/SandboxController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/circuit_project/sandbox.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,23 +39,23 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
+    &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;SandalCodez&quot;
-  }
-}</component>
+    }
+    }</component>
   <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/kkconaty23/CSC311-Circuit-Project.git&quot;,
     &quot;accountId&quot;: &quot;f57224fa-0fd1-43a7-ae33-19025d14b09e&quot;
-  }
-}</component>
+    }
+    }</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
-}</component>
+    &quot;associatedIndex&quot;: 8
+    }</component>
   <component name="ProjectId" id="2urW1Z6VM6D4o74EqL6q9PD0ir8" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -73,7 +71,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Rebasing logPane",
+    "git-widget-placeholder": "logPane",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/estos/IdeaProjects/CSC311-Circuit-Project/src/main/resources/org/example/circuit_project/images",
@@ -154,7 +152,6 @@
       <workItem from="1746046703725" duration="364000" />
       <workItem from="1746070911377" duration="6464000" />
       <workItem from="1746556185086" duration="7148000" />
-      <workItem from="1746556185086" duration="3519000" />
     </task>
     <task id="LOCAL-00001" summary="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next">
       <option name="closed" value="true" />
@@ -188,8 +185,31 @@
       <option name="project" value="LOCAL" />
       <updated>1746561200316</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00005" summary="tutorial page">
+      <option name="closed" value="true" />
+      <created>1746575226048</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746575226048</updated>
+    </task>
+    <task id="LOCAL-00006" summary="removed redundancy, added javadocs">
+      <option name="closed" value="true" />
+      <created>1746581557986</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1746581557986</updated>
+    </task>
+    <task id="LOCAL-00007" summary="removed redundancy, added javadocs">
+      <option name="closed" value="true" />
+      <created>1746581671733</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1746581671733</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,21 +229,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="SUCCESSFUL SAVES!&#10;Completely implemented save and it now works with json. Had to make some db adjustments, and lots of query adjustments. &#10;ISSUE:&#10;The project list only shows the most latest save. will work on next" />
     <MESSAGE value="list adjusted successfully and now displays more projects !" />
-    <option name="LAST_COMMIT_MESSAGE" value="list adjusted successfully and now displays more projects !" />
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-field">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java</url>
-          <line>45</line>
-          <properties field="currentUser" class="org.example.circuit_project.LoginController" />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="tutorial page" />
+    <MESSAGE value="removed redundancy, added javadocs" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed redundancy, added javadocs" />
   </component>
 </project>
