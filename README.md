@@ -128,8 +128,9 @@ CREATE TABLE IF NOT EXISTS projects (
 ### ProfilePage
 ![Circuit Editor](docs/images/profile-image.png)
 
-### ProfilePage
-![Circuit Editor](docs/images/profile-image.png)
+### Components
+![Circuit Editor](docs/images/structure.png)
+
 
 ---
 
