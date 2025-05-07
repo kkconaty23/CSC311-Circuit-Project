@@ -382,6 +382,22 @@ public class SandboxController implements Initializable {
             showAlert("Error", "Save Failed", e.getMessage());
         }
     }
+
+    /**
+     * Loads a saved {@link Project} from blob storage and reconstructs the circuit editor UI.
+     * <p>
+     * This includes:
+     * <ul>
+     *     <li>Clearing the current editor view</li>
+     *     <li>Drawing the base grid</li>
+     *     <li>Deserializing saved components and wires from JSON</li>
+     *     <li>Restoring their layout, ports, and connections</li>
+     *     <li>Reconnecting wires and updating the visual layout</li>
+     * </ul>
+     *
+     * @param project The {@code Project} object to be loaded. If null or malformed, an error dialog is shown.
+     */
+
     public void loadProject(Project project) {
         if (project == null) {
             showAlert("Error", "Invalid Project", "No project was selected to load.");
@@ -1046,6 +1062,23 @@ public class SandboxController implements Initializable {
 
 
 
+    /**
+     * Snaps a draggable port (represented by a {@link Circle}) to a target {@link Port},
+     * updates their visual positions, breaks any previous connections, and reconnects them logically.
+     * <p>
+     * This method performs the following steps:
+     * <ul>
+     *     <li>Breaks any existing connections on both {@code draggedPort} and {@code targetPort}</li>
+     *     <li>Snaps the {@code draggedCircle} to the visual position of {@code targetPort}</li>
+     *     <li>Updates the wire's line position to reflect the new snap</li>
+     *     <li>Re-establishes bidirectional connections between the two ports</li>
+     *     <li>Refreshes the visual state of both ports</li>
+     * </ul>
+     *
+     * @param draggedCircle The visual circle representing the dragged port
+     * @param draggedPort   The logical port being dragged
+     * @param targetPort    The port to snap to and connect with
+     */
 
     private void snapPortToTarget(Circle draggedCircle, Port draggedPort, Port targetPort) {
 
@@ -1489,6 +1522,21 @@ public class SandboxController implements Initializable {
         }
     }
 
+    /**
+     * Styles a {@link Line} object to represent a wire in the circuit editor with enhanced visual appearance.
+     * <p>
+     * This includes:
+     * <ul>
+     *     <li>Thicker stroke width for visibility</li>
+     *     <li>Rounded line caps and joins for smooth aesthetics</li>
+     *     <li>Dashed pattern to simulate wire texture</li>
+     *     <li>Drop shadow effect to add visual depth</li>
+     *     <li>Hover behavior to highlight the wire in red</li>
+     * </ul>
+     *
+     * @param line The {@code Line} representing the wire to be styled
+     */
+
     private void styleWire(Line line) {
         // Thicker, rich stroke
         line.setStrokeWidth(5.5);
@@ -1515,6 +1563,13 @@ public class SandboxController implements Initializable {
         line.setOnMouseEntered(e -> line.setStroke(Color.DARKRED));
         line.setOnMouseExited(e -> line.setStroke(Color.web("#2e2e2e")));
     }
+
+    /**
+     * Clears the current port highlight by resetting its visual state and nullifying the reference.
+     * <p>
+     * This method ensures that any previously highlighted port (typically shown during drag or hover)
+     * returns to its normal appearance.
+     */
 
     private void clearHighlightedPort() {
         if (currentlyHighlightedPort != null && currentlyHighlightedPort.getCircle() != null) {

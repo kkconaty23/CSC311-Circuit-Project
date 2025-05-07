@@ -23,6 +23,18 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 
+/**
+ * Controller class for managing the user profile view in the circuit simulator application.
+ * <p>
+ * Users can:
+ * <ul>
+ *     <li>View and edit their profile information</li>
+ *     <li>Change their password</li>
+ *     <li>View, open, or delete their saved projects</li>
+ *     <li>Return to the main menu</li>
+ * </ul>
+ * This class interacts with the database through {@link DbOpps} and displays projects using a custom list cell.
+ */
 public class ProfileController implements Initializable {
 
     @FXML
@@ -43,7 +55,13 @@ public class ProfileController implements Initializable {
     User currentUser = UserManager.getInstance().getCurrentUser();
     private ObservableList<Project> userProjects;
 
-
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Loads the user's profile data and projects.
+     *
+     * @param location  the location used to resolve relative paths for the root object
+     * @param resources the resources used to localize the root object
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadUserProfile();
@@ -53,7 +71,7 @@ public class ProfileController implements Initializable {
     }
 
     /**
-     * This method loads the first name, last name and email of the current user.
+     * Populates the text fields with the current user's information.
      */
     private void loadUserProfile() {
         firstNameField.setText(currentUser.getFirstName());
@@ -62,7 +80,7 @@ public class ProfileController implements Initializable {
     }
 
     /**
-     * This method loads all projects associated with the current user
+     * Loads the list of projects associated with the current user from the database.
      */
     private void loadUserProjects() {
         User currentUser = UserManager.getInstance().getCurrentUser();
@@ -297,6 +315,12 @@ public class ProfileController implements Initializable {
             content.getChildren().addAll(nameLabel, dateLabel, actionButtons);
         }
 
+        /**
+         * Updates the content of this cell to show project details.
+         *
+         * @param project The project to display
+         * @param empty   Whether this cell is empty
+         */
         @Override
         protected void updateItem(Project project, boolean empty) {
             super.updateItem(project, empty);

@@ -5,7 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
- * Represents a circuit project with its associated metadata
+ * Represents a circuit project containing metadata such as name, description, timestamps,
+ * user association, and a reference to blob storage for circuit data.
  */
 public class Project {
     private final String id;
@@ -55,53 +56,97 @@ public class Project {
         this.blobReference = this.id + ".circuit";
     }
 
-    // Getters and setters
+    /** @return The unique project ID
+     *
+     * */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return The project name
+     *
+     * */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the project name and updates the last modified timestamp.
+     *
+     * @param name New project name
+     */
     public void setName(String name) {
         this.name = name;
         this.lastModified = LocalDateTime.now();
     }
-
+    /** @return The project description
+     *
+     * */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the project description and updates the last modified timestamp.
+     *
+     * @param description New project description
+     */
     public void setDescription(String description) {
         this.description = description;
         this.lastModified = LocalDateTime.now();
     }
 
+    /** @return The user ID associated with this project
+     *
+     * */
     public String getUserId() {
         return userId;
     }
 
+
+    /** @return The creation timestamp
+     *
+     * */
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+
+    /** @return The last modified timestamp
+     *
+     * */
     public LocalDateTime getLastModified() {
         return lastModified;
     }
 
+    /**
+     * Manually sets the last modified timestamp (used when restoring from DB).
+     *
+     * @param lastModified Timestamp to set
+     */
     public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 
+    /** @return The blob storage reference for this project
+     * */
     public String getBlobReference() {
         return blobReference;
     }
 
+    /**
+     * Sets the blob storage reference.
+     *
+     * @param blobReference Blob reference filename or path
+     */
     public void setBlobReference(String blobReference) {
         this.blobReference = blobReference;
     }
 
+    /**
+     * @return String representation of the project, including name and last modified date
+     */
     @Override
     public String toString() {
         return name + " (Last modified: " + lastModified.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + ")";

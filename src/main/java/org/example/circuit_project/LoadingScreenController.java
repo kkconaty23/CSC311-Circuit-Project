@@ -10,11 +10,19 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Controller class for the loading screen.
+ * Displays a brief animated loading graphic before transitioning to the main menu.
+ */
 public class LoadingScreenController {
 
     @FXML
     private ImageView loadingGif;
 
+    /**
+     * Initializes the loading screen by displaying an animated GIF and
+     * transitioning to the main menu after a short delay.
+     */
     @FXML
     public void initialize() {
 
