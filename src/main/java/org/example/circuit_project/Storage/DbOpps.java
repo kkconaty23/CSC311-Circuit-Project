@@ -66,6 +66,23 @@ public class DbOpps {
         return hasRegistredUsers;
     }
 
+    public boolean checkForUser(String email){
+        boolean exists = false;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "SELECT COUNT(*) FROM circuitUsers WHERE email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                int count = resultSet.getInt(1);
+                exists = count > 0;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }return exists;
+    }
+
     public void insertUser(String uniqueID, String email, String password, String firstname, String lastname, String dob) {
 
         try {

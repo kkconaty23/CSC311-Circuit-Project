@@ -7,13 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="removed redundancy, added javadocs">
+    <list default="true" id="01279aa7-094a-4011-a7e0-c84f455f56df" name="Changes" comment="tutorial page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Battery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Component.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Lightbulb.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Components/Port.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/circuit_project/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/circuit_project/Storage/DbOpps.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +102,7 @@
   <component name="RunManager">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.circuit_project.Login" />
-      <module name="Circuit" />
+      <module name="PintFinder" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="org.example.circuit_project.*" />
@@ -196,23 +193,7 @@
       <option name="project" value="LOCAL" />
       <updated>1746575226048</updated>
     </task>
-    <task id="LOCAL-00006" summary="removed redundancy, added javadocs">
-      <option name="closed" value="true" />
-      <created>1746581557986</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1746581557986</updated>
-    </task>
-    <task id="LOCAL-00007" summary="removed redundancy, added javadocs">
-      <option name="closed" value="true" />
-      <created>1746581671733</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1746581671733</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,7 +216,18 @@
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit" />
     <MESSAGE value="- Changed Lightbulb images&#10;- Added better colors&#10;- Checkpoint Commit&#10;- New battery Icon&#10;- Enhanced animation for wires" />
     <MESSAGE value="tutorial page" />
-    <MESSAGE value="removed redundancy, added javadocs" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed redundancy, added javadocs" />
+    <option name="LAST_COMMIT_MESSAGE" value="tutorial page" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/circuit_project/LoginController.java</url>
+          <line>52</line>
+          <properties field="currentUser" class="org.example.circuit_project.LoginController" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -239,18 +239,17 @@ public class LoginController implements Initializable {
 
         String uniqueID = UUID.randomUUID().toString();
 
+        if(connection.checkForUser(emailCheckField.getText())){
+            registerErrorLabel.setText("Email is already in use");
+            return;
+        }
         connection.insertUser(uniqueID, emailCheckField.getText(), passwordField.getText(),
                 firstNameField.getText(), lastNameField.getText(), formattedDOB);
 
         registerErrorLabel.setText("Registration successful!");
-
-        TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
-        slide.setToX(0);
-        slide.setOnFinished(e -> toggleFormButton.setText("I need an account"));
-        slide.play();
-
-        isOnRegisterPage = false;
     }
+
+
 
     private boolean isOnRegisterPage = true;
     @FXML private Button toggleFormButton;
