@@ -19,20 +19,6 @@ A JavaFX-based drag-and-drop circuit simulation tool designed for interactive el
 
 ---
 
-## 📁 Folder Structure
-
-```
-├── Components/               # All circuit components (Battery, Lightbulb, Switch, Wire)
-├── Storage/                 # Blob storage and DB integration classes
-├── sandbox.fxml             # UI for the circuit-building playground
-├── MainMenuController.java  # Navigation hub
-├── ProfileController.java   # User info and project management
-├── ProjectBlobManager.java  # File save/load logic
-├── DbOpps.java              # SQL interface (MySQL)
-```
-
----
-
 ## 💻 Technologies Used
 
 - **JavaFX** – UI and drag-and-drop interface  
