@@ -212,14 +212,35 @@ public class SandboxController implements Initializable {
     }
 
     /**
-     * Clears all user-placed components from the playground.
+     * Clears all user-placed components (lightbulbs, switches, wires, etc.) from the playground
+     * while preserving the grid canvas.
      */
     @FXML
     private void clearBtnClick() {
-        //Remove all nodes from the canvas
-        playgroundPane.getChildren().clear();
+        // Create a temporary list to hold nodes to remove
+        List<Node> nodesToRemove = new ArrayList<>();
 
+        // Identify all component nodes, but not the grid canvas
+        for (Node node : playgroundPane.getChildren()) {
+            if (node != gridCanvas) {
+                nodesToRemove.add(node);
 
+                // If this is a component, ensure it's properly disconnected
+                if (node.getUserData() instanceof Component c) {
+                    c.disconnect();
+                }
+            }
+        }
+
+        // Remove the identified nodes
+        playgroundPane.getChildren().removeAll(nodesToRemove);
+
+        // Redraw the grid to ensure it's visible
+        drawGrid(gc, isDarkMode, gridLinesEnabled);
+
+        // Reset any component tracking variables
+        firstSelectedPort = null;
+        currentlyHighlightedPort = null;
     }
 
 
