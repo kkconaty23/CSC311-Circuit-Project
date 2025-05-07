@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+/**
+ * This class is used to connect and query SQL commands to the circuitsim database hosted on a Flexible server via Azure.
+ * All operations for both circuitUsers and project tables are contained within this class.
+ */
 public class DbOpps {
     final String MYSQL_SERVER_URL = "jdbc:mysql://csc311circuitsim.mysql.database.azure.com/";
     final String DB_URL = MYSQL_SERVER_URL + "DBname";
@@ -23,7 +26,10 @@ public class DbOpps {
 
     final String PASSWORD = "Qwerty123!";
 
-
+    /**
+     * This method is Azure boilerplate code to establish a connection to the DB.
+     * @return boolean according to a successful connection
+     */
     public boolean connectToDatabase() {
         boolean hasRegistredUsers = false;
 
@@ -66,6 +72,38 @@ public class DbOpps {
         return hasRegistredUsers;
     }
 
+    /**
+     * This method is used to check if an email exists within the circuitUsers DB to ensure there are
+     * no duplicate emails.
+     * @param email user inputted email
+     * @return boolean according to whether the user exists within the DB
+     */
+    public boolean checkForUser(String email){
+        boolean exists = false;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "SELECT COUNT(*) FROM circuitUsers WHERE email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                int count = resultSet.getInt(1);
+                exists = count > 0;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }return exists;
+    }
+
+    /**
+     * This method creates a new user within the circuitusers DB. All fields go through a regex check to ensure valid formatting
+     * @param uniqueID UUID, primary key user
+     * @param email email address of user
+     * @param password password of the user
+     * @param firstname first name of the user
+     * @param lastname last name of the user
+     * @param dob date of birth of user
+     */
     public void insertUser(String uniqueID, String email, String password, String firstname, String lastname, String dob) {
 
         try {
@@ -93,7 +131,13 @@ public class DbOpps {
         }
     }
 
-    public User queryUserByName(String message, String password) {
+    /**
+     * This method is used to search for a user within the circuitusers DB. This method is used particular for sign in.
+     * @param userEmail user inputted email
+     * @param password user inputted password
+     * @return User object if the email and password match with the DB
+     */
+    public User queryUserByName(String userEmail, String password) {
         User currentUser = null;
 
         try {
@@ -101,7 +145,7 @@ public class DbOpps {
 
             String sql = "SELECT * FROM circuitusers WHERE email = ? AND password = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, message);
+            preparedStatement.setString(1, userEmail);
             preparedStatement.setString(2, password);
 
             ResultSet resultSet = preparedStatement.executeQuery();
