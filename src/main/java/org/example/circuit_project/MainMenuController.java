@@ -52,6 +52,7 @@ public class MainMenuController implements Initializable {
             Stage stage = (Stage) newPlaygroundBtn.getScene().getWindow(); // Replace 'yourButtonId' with your actual button id
             Scene scene = new Scene(sandboxRoot);
             stage.setScene(scene);
+            stage.setResizable(true); // < - Right here for Presentation
 
             // Now call the new method on the controller
             controller.setAsSceneController();
