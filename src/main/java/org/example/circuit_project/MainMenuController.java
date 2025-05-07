@@ -143,7 +143,8 @@ public class MainMenuController implements Initializable {
         try {
             Parent loginRoot = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/login.fxml"));
             Stage stage = (Stage) logoutIcon.getScene().getWindow();
-            stage.setScene(new Scene(loginRoot));
+            stage.setScene(new Scene(loginRoot, 1000, 679));
+
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
