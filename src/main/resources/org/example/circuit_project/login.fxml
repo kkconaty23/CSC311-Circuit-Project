@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Group stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoginController">
+<Group stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoginController">
    <children>
       <AnchorPane layoutY="1.0" prefHeight="679.0" prefWidth="1000.0" styleClass="login-container">
          <children>
@@ -97,11 +97,6 @@
       </AnchorPane>
       <Pane fx:id="slidingPane" maxHeight="683.0" maxWidth="500.0" minHeight="677.0" minWidth="500.0" prefHeight="683.0" prefWidth="500.0" style="-fx-background-color: #0D1117;">
          <children>
-            <Label layoutX="237.0" layoutY="509.0" prefHeight="96.0" prefWidth="29.0" text="-" textFill="WHITE">
-               <font>
-                  <Font size="64.0" />
-               </font>
-            </Label>
             <Button fx:id="slideRightButton" layoutX="263.0" layoutY="506.0" mnemonicParsing="false" onAction="#slideToLogin" style="-fx-background-color: transparent;" text="&gt;" textFill="WHITE">
                <font>
                   <Font size="49.0" />
