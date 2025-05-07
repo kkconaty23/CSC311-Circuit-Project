@@ -1,23 +1,16 @@
 package org.example.circuit_project.Components;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
-import java.util.List;
-import java.util.Set;
+import org.example.circuit_project.SandboxController;
 
-/**
- * Represents a wire component that connects two ports in a circuit.
- * A wire transmits voltage between two ends if both are connected.
- */
+import java.util.*;
+
 public class Wire extends Component {
     private final Line line;
     private final Port end1;
     private final Port end2;
 
-    /**
-     * Constructs a Wire component with a visual Line object.
-     *
-     * @param line the JavaFX Line used to visually represent the wire
-     */
     public Wire(Line line) {
         super(null); // Wires don't use an ImageView
         this.line = line;
@@ -25,18 +18,10 @@ public class Wire extends Component {
         this.end2 = new Port(this, 1, 0);
     }
 
-    /**
-     * Returns the JavaFX Line associated with this wire.
-     *
-     * @return the Line object representing the wire visually
-     */
     public Line getLine() {
         return line;
     }
 
-    /**
-     * Updates the Line's start and end positions based on connected port locations.
-     */
     public void updateLinePosition() {
         if (end1.getCircle() != null) {
             line.setStartX(end1.getCircle().getLayoutX());
@@ -48,28 +33,108 @@ public class Wire extends Component {
         }
     }
 
-    /**
-     * Disconnects both ends of the wire from any connected ports.
-     * Resets internal voltages and updates visuals.
-     */
     @Override
     public void disconnect() {
+        // Disconnect all ports
         for (Port port : getPorts()) {
             Port other = port.getConnectedTo();
             if (other != null) {
+                // Find controller before disconnecting
+                SandboxController controller = null;
+                Component otherComponent = other.getParentComponent();
+                if (otherComponent != null && otherComponent.getView() != null &&
+                        otherComponent.getView().getScene() != null &&
+                        otherComponent.getView().getScene().getUserData() instanceof SandboxController) {
+
+                    controller = (SandboxController) otherComponent.getView().getScene().getUserData();
+                }
+
+                // Disconnect
                 other.connectTo(null);
+                port.connectTo(null);
+
+                // If auto-simulate is enabled, force a full reset and re-simulation
+                if (controller != null && controller.isAutoSimulateEnabled()) {
+                    controller.resetAllComponents();
+                    controller.runCircuitSimulation();
+                    break; // Only need to do this once
+                }
             }
-            port.connectTo(null);
         }
 
+        // Reset this wire
         reset();
-        updateVisualState();
     }
 
-    /**
-     * Simulates voltage transmission through the wire based on connections.
-     * Voltage is passed from the end that has it to the other end.
-     */
+    private boolean shouldAutoSimulate() {
+        for (Component component : getAllConnected(this)) {
+            if (component.getView() != null &&
+                    component.getView().getScene() != null &&
+                    component.getView().getScene().getUserData() instanceof SandboxController) {
+                return ((SandboxController) component.getView().getScene().getUserData())
+                        .isAutoSimulateEnabled();
+            }
+        }
+        return false;
+    }
+
+    private Battery findBatteryIn(Set<Component> components) {
+        for (Component c : components) {
+            if (c instanceof Battery) return (Battery)c;
+        }
+
+        // Also search for batteries connected to these components
+        for (Component c : components) {
+            for (Port p : c.getPorts()) {
+                if (p.isConnected()) {
+                    Component other = p.getConnectedTo().getParentComponent();
+                    if (other instanceof Battery) return (Battery)other;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Set<Component> getAllConnected(Component start) {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+
+    // Helper to check if auto-simulation is enabled
+    private boolean isAutoSimulationEnabled() {
+        // Try to find a component that can access the scene
+        for (Port port : getPorts()) {
+            Component parentComponent = port.getParentComponent();
+            if (parentComponent != null && parentComponent.getView() != null) {
+                ImageView view = parentComponent.getView();
+                if (view.getScene() != null &&
+                        view.getScene().getUserData() instanceof SandboxController) {
+
+                    SandboxController controller =
+                            (SandboxController) view.getScene().getUserData();
+                    return controller.isAutoSimulateEnabled();
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public void simulate() {
         if (end1.isConnected() && end2.isConnected()) {
@@ -99,9 +164,6 @@ public class Wire extends Component {
         }
     }
 
-    /**
-     * Resets the voltage on both ports and clears any internal voltage state.
-     */
     public void reset() {
         for (Port port : getPorts()) {
             port.setVoltage(0);
@@ -109,21 +171,11 @@ public class Wire extends Component {
         setVoltage(0); // For components that store internal voltage
     }
 
-    /**
-     * Returns both ports (ends) of the wire.
-     *
-     * @return a list containing the two wire ends
-     */
     @Override
     public List<Port> getPorts() {
         return List.of(end1, end2);
     }
 
-    /**
-     * Propagates power through both ends of the wire to connected components.
-     *
-     * @param visited a set of already visited components to avoid infinite loops
-     */
     @Override
     public void propagatePower(Set<Component> visited) {
         if (!visited.add(this)) return;
@@ -138,11 +190,6 @@ public class Wire extends Component {
         }
     }
 
-    /**
-     * Determines if the wire is currently carrying any voltage.
-     *
-     * @return true if either end has a non-zero voltage
-     */
     @Override
     public boolean isPowered() {
         return end1.getVoltage() > 0 || end2.getVoltage() > 0;

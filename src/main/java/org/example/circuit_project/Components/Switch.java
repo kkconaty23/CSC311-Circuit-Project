@@ -4,63 +4,162 @@ import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.example.circuit_project.SandboxController;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-/**
- * Represents a switch component in a circuit that can toggle between open and closed states.
- * When closed, it allows voltage to pass from input to output. When open, it blocks current.
- */
 public class Switch extends Component {
     private final Port input;
     private final Port output;
     private boolean isClosed;
 
-    /**
-     * Constructs a new Switch component with an image view.
-     *
-     * @param view the ImageView used to visually represent the switch
-     */
     public Switch(ImageView view) {
         super(view);
-        this.input = new Port(this, 0.15, 0.5);
-        this.output = new Port(this, 0.85, 0.5);
+        this.input = new Port(this, 0.01, 0.55);
+        this.output = new Port(this, 0.99, 0.55);
         this.isClosed = false;
     }
 
-    /**
-     * Toggles the switch between open and closed states and updates its visual representation.
-     */
+
     public void toggle() {
+        // Change state
         isClosed = !isClosed;
         System.out.println("Switch toggled: " + (isClosed ? "CLOSED" : "OPEN"));
         updateVisualState();
+
+        // Find all components in the circuit
+        Battery battery = null;
+        Lightbulb bulb = null;
+        Set<Component> allComponents = getAllConnectedComponents();
+
+        // Find battery and bulb
+        for (Component c : allComponents) {
+            if (c instanceof Battery) {
+                battery = (Battery) c;
+            } else if (c instanceof Lightbulb) {
+                bulb = (Lightbulb) c;
+            }
+        }
+
+        // Reset the entire circuit
+        for (Component c : allComponents) {
+            c.reset();
+        }
+
+        // Only proceed if we have a battery
+        if (battery != null) {
+            // Battery always operates first
+            battery.simulate();
+
+            // Pass current through wires and switch
+            for (Component c : allComponents) {
+                if (c instanceof Wire) {
+                    c.simulate();
+                }
+            }
+
+            // The switch itself (already updated state)
+            this.simulate();
+
+            // More wire updates to propagate voltage past the switch
+            for (Component c : allComponents) {
+                if (c instanceof Wire) {
+                    c.simulate();
+                }
+            }
+
+            // Finally run the bulb
+            if (bulb != null) {
+                bulb.simulate();
+            }
+
+            // Run everything one more time for consistency
+            for (Component c : allComponents) {
+                c.simulate();
+            }
+
+            // Visual updates through power propagation
+            Set<Component> visited = new HashSet<>();
+            battery.propagatePower(visited);
+        } else {
+            // Fallback to standard port-based auto-simulation
+            if (input.isConnected() || output.isConnected()) {
+                input.triggerAutomaticSimulation();
+            }
+        }
     }
 
-    /**
-     * Checks whether the switch is currently closed.
-     *
-     * @return true if the switch is closed; false if open
-     */
+    // Helper method to find the battery in connected circuit
+    private Battery findBatteryInCircuit() {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                if (current instanceof Battery) {
+                    return (Battery) current;
+                }
+
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    // Helper method to get all connected components
+    private Set<Component> getAllConnectedComponents() {
+        Set<Component> visited = new HashSet<>();
+        Queue<Component> queue = new LinkedList<>();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            Component current = queue.poll();
+            if (visited.add(current)) {
+                for (Port port : current.getPorts()) {
+                    if (port.isConnected()) {
+                        Component neighbor = port.getConnectedTo().getParentComponent();
+                        if (!visited.contains(neighbor)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+
     public boolean isClosed() {
         return isClosed;
     }
 
-    /**
-     * Resets the voltage of the switch and its ports to zero.
-     */
     public void reset() {
         input.setVoltage(0);
         output.setVoltage(0);
         setVoltage(0);
     }
 
-    /**
-     * Disconnects the switch from all connected components and resets its state.
-     */
+
     @Override
     public void disconnect() {
+        // Store a reference to a connected port before disconnecting
+        Port triggerPort = null;
+        for (Port port : getPorts()) {
+            if (port.isConnected()) {
+                triggerPort = port.getConnectedTo();
+                break;
+            }
+        }
+
+        // Disconnect all ports
         for (Port port : getPorts()) {
             Port other = port.getConnectedTo();
             if (other != null) {
@@ -72,11 +171,13 @@ public class Switch extends Component {
         reset();
         updateVisualState();
         System.out.println("Disconnecting Switch: isClosed = " + isClosed + ", ports: " + getPorts().size());
+
+        // Trigger auto-simulation if a port was connected
+        if (triggerPort != null) {
+            triggerPort.triggerAutomaticSimulation();
+        }
     }
 
-    /**
-     * Simulates voltage behavior through the switch depending on its state and connections.
-     */
     @Override
     public void simulate() {
         // Don't do anything unless both ports are connected
@@ -115,21 +216,12 @@ public class Switch extends Component {
         updateVisualState();
     }
 
-    /**
-     * Returns the list of ports associated with this switch (input and output).
-     *
-     * @return a list containing the input and output ports
-     */
+
     @Override
     public List<Port> getPorts() {
         return List.of(input, output);
     }
 
-    /**
-     * Checks if the switch is actively conducting power.
-     *
-     * @return true if closed and both input and output have voltage; otherwise false
-     */
     @Override
     public boolean isPowered() {
         // A switch is only powered when closed AND both ports have voltage
@@ -139,11 +231,6 @@ public class Switch extends Component {
         return (input.getVoltage() > 0 && output.getVoltage() > 0);
     }
 
-    /**
-     * Propagates power to connected components if the switch is closed and has voltage.
-     *
-     * @param visited the set of components already visited during propagation to prevent cycles
-     */
     @Override
     public void propagatePower(Set<Component> visited) {
         if (!visited.add(this)) return;
@@ -179,9 +266,6 @@ public class Switch extends Component {
         updateVisualState();
     }
 
-    /**
-     * Updates the visual representation of the switch (open or closed image).
-     */
     @Override
     public void updateVisualState() {
         if (view == null) return;

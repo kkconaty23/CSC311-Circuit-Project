@@ -6,39 +6,23 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.example.circuit_project.CircuitUtils;
+import org.example.circuit_project.SandboxController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Represents a Lightbulb component in the circuit simulator.
- *
- * The Lightbulb requires two connected ports forming a complete circuit loop,
- * and a voltage difference across those ports to be considered "powered".
- * When powered, its visual state changes to a lit bulb.
- */
 public class Lightbulb extends Component {
     private final Port input;
     private final Port output;
 
-    /**
-     * Constructs a new Lightbulb component with an image view.
-     *
-     * @param view the ImageView representing the bulb
-     */
     public Lightbulb(ImageView view) {
         super(view);
         this.input = new Port(this, 0.4, 1.05);
         this.output = new Port(this, 0.6, 1.05);
     }
 
-    /**
-     * Simulates the lightbulb logic:
-     * - Requires both input and output ports to be connected
-     * - Ensures ports are in the same loop
-     * - Powers the bulb only if voltage difference exists between ports
-     */
     @Override
     public void simulate() {
         Port inputTo = input.getConnectedTo();
@@ -82,9 +66,25 @@ public class Lightbulb extends Component {
         }
     }
 
-    /**
-     * Resets the bulb’s voltage state and updates its visual.
-     */
+    private boolean arePortsInSameLoop(Port a, Port b) {
+        Set<Component> visited = new HashSet<>();
+        return dfsBetweenPorts(a.getParentComponent(), b, visited);
+    }
+
+    private boolean dfsBetweenPorts(Component current, Port targetPort, Set<Component> visited) {
+        if (!visited.add(current)) return false;
+
+        for (Port port : current.getPorts()) {
+            Port connected = port.getConnectedTo();
+            if (connected != null) {
+                if (connected == targetPort) return true;
+                Component next = connected.getParentComponent();
+                if (dfsBetweenPorts(next, targetPort, visited)) return true;
+            }
+        }
+
+        return false;
+    }
     public void reset() {
         for (Port port : getPorts()) {
             port.setVoltage(0);
@@ -93,49 +93,57 @@ public class Lightbulb extends Component {
         isPowered();
         updateVisualState();
     }
-
-    /**
-     * Disconnects both input and output ports and resets the visual and voltage state.
-     */
     @Override
     public void disconnect() {
+        // Disconnect all ports
         for (Port port : getPorts()) {
             if (port.getConnectedTo() != null) {
-                port.getConnectedTo().connectTo(null); // safely breaks the other side
+                port.getConnectedTo().connectTo(null);
             }
-            port.connectTo(null); // safely breaks this side
+            port.connectTo(null);
+        }
 
+        // Force the bulb to turn off immediately
+        setVoltage(0);
+        reset();
+        updateVisualState();
 
-            reset();
-            updateVisualState();
+        // Find controller to force a reset of all components if auto-simulate is enabled
+        if (view != null && view.getScene() != null &&
+                view.getScene().getUserData() instanceof SandboxController) {
+
+            SandboxController controller = (SandboxController) view.getScene().getUserData();
+            if (controller.isAutoSimulateEnabled()) {
+                // Reset all components and run simulation
+                controller.resetAllComponents();
+                controller.runCircuitSimulation();
+            }
         }
     }
 
-    /**
-     * Returns the ports of this bulb: input and output.
-     *
-     * @return a list containing both ports
-     */
+    // Helper method to check if auto-simulation is enabled
+    private boolean isAutoSimulateEnabled() {
+        if (view != null && view.getScene() != null &&
+                view.getScene().getUserData() instanceof SandboxController) {
+            return ((SandboxController) view.getScene().getUserData()).isAutoSimulateEnabled();
+        }
+        return false;
+    }
+
+// Helper method to che
+
     @Override
     public List<Port> getPorts() {
         return List.of(input, output);
     }
 
-    /**
-     * Checks whether the bulb is powered (both ports connected and voltage difference exists).
-     *
-     * @return true if powered; false otherwise
-     */
     @Override
     public boolean isPowered() {
         return input.isConnected() && output.isConnected() && getVoltage() > 0;
     }
 
-    /**
-     * Propagates power recursively from this bulb to downstream components.
-     *
-     * @param visited the set of components already visited
-     */
+
+
     @Override
     public void propagatePower(Set<Component> visited) {
         if (!visited.add(this)) return;
@@ -147,9 +155,6 @@ public class Lightbulb extends Component {
         }
     }
 
-    /**
-     * Updates the visual appearance of the bulb (lit or unlit) based on power state.
-     */
     @Override
     public void updateVisualState() {
         if (view == null) return;

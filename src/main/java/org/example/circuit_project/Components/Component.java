@@ -133,12 +133,30 @@ public abstract class Component {
      * Clears connections and voltage propagation.
      */
     public void disconnect() {
+        boolean hadConnections = false;
+        Port triggerPort = null;
+
         for (Port port : getPorts()) {
             Port connected = port.getConnectedTo();
             if (connected != null) {
+                hadConnections = true;
+
+                // Keep a reference to one connected port for auto-simulation
+                triggerPort = connected;
+
+                // Disconnect the ports
                 connected.connectTo(null);
                 port.connectTo(null);
             }
+        }
+
+        // Reset the component state
+        reset();
+        updateVisualState();
+
+        // If auto-simulation is enabled, trigger it from the other component
+        if (triggerPort != null) {
+            triggerPort.triggerAutomaticSimulation();
         }
     }
     /**

@@ -19,10 +19,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * Controller for the main menu after user login.
- * Provides navigation options to tutorial, sandbox playground, profile page, and logout.
- */
+/*
+ * This is the screen that will be displayed after the user is logged in.
+ * User will have the option to enter the Tutorial, Create a new Playground, or visit their profile page.
+ * There will be a button to go back to the SplashScreen, which makes it similar to a "home dashboard".
+ * */
 public class MainMenuController implements Initializable {
 
 
@@ -40,23 +41,23 @@ public class MainMenuController implements Initializable {
 
     @FXML private ImageView sandboxPreview;
 
-    /**
-     * Opens the sandbox/playground scene when the relevant button is clicked.
-     *
-     * @param event The ActionEvent triggered by the button
-     */
-    @FXML
-    private void onClick(ActionEvent event) {
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1030, 818);
+    public void onClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/circuit_project/sandbox.fxml"));
+            Parent sandboxRoot = loader.load();
+
+            // Get the controller instance
+            SandboxController controller = loader.getController();
+
+            Stage stage = (Stage) newPlaygroundBtn.getScene().getWindow(); // Replace 'yourButtonId' with your actual button id
+            Scene scene = new Scene(sandboxRoot);
             stage.setScene(scene);
-            stage.setResizable(true);
+
+            // Now call the new method on the controller
+            controller.setAsSceneController();
+
             stage.show();
-
-
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -81,11 +82,6 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    /**
-     * Opens the tutorial page.
-     *
-     * @param event The ActionEvent triggered by the tutorial button
-     */
     @FXML
     private void openTutorialPage(ActionEvent event) {
         try {
@@ -101,9 +97,6 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    /**
-     * Initializes the main menu controller and sets up hover behavior and button actions.
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupHoverSync(profileBtn, profileLabel);
@@ -116,10 +109,9 @@ public class MainMenuController implements Initializable {
     }
 
     /**
-     * Adds hover scaling effect between a button and its associated label.
-     *
-     * @param button The button to attach the effect to
-     * @param label  The label to animate when the button is hovered
+     * Allows for the hover sync of both button and label
+     * @param button
+     * @param label
      */
     private void setupHoverSync(Button button, Label label){
         button.setOnMouseEntered(e -> {
@@ -135,9 +127,6 @@ public class MainMenuController implements Initializable {
         });
     }
 
-    /**
-     * Shows the "About" overlay pane with fade-in animation.
-     */
     @FXML
     public void showAboutOverlay(){
         aboutOverlay.setVisible(true);
@@ -148,18 +137,12 @@ public class MainMenuController implements Initializable {
         setMainMenuButtonsDisabled(true);
     }
 
-    /**
-     * Hides the "About" overlay and re-enables main menu buttons.
-     */
     @FXML
     public void hideAboutOverlay() {
         aboutOverlay.setVisible(false);
         setMainMenuButtonsDisabled(false);
     }
 
-    /**
-     * Logs the user out and returns to the login screen.
-     */
     @FXML
     public void logoutUser() {
         try {
@@ -174,11 +157,6 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    /**
-     * Enables or disables all main menu buttons.
-     *
-     * @param disable true to disable all main menu controls; false to enable
-     */
     private void setMainMenuButtonsDisabled(boolean disable){
         profileBtn.setDisable(disable);
         tutorialBtn.setDisable(disable);
@@ -187,18 +165,12 @@ public class MainMenuController implements Initializable {
         helpIcon.setDisable(disable);
     }
 
-    /**
-     * Displays the sandbox preview image when the user hovers over the sandbox option.
-     */
     @FXML
     public void showSandboxImage() {
         System.out.println("hovering in"); // <- add this for debug
         sandboxPreview.setVisible(true);
     }
 
-    /**
-     * Hides the sandbox preview image when the user moves the cursor away.
-     */
     @FXML
     public void hideSandboxImage() {
         System.out.println("hovering out"); // <- add this for debug
