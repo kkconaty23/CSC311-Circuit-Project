@@ -1111,7 +1111,7 @@ public class SandboxController implements Initializable {
 
         Set<Component> components = new HashSet<>();
 
-        // 🔁 First: collect all components and reset their state
+        //First: collect all components and reset their state
         for (Node node : playgroundPane.getChildren()) {
             if (node.getUserData() instanceof Component c) {
                 c.reset();  //Clear voltages and propagation flags
