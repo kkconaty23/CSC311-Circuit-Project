@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <Group stylesheets="@css/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.circuit_project.LoginController">
    <children>
@@ -25,11 +24,6 @@
                      <children>
                         <Pane prefHeight="704.0" prefWidth="500.0">
                            <children>
-                              <Text layoutX="171.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Register Account">
-                                 <font>
-                                    <Font name="MS Reference Sans Serif" size="18.0" />
-                                 </font>
-                              </Text>
                               <TextField fx:id="emailField" layoutX="49.0" layoutY="244.0" prefHeight="40.0" prefWidth="178.0" promptText="E-mail" />
                               <TextField fx:id="emailCheckField" layoutX="259.0" layoutY="244.0" prefHeight="40.0" prefWidth="178.0" promptText="Re-type E-mail" />
                               <PasswordField fx:id="passwordField" layoutX="49.0" layoutY="307.0" prefHeight="40.0" prefWidth="178.0" promptText="Password" />
@@ -67,6 +61,11 @@
                                  <font>
                                     <Font name="System Italic" size="13.0" />
                                  </font></Label>
+                              <ImageView fitHeight="203.0" fitWidth="567.0" layoutX="-36.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/Register%20Account.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </Pane>
                      </children>
@@ -75,11 +74,6 @@
                      <children>
                         <Pane prefHeight="689.0" prefWidth="500.0">
                            <children>
-                              <Text layoutX="223.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" wrappingWidth="53.81640625">
-                                 <font>
-                                    <Font name="MS Reference Sans Serif" size="18.0" />
-                                 </font>
-                              </Text>
                               <TextField fx:id="loginEmailField" layoutX="56.0" layoutY="244.0" prefHeight="40.0" prefWidth="384.0" promptText="E-mail..." />
                               <PasswordField fx:id="loginPasswordField" layoutX="58.0" layoutY="307.0" prefHeight="40.0" prefWidth="384.0" promptText="Password..." />
                               <Button fx:id="loginButton" layoutX="49.0" layoutY="503.0" mnemonicParsing="false" onAction="#onLoginClicked" prefHeight="40.0" prefWidth="100.0" text="Login">
@@ -87,6 +81,11 @@
                                     <Font size="15.0" />
                                  </font>
                               </Button>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="148.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/Login.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </Pane>
                      </children>
@@ -97,23 +96,16 @@
       </AnchorPane>
       <Pane fx:id="slidingPane" maxHeight="683.0" maxWidth="500.0" minHeight="677.0" minWidth="500.0" prefHeight="683.0" prefWidth="500.0" style="-fx-background-color: #0D1117;">
          <children>
-            <Button fx:id="slideRightButton" layoutX="263.0" layoutY="506.0" mnemonicParsing="false" onAction="#slideToLogin" style="-fx-background-color: transparent;" text="&gt;" textFill="WHITE">
-               <font>
-                  <Font size="49.0" />
-               </font>
-            </Button>
-            <Button fx:id="slideLeftButton" layoutX="137.0" layoutY="506.0" mnemonicParsing="false" onAction="#slideToRegister" prefWidth="100.0" style="-fx-background-color: transparent;" text="&lt;" textFill="WHITE">
-               <font>
-                  <Font size="49.0" />
-               </font>
-            </Button>
-            <Label layoutX="172.0" layoutY="597.0" text="Login" textFill="WHITE" />
-            <Label layoutX="291.0" layoutY="597.0" text="Register" textFill="WHITE" />
             <ImageView fitHeight="448.0" fitWidth="460.0" layoutX="26.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/raw.png" />
                </image>
             </ImageView>
+            <Button fx:id="toggleFormButton" layoutX="165.0" layoutY="549.0" mnemonicParsing="false" onAction="#onToggleForm" prefHeight="40.0" prefWidth="171.0" styleClass="toggle-button" text="I need an account">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

@@ -20,7 +20,7 @@
 
     <!-- Top Bar -->
     <top>
-      <HBox prefHeight="42.0" prefWidth="1481.0" styleClass="toolbar">
+      <HBox prefHeight="42.0" prefWidth="1505.0" styleClass="toolbar">
          <children>
                 <Button fx:id="homeButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="0.0" prefWidth="37.0">
                <graphic>
@@ -40,7 +40,6 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="loadButton" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="0.0" prefWidth="37.0">
                <graphic>
                   <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -59,7 +58,6 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button fx:id="toggleGridLinesItem" maxHeight="115.0" minHeight="0.0" mnemonicParsing="false" onAction="#onToggleGridLines" prefHeight="0.0" prefWidth="37.0">
                <graphic>
                   <ImageView fitHeight="170.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
