@@ -94,7 +94,11 @@ public class SandboxController implements Initializable {
     @FXML public ImageView bulbIcon;
     @FXML public ImageView switchIcon;
     @FXML public ImageView logoIcon;
+
+    // Log Pane
     @FXML private Pane logPane;
+    private double offsetX;
+    private double offsetY;
 
     private Port currentlyHighlightedPort = null;
 
@@ -132,7 +136,11 @@ public class SandboxController implements Initializable {
 //        saveButton.setTooltip(darkTooltip("Save Circuit"));
 //        loadButton.setTooltip(darkTooltip("Load Circuit"));
         clearBtn.setTooltip(darkTooltip("Clear Workspace"));
-        homeButton.setTooltip(darkTooltip("Return to Main Menu")); //
+        homeButton.setTooltip(darkTooltip("Return to Main Menu"));
+
+        logPane.setOnMousePressed(this::handleMousePressed);
+        logPane.setOnMouseDragged(this::handleMouseDragged);
+
     }
 
     /**
@@ -1559,6 +1567,16 @@ public class SandboxController implements Initializable {
 
     public void hideLogPane() {
         logPane.setVisible(false);
+    }
+
+    private void handleMousePressed(MouseEvent event) {
+        offsetX = event.getSceneX() - logPane.getLayoutX();
+        offsetY = event.getSceneY() - logPane.getLayoutY();
+    }
+
+    private void handleMouseDragged(MouseEvent event) {
+        logPane.setLayoutX(event.getSceneX() - offsetX);
+        logPane.setLayoutY(event.getSceneY() - offsetY);
     }
 
 
