@@ -15,14 +15,16 @@ public class Switch extends Component {
 
     public Switch(ImageView view) {
         super(view);
-        this.input = new Port(this, 0.1, 0.5);
-        this.output = new Port(this, 0.9, 0.5);
+        this.input = new Port(this, 0.15, 0.5);
+        this.output = new Port(this, 0.85, 0.5);
         this.isClosed = false;
     }
 
+
+
     public void toggle() {
         isClosed = !isClosed;
-        System.out.println("🔁 Switch toggled: " + (isClosed ? "CLOSED" : "OPEN"));
+        System.out.println("Switch toggled: " + (isClosed ? "CLOSED" : "OPEN"));
         updateVisualState();
     }
 
@@ -31,11 +33,11 @@ public class Switch extends Component {
     }
 
     public void reset() {
-        for (Port port : getPorts()) {
-            port.setVoltage(0);
-        }
-        setVoltage(0); // For components that store internal voltage
+        input.setVoltage(0);
+        output.setVoltage(0);
+        setVoltage(0);
     }
+
 
     @Override
     public void disconnect() {
@@ -54,17 +56,15 @@ public class Switch extends Component {
 
     @Override
     public void simulate() {
-        // Always start with zero voltage
-        input.setVoltage(0);
-        output.setVoltage(0);
-        setVoltage(0);
-
+        // Don't do anything unless both ports are connected
         if (!input.isConnected() || !output.isConnected()) {
-            System.out.println("⛔ Switch not fully connected – no simulation");
+            reset(); // ensure it doesn't carry ghost voltage
+            updateVisualState();
+            System.out.println("Switch not fully connected – skipping simulation");
             return;
         }
 
-        // Find which port has voltage coming in (could be either input or output depending on circuit)
+        // Get voltage from connected input port
         double inputVoltage = 0;
         if (input.getConnectedTo() != null) {
             inputVoltage = input.getConnectedTo().getVoltage();
@@ -72,21 +72,26 @@ public class Switch extends Component {
         }
 
         if (!isClosed) {
-            System.out.println("⛔ Switch is OPEN – blocking voltage: " + (inputVoltage > 0 ? "Found " + inputVoltage + "V" : "No voltage"));
-            return; // Don't pass voltage when switch is open
+            reset(); // reset output and internal voltage if open
+            System.out.println("Switch is OPEN – blocking voltage: " + (inputVoltage > 0 ? "Found " + inputVoltage + "V" : "No voltage"));
+            updateVisualState();
+            return;
         }
 
-        // When closed, pass voltage from input to output
+        // If closed and voltage is present, pass it
         if (inputVoltage > 0) {
             output.setVoltage(inputVoltage);
             setVoltage(inputVoltage);
-            System.out.println("✅ Switch CLOSED – passing voltage: " + inputVoltage);
+            System.out.println("Switch CLOSED – passing voltage: " + inputVoltage);
         } else {
-            System.out.println("✅ Switch CLOSED – but no voltage to pass");
+            output.setVoltage(0);
+            setVoltage(0);
+            System.out.println("Switch CLOSED – but no voltage to pass");
         }
 
         updateVisualState();
     }
+
 
     @Override
     public List<Port> getPorts() {
@@ -104,18 +109,18 @@ public class Switch extends Component {
 
     @Override
     public void propagatePower(Set<Component> visited) {
-        if (!visited.add(this)) return; // 👈 Prevents loops
+        if (!visited.add(this)) return;
 
-        // Critical fix: Only propagate power through the switch if it's closed
+        //Only propagate power through the switch if it's closed
         if (!isClosed) {
-            System.out.println("⛔ Switch is OPEN – blocking power propagation");
+            System.out.println("Switch is OPEN – blocking power propagation");
             updateVisualState();
             return;
         }
 
         // Only propagate if switch has power itself
         if (getVoltage() <= 0) {
-            System.out.println("⛔ Switch has no voltage to propagate");
+            System.out.println("Switch has no voltage to propagate");
             updateVisualState();
             return;
         }

@@ -26,41 +26,41 @@ public class Lightbulb extends Component {
         Port inputTo = input.getConnectedTo();
         Port outputTo = output.getConnectedTo();
 
-        // 🔒 Step 1: Require both connections to be physically present
+        //Require both connections to be physically present
         if (inputTo == null || outputTo == null) {
             input.setVoltage(0);
             output.setVoltage(0);
             setVoltage(0);
-            System.out.println("🚫 Lightbulb simulate: one or both ports NOT connected");
+            System.out.println("Lightbulb simulate: one or both ports NOT connected");
             return;
         }
 
-        // 🔒 Step 2: Ensure both are connected in the same loop
+        //Ensure both are connected in the same loop
         if (!CircuitUtils.arePortsInSameLoop(inputTo, outputTo)) {
             input.setVoltage(0);
             output.setVoltage(0);
             setVoltage(0);
-            System.out.println("🚫 Lightbulb simulate: ports not in same loop");
+            System.out.println("Lightbulb simulate: ports not in same loop");
             return;
         }
 
-        // ⚡ Step 3: Check for voltage difference
+        //Step 3: Check for voltage difference
         double voltageA = inputTo.getVoltage();
         double voltageB = outputTo.getVoltage();
 
-        System.out.println("🔍 Bulb input connected to voltage: " + voltageA);
-        System.out.println("🔍 Bulb output connected to voltage: " + voltageB);
+        System.out.println("Bulb input connected to voltage: " + voltageA);
+        System.out.println("Bulb output connected to voltage: " + voltageB);
 
         if (voltageA != voltageB) {
             input.setVoltage(voltageA);
             output.setVoltage(voltageB);
             setVoltage(Math.abs(voltageA - voltageB));
-            System.out.println("💡 Lightbulb activated in closed loop with voltage: " + getVoltage());
+            System.out.println("Lightbulb activated in closed loop with voltage: " + getVoltage());
         } else {
             input.setVoltage(0);
             output.setVoltage(0);
             setVoltage(0);
-            System.out.println("⚠️ Loop exists but no voltage difference");
+            System.out.println("Loop exists but no voltage difference");
         }
     }
 

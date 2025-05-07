@@ -66,11 +66,11 @@ public class Wire extends Component {
             end1.setVoltage(chosenVoltage);
             end2.setVoltage(chosenVoltage);
 
-            System.out.println("🔌 Wire simulate: A=" + voltageA + ", B=" + voltageB + " => Setting both to " + chosenVoltage);
+            System.out.println("Wire simulate: A=" + voltageA + ", B=" + voltageB + " => Setting both to " + chosenVoltage);
         } else {
             end1.setVoltage(0);
             end2.setVoltage(0);
-            System.out.println("❌ Wire simulate: Not fully connected. Zeroing ports.");
+            System.out.println("Wire simulate: Not fully connected. Zeroing ports.");
         }
     }
 
