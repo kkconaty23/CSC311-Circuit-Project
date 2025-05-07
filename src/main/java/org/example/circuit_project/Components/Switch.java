@@ -15,10 +15,11 @@ public class Switch extends Component {
 
     public Switch(ImageView view) {
         super(view);
-        this.input = new Port(this, 0.15, 0.5);
-        this.output = new Port(this, 0.85, 0.5);
+        this.input = new Port(this, 0.01, 0.55);
+        this.output = new Port(this, 0.99, 0.55);
         this.isClosed = false;
     }
+
 
 
 
