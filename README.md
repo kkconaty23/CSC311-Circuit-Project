@@ -40,7 +40,7 @@ A JavaFX-based drag-and-drop circuit simulation tool designed for interactive el
 - **Azure Blob Storage** – Save circuit JSON files  
 - **Gson** – JSON serialization of circuit layout  
 - **FXML** – Declarative layout for views  
-- **Java 23+** – Modern Java features (records, pattern matching)
+- **Java 21+** – Modern Java features (records, pattern matching)
 
 ---
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS projects (
 ![Circuit Editor](docs/images/profile-image.png)
 
 ### Components
-![Circuit Editor](docs/images/structure.png)
+![Circuit Editor](docs/images/struct2.png)
 
 
 ---
