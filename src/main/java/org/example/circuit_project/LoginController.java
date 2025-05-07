@@ -23,6 +23,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+/**
+ * Controller for the login and registration view in the Circuit Project application.
+ * Handles form input validation, user authentication, registration, and view transitions.
+ */
 public class LoginController implements Initializable {
 
     @FXML private Pane slidingPane;
@@ -43,6 +47,9 @@ public class LoginController implements Initializable {
 
     public User currentUser;
 
+    /**
+     * Initializes the controller. Sets up regex validator and field focus listeners.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         slidingPane.setTranslateX(slidingPane.getWidth());
@@ -71,6 +78,9 @@ public class LoginController implements Initializable {
         });
     }
 
+    /**
+     * Clears all displayed error messages.
+     */
  private void clearErrorLabels() {
         registerErrorLabel.setText("");
         firstNameRegex.setText("");
@@ -80,6 +90,9 @@ public class LoginController implements Initializable {
         passwordMatchRegex.setText("");
     }
 
+    /**
+     * Validates the first name input using regex.
+     */
     private void validateFirstName() {
         if (!firstNameField.getText().isEmpty() && !regex.firstNameCheck(firstNameField.getText())) {
             firstNameRegex.setText("Only letters allowed, 2-25 characters");
@@ -88,6 +101,9 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Validates the last name input using regex.
+     */
     private void validateLastName() {
         if (!lastNameField.getText().isEmpty() && !regex.lastNameCheck(lastNameField.getText())) {
             lastNameRegex.setText("Only letters allowed, 2-25 characters");
@@ -96,6 +112,9 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Validates that the email ends in @farmingdale.edu.
+     */
     private void validateEmail() {
         if (!emailField.getText().isEmpty() && !regex.emailCheck(emailField.getText())) {
             emailRegex.setText("Must be @farmingdale.edu");
@@ -104,6 +123,9 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Validates that both entered email fields match.
+     */
     private void validateEmailMatch() {
         if (!emailField.getText().isEmpty() && !emailCheckField.getText().isEmpty()
                 && !emailCheckField.getText().equals(emailField.getText())) {
@@ -113,6 +135,9 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Validates that both password fields match.
+     */
     private void validatePasswordMatch() {
         if (!passwordField.getText().isEmpty() && !passwordCheckField.getText().isEmpty()
                 && !passwordCheckField.getText().equals(passwordField.getText())) {
@@ -122,6 +147,11 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Checks if all registration fields are filled out and valid.
+     *
+     * @return true if the form is valid, false otherwise
+     */
     private boolean isFormValid() {
         if (firstNameField.getText().isEmpty() ||
                 lastNameField.getText().isEmpty() ||
@@ -163,6 +193,11 @@ public class LoginController implements Initializable {
         return true;
     }
 
+    /**
+     * Handles login button click. Validates user credentials and transitions to the loading screen.
+     *
+     * @param event the triggered ActionEvent
+     */
     @FXML
     private void onLoginClicked(ActionEvent event) {
         DbOpps connection = new DbOpps();
@@ -185,6 +220,11 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Handles registration button click. Inserts new user into database if the form is valid.
+     *
+     * @param event the triggered ActionEvent
+     */
     @FXML
     void onRegisterClicked(ActionEvent event) {
         if (!isFormValid()) return;
@@ -216,6 +256,9 @@ public class LoginController implements Initializable {
     @FXML private Button toggleFormButton;
 
 
+    /**
+     * Toggles between login and registration forms by animating the sliding panel.
+     */
     @FXML
     private void onToggleForm() {
         TranslateTransition slide = new TranslateTransition(Duration.millis(500), slidingPane);
