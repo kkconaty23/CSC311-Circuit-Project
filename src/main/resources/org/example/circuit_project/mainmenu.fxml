@@ -35,10 +35,18 @@
             </Button>
 
             <Button fx:id="tutorialBtn" layoutX="617.0" layoutY="384.0" mnemonicParsing="false" onAction="#openTutorialPage" prefHeight="140.0" prefWidth="200.0">
+               <graphic>
+                  <ImageView fitHeight="120.0" fitWidth="239.0" preserveRatio="true">
+                     <image>
+                        <Image url="@images/lightbulb-TutorialIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
+
             <AnchorPane layoutX="346.0" layoutY="447.0">
                <children>
                   <Button fx:id="newPlaygroundBtn" mnemonicParsing="false" onAction="#onClick" onMouseEntered="#showSandboxImage" onMouseExited="#hideSandboxImage" prefHeight="144.0" prefWidth="208.0">
