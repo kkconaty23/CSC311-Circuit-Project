@@ -11,16 +11,34 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a Lightbulb component in the circuit simulator.
+ *
+ * The Lightbulb requires two connected ports forming a complete circuit loop,
+ * and a voltage difference across those ports to be considered "powered".
+ * When powered, its visual state changes to a lit bulb.
+ */
 public class Lightbulb extends Component {
     private final Port input;
     private final Port output;
 
+    /**
+     * Constructs a new Lightbulb component with an image view.
+     *
+     * @param view the ImageView representing the bulb
+     */
     public Lightbulb(ImageView view) {
         super(view);
         this.input = new Port(this, 0.4, 1.05);
         this.output = new Port(this, 0.6, 1.05);
     }
 
+    /**
+     * Simulates the lightbulb logic:
+     * - Requires both input and output ports to be connected
+     * - Ensures ports are in the same loop
+     * - Powers the bulb only if voltage difference exists between ports
+     */
     @Override
     public void simulate() {
         Port inputTo = input.getConnectedTo();
@@ -64,25 +82,9 @@ public class Lightbulb extends Component {
         }
     }
 
-    private boolean arePortsInSameLoop(Port a, Port b) {
-        Set<Component> visited = new HashSet<>();
-        return dfsBetweenPorts(a.getParentComponent(), b, visited);
-    }
-
-    private boolean dfsBetweenPorts(Component current, Port targetPort, Set<Component> visited) {
-        if (!visited.add(current)) return false;
-
-        for (Port port : current.getPorts()) {
-            Port connected = port.getConnectedTo();
-            if (connected != null) {
-                if (connected == targetPort) return true;
-                Component next = connected.getParentComponent();
-                if (dfsBetweenPorts(next, targetPort, visited)) return true;
-            }
-        }
-
-        return false;
-    }
+    /**
+     * Resets the bulb’s voltage state and updates its visual.
+     */
     public void reset() {
         for (Port port : getPorts()) {
             port.setVoltage(0);
@@ -91,6 +93,10 @@ public class Lightbulb extends Component {
         isPowered();
         updateVisualState();
     }
+
+    /**
+     * Disconnects both input and output ports and resets the visual and voltage state.
+     */
     @Override
     public void disconnect() {
         for (Port port : getPorts()) {
@@ -105,18 +111,31 @@ public class Lightbulb extends Component {
         }
     }
 
+    /**
+     * Returns the ports of this bulb: input and output.
+     *
+     * @return a list containing both ports
+     */
     @Override
     public List<Port> getPorts() {
         return List.of(input, output);
     }
 
+    /**
+     * Checks whether the bulb is powered (both ports connected and voltage difference exists).
+     *
+     * @return true if powered; false otherwise
+     */
     @Override
     public boolean isPowered() {
         return input.isConnected() && output.isConnected() && getVoltage() > 0;
     }
 
-
-
+    /**
+     * Propagates power recursively from this bulb to downstream components.
+     *
+     * @param visited the set of components already visited
+     */
     @Override
     public void propagatePower(Set<Component> visited) {
         if (!visited.add(this)) return;
@@ -128,6 +147,9 @@ public class Lightbulb extends Component {
         }
     }
 
+    /**
+     * Updates the visual appearance of the bulb (lit or unlit) based on power state.
+     */
     @Override
     public void updateVisualState() {
         if (view == null) return;
