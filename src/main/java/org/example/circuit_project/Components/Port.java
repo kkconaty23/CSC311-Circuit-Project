@@ -94,9 +94,9 @@ public class Port {
                 other.connectTo(this);
             }
 
-            System.out.println("🔗 " + this.parent.getClass().getSimpleName() + " port connected to " + other.parent.getClass().getSimpleName());
+            System.out.println(this.parent.getClass().getSimpleName() + " port connected to " + other.parent.getClass().getSimpleName());
         } else {
-            System.out.println("🔌 Port disconnected");
+            System.out.println("Port disconnected");
         }
 
         updateVisualState();
@@ -113,7 +113,7 @@ public class Port {
 
     public void setVoltage(double voltage) {
         this.voltage = voltage;
-        System.out.println("🔋 Port " + parent.getClass().getSimpleName() + " set to " + voltage + "V");
+        System.out.println("Port " + parent.getClass().getSimpleName() + " set to " + voltage + "V");
     }
 
     public Component getParentComponent() {

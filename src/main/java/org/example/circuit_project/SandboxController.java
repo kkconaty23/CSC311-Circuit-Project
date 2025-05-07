@@ -204,11 +204,10 @@ public class SandboxController implements Initializable {
      */
     @FXML
     private void clearBtnClick() {
-        // 1. Remove all nodes from the canvas
+        //Remove all nodes from the canvas
         playgroundPane.getChildren().clear();
 
-        // 2. (Optional) Clear additional state if needed
-        System.out.println("🧼 Canvas cleared!");
+
     }
 
 
@@ -284,7 +283,7 @@ public class SandboxController implements Initializable {
 
                     ImageView view = c.getView();
                     if (view == null) {
-                        System.out.println("⚠️ Skipping component with null view: " + c.getClass().getSimpleName());
+                        System.out.println("Skipping component with null view: " + c.getClass().getSimpleName());
                         continue;
                     }
 
@@ -309,7 +308,7 @@ public class SandboxController implements Initializable {
                     Port b = wire.getPorts().get(1);
 
                     if (a.getConnectedTo() == null || b.getConnectedTo() == null) {
-                        System.out.println("⚠️ Skipping wire with disconnected ports");
+                        System.out.println("Skipping wire with disconnected ports");
                         continue;
                     }
 
@@ -458,7 +457,7 @@ public class SandboxController implements Initializable {
                 Component compB = idToComponent.get(idB);
 
                 if (compA == null || compB == null) {
-                    System.err.println("⚠️ Skipping wire: missing components " + idA + ", " + idB);
+                    System.err.println("Skipping wire: missing components " + idA + ", " + idB);
                     continue;
                 }
 
@@ -466,7 +465,7 @@ public class SandboxController implements Initializable {
                 int portB = ((Number) data.get("endPortIndex")).intValue();
 
                 if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
-                    System.err.println("⚠️ Skipping wire: invalid port index");
+                    System.err.println("Skipping wire: invalid port index");
                     continue;
                 }
 
@@ -635,7 +634,7 @@ public class SandboxController implements Initializable {
                             c.disconnect();
                             c.reset();
                             c.updateVisualState();
-                            System.out.println("🔌 Component disconnected by double-click.");
+                            System.out.println("Component disconnected by double-click.");
                         }
                     }
                 });
@@ -754,11 +753,11 @@ public class SandboxController implements Initializable {
                         System.out.println("🔌 Switch disconnected (double-click)");
                     } else if (duration > 500) { // press-and-hold to toggle
                         newSwitch.toggle();
-                        System.out.println("🔁 Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
+                        System.out.println("Switch toggled via hold (" + (newSwitch.isClosed() ? "CLOSED" : "OPEN") + ")");
 
                         Set<Component> connected = getAllConnectedComponents(newSwitch);
 
-                        for (Component c : connected) c.reset();       // ✅ Important
+                        for (Component c : connected) c.reset();
                         for (Component c : connected) c.simulate();    // voltage simulation
                         for (Component c : connected) c.propagatePower(new HashSet<>());
                     }
@@ -791,19 +790,6 @@ public class SandboxController implements Initializable {
         return Math.max(min, Math.min(max, value));
     }
 
-//TODO delete this maybe
-//    private Point2D calculatePortPosition(Component component, Port port) {
-//        ImageView view = component.getView();
-//        double imageX = view.getLayoutX();
-//        double imageY = view.getLayoutY();
-//        double width = view.getBoundsInParent().getWidth();
-//        double height = view.getBoundsInParent().getHeight();
-//
-//        double portX = imageX + port.getXOffset() * width;
-//        double portY = imageY + port.getYOffset() * height;
-//
-//        return new Point2D(portX, portY);
-//    }
 
     /**
      * Searches the playground for a nearby Port within a given radius.
@@ -933,6 +919,14 @@ public class SandboxController implements Initializable {
             dragDelta.x = e.getSceneX();
             dragDelta.y = e.getSceneY();
         });
+        line.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2 && line.getUserData() instanceof Wire wire) {
+                wire.disconnect();
+                System.out.println("Wire disconnected by double-click");
+            }
+        });
+
+
 
         line.setOnMouseDragged(e -> {
             double dx = e.getSceneX() - dragDelta.x;
@@ -989,6 +983,10 @@ public class SandboxController implements Initializable {
             // Move wire freely
             circle.setLayoutX(local.getX());
             circle.setLayoutY(local.getY());
+            if (wire != null) {
+                wire.updateLinePosition();
+            }
+
 
             if (isStart) {
                 wire.getLine().setStartX(local.getX());
@@ -1020,6 +1018,7 @@ public class SandboxController implements Initializable {
 
 
     private void snapPortToTarget(Circle draggedCircle, Port draggedPort, Port targetPort) {
+
         // Break previous connections manually
         if (draggedPort.getConnectedTo() != null) {
             Port prev = draggedPort.getConnectedTo();
@@ -1050,6 +1049,8 @@ public class SandboxController implements Initializable {
         // Update wire visuals
         Wire parentWire = (Wire) draggedPort.getParentComponent();
         Line line = parentWire.getLine();
+        parentWire.updateLinePosition();
+
         if (draggedPort == parentWire.getPorts().get(0)) {
             line.setStartX(snappedX);
             line.setStartY(snappedY);
@@ -1110,20 +1111,20 @@ public class SandboxController implements Initializable {
      */
     @FXML
     private void onRunCircuit() {
-        System.out.println("\n\n✅ Run Circuit button clicked");
+        System.out.println("\n\n Run Circuit button clicked");
 
         Set<Component> components = new HashSet<>();
 
         // 🔁 First: collect all components and reset their state
         for (Node node : playgroundPane.getChildren()) {
             if (node.getUserData() instanceof Component c) {
-                c.reset();  // ✅ Clear voltages and propagation flags
+                c.reset();  //Clear voltages and propagation flags
                 components.add(c);
                 System.out.println("Reset component: " + c.getClass().getSimpleName());
             }
         }
 
-        // 🔋 Find the battery
+        // Find the battery
         Battery battery = null;
         for (Component c : components) {
             if (c instanceof Battery b) {
@@ -1133,7 +1134,7 @@ public class SandboxController implements Initializable {
         }
 
         if (battery == null) {
-            System.out.println("❌ No battery found. Cannot simulate.");
+            System.out.println("No battery found. Cannot simulate.");
             return;
         }
 
@@ -1149,27 +1150,38 @@ public class SandboxController implements Initializable {
         // Evaluate if the circuit is interrupted by open switches
         boolean circuitBroken = false;
         for (Switch s : switches) {
+            if (!hasAnyConnectedPorts(s)) continue;
             if (!s.isClosed()) {
-                System.out.println("⚠️ Circuit contains OPEN switch!");
+                System.out.println("Circuit contains OPEN switch!");
                 circuitBroken = true;
                 break;
             }
         }
 
-        // 🔍 Only keep components that are connected
+
+        //Only keep components that are connected
         List<Component> filtered = new ArrayList<>();
         for (Component c : components) {
             // Always include batteries and switches for simulation
-            if (c instanceof Battery || c instanceof Switch) {
+            if (c instanceof Battery) {
                 filtered.add(c);
                 continue;
             }
+            if (c instanceof Switch s) {
+                if (hasAnyConnectedPorts(s)) {
+                    filtered.add(s);
+                } else {
+                    System.out.println("Skipping switch – not connected");
+                }
+                continue;
+            }
+
 
             // Check if component is connected to the circuit
             if (hasAnyConnectedPorts(c)) {
                 filtered.add(c);
             } else {
-                System.out.println("⛔ Skipping " + c.getClass().getSimpleName() + " – not connected");
+                System.out.println("Skipping " + c.getClass().getSimpleName() + " – not connected");
             }
         }
 
@@ -1183,14 +1195,14 @@ public class SandboxController implements Initializable {
 
         // If circuit is broken by an open switch, simulate switches but skip other components
         if (circuitBroken) {
-            System.out.println("⚠️ Circuit is BROKEN - simulating switches only to enforce open state");
+            System.out.println("Circuit is BROKEN - simulating switches only to enforce open state");
             for (Component c : filtered) {
                 if (c instanceof Switch) {
                     c.simulate();
                 }
             }
         } else {
-            System.out.println("✅ Circuit is CLOSED - simulating all components");
+            System.out.println("Circuit is CLOSED - simulating all components");
 
             // Simulate in correct order: wires -> switches -> other components
             for (Component c : filtered) {
@@ -1212,14 +1224,14 @@ public class SandboxController implements Initializable {
             }
 
             // Second pass to ensure proper propagation
-            System.out.println("🔄 Second simulation pass");
+            System.out.println("Second simulation pass");
             for (Component c : filtered) {
                 c.simulate();
             }
         }
 
         // Final propagation pass to update visual states
-        System.out.println("🔄 Final power propagation");
+        System.out.println("Final power propagation");
         Set<Component> visited = new HashSet<>();
         for (Component c : filtered) {
             if (c instanceof Battery) {
@@ -1234,11 +1246,9 @@ public class SandboxController implements Initializable {
      * @return true if any of the component's ports are connected; false otherwise
      */
     private boolean hasAnyConnectedPorts(Component c) {
-        for (Port p : c.getPorts()) {
-            if (p.getConnectedTo() != null) return true;
-        }
-        return false;
+        return c.getPorts().stream().anyMatch(p -> p.isConnected());
     }
+
     /**
      * Saves the current circuit layout to a specified JSON file.
      * Serializes all components and wires into a structured format for later restoration.
@@ -1263,7 +1273,7 @@ public class SandboxController implements Initializable {
 
                 ImageView view = c.getView();
                 if (view == null) {
-                    System.out.println("⚠️ Skipping component with null view: " + c.getClass().getSimpleName());
+                    System.out.println("Skipping component with null view: " + c.getClass().getSimpleName());
                     continue;
                 }
 
@@ -1392,7 +1402,7 @@ public class SandboxController implements Initializable {
             Component compB = idToComponent.get(idB);
 
             if (compA == null || compB == null) {
-                System.err.println("⚠️ Skipping wire: missing components " + idA + ", " + idB);
+                System.err.println("Skipping wire: missing components " + idA + ", " + idB);
                 continue;
             }
 
@@ -1400,7 +1410,7 @@ public class SandboxController implements Initializable {
             int portB = ((Number) data.get("endPortIndex")).intValue();
 
             if (compA.getPorts().size() <= portA || compB.getPorts().size() <= portB) {
-                System.err.println("⚠️ Skipping wire: invalid port index");
+                System.err.println("Skipping wire: invalid port index");
                 continue;
             }
 
